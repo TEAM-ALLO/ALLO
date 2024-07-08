@@ -4,4 +4,4 @@ def users(request):
     return render(request, 'users_main.html')
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'users/home.html')
