@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ALLO{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="ALLO Logo">
+                <span>ALLO</span>
+            </a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="검색어를 입력하세요">
+            <button type="submit">검색</button>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">메뉴1</a></li>
+                <li><a href="#">메뉴2</a></li>
+                <li><a href="#">메뉴3</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="category-bar">
+            <ul>
+                <li><a href="{% url 'event_list' %}">이벤트</a></li>
+                <li><a href="{% url 'chat_room' request.user.username %}">채팅방</a></li>
+                <li><a href="{% url 'post_list' %}">커뮤니티</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 ALLO. All rights reserved.</p>
+    </footer>
+</body>
+</html>

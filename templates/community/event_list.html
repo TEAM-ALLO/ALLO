@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Events & Notices{% endblock %}
+{% block content %}
+<h1>Events & Notices</h1>
+<a href="{% url 'create_event' %}">Create New Event</a>
+<ul>
+    {% for event in events %}
+        <li>
+            <a href="{% url 'event_detail' event.pk %}">{{ event.title }}</a> on {{ event.event_date }}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
