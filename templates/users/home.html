@@ -1,11 +1,29 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/allo_logo.jpg" type="image/x-icon">
+    <title>ALLO</title>
 </head>
 <body>
-    hi
+    <header id="header">
+        <div id="header-logo">
+            <img src="/static/img/allo_logo.jpg" alt="올로 로고 이미지" id="allo-logo-img1">
+            <img src="/static/img/ALLO.svg" alt="올로 로고 이미지" id="allo-logo-img2">
+        </div>
+        <nav id="header-nav">
+            <img src="/static/img/search2.png" alt="검색창 아이콘" id="notification-icon">
+            <img src="/static/img/notification2.png" alt="알림창 아이콘" id="search-icon">
+            <div id="hamburger-btn">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+    </header>
 </body>
 </html>
