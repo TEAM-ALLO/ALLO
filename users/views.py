@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
-from .forms import signUpForm, loginForm
+from django.contrib.auth import authenticate, login, logout
+from .models import User
 
 def users(request):
     return render(request, 'users_main.html')
@@ -9,25 +8,32 @@ def users(request):
 def home(request):
     return render(request, 'users/home.html')
 
-def signup(request):
-    if request.method == 'POST':
-        form = signUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user) #사용자 로그인 시키기
-            return redirect('home') #회원가입 후 리다이렉션할 url 
-    else:
-        form = signUpForm()
-    return render(request, 'users/signup.html', {'form': form})
+def signup_view(request):
+    if request.method == "POST":
+        print(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        nickname = request.POST['nickname']
+        email = request.POST['email']
 
-def login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
+        user = User.objects.create_user(username, email, password)
+        user.nickname = nickname
+        user.save()
+        return redirect("user:login")
+    return render(request, 'users/signup.html')
+        
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            print('인증성공')
             login(request, user)
-            return redirect('home') #로그인 후 home으로
-    else:
-        form = AuthenticationForm()
-    return render(request, 'users/login.html', {'form':form})
+        else:
+            print('인증실패')
+    return render(request, "users/login.html")
 
+def logout_view(request):
+    logout(request)
+    return redirect("user:login")

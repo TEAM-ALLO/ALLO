@@ -1,26 +1,19 @@
-{% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login page{% endblock %}
 
-{% block content %}
-<h2>Login</h2>
-<form method="post" action="{% url 'login' %}">
+<br>
+{% if user.is_authenticated %}
+    로그인 성공!
+    {{ user.username }}님 환영합니다. 
+    <a href="{% url 'user:logout' %}">로그아웃</a>
+{% else %}
+
+ <form action="" method="POST">
     {% csrf_token %}
-    <div>
-        <label for="id_username">Username:</label>
-        <input type="text" name="username" id="id_username" required>
-    </div>
-    <div>
-        <label for="id_password">Password:</label>
-        <input type="password" name="password" id="id_password" required>
-    </div>
-    <button type="submit">Login</button>
-    {% if form.non_field_errors %}
-        <div class="errors">
-            {% for error in form.non_field_errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
-</form>
-{% endblock %}
+    <input name="username" type="text">
+    <input name="password" type="password">
+    <input type="submit" value="로그인">
+ </form>
+ <a href="{% url 'user:signup' %}">회원가입</a>
+{% endif %}
+
