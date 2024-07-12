@@ -1,50 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ALLO{% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/allo_logo.jpg" type="image/x-icon">
+    <title>ALLO</title>
+    {% block head %} {% endblock %}
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <a href="{% url 'home' %}">
-                <img src="{% static 'images/logo.png' %}" alt="ALLO Logo">
-                <span>ALLO</span>
-            </a>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="검색어를 입력하세요">
-            <button type="submit">검색</button>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">메뉴1</a></li>
-                <li><a href="#">메뉴2</a></li>
-                <li><a href="#">메뉴3</a></li>
-                <li><a href="{% url 'signup' %}">회원가입</a></li>
-            </ul>
+    <header id="header">
+        <a href="/" id="header-logo">
+            <img src="/static/img/allo_logo.jpg" alt="올로 로고 이미지" id="allo-logo-img1">
+            <img src="/static/img/ALLO.svg" alt="올로 로고 이미지" id="allo-logo-img2">
+        </a>
+        <nav id="header-nav">
+            <img src="/static/img/search2.png" alt="검색창 아이콘" id="notification-icon">
+            <img src="/static/img/notification2.png" alt="알림창 아이콘" id="search-icon">
+            <div id="hamburger-btn">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </nav>
     </header>
+    <div class="main-container">
+        {% block content %}
 
-    <main>
-        <div class="category-bar">
-            <ul>
-                <li><a href="{% url 'event_list' %}">이벤트</a></li>
-                <li><a href="{% url 'chat_room' request.user.username %}">채팅방</a></li>
-                <li><a href="{% url 'post_list' %}">커뮤니티</a></li>
-            </ul>
-        </div>
-        <div class="content">
-            {% block content %}
-            {% endblock %}
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 ALLO. All rights reserved.</p>
-    </footer>
+        {% endblock %}
+    </div>
+    <footer id="footer">
+        © ALLO. 2024 All rights reserved.
+    </footer>    
+    
 </body>
+{% block script %}
+
+{% endblock %}
 </html>
