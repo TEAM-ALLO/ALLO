@@ -1,0 +1,54 @@
+:root {
+    --main--red--color: #EB5050;
+    --main--yellow--color: #FFD732;    
+    --main--blue--color: #B4E5FF;
+}
+
+/* header */
+#header {
+    width: 100%;
+    height: 75px;
+    padding: 5px 20px;
+    display: flex;
+    justify-content: space-between;
+}
+#header-logo {
+    display: flex;
+    gap: 10px;
+}
+#allo-logo-img1 {
+    width: 70px;
+}
+#allo-logo-img2 {
+    width: 100px;
+}
+#header-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#notification-icon,
+#search-icon {
+    width: 40px;
+    height: 40px;
+}
+#hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+#hamburger-btn > div {
+    width: 40px;
+    height: 6px;
+}
+#hamburger-btn>div:nth-child(1) {
+    background-color: var(--main--red--color);
+}
+#hamburger-btn>div:nth-child(2) {
+    background-color: var(--main--yellow--color);
+}
+#hamburger-btn>div:nth-child(3) {
+    background-color: var(--main--blue--color);
+}
+
+/* footer */
