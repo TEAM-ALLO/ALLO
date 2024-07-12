@@ -1,0 +1,17 @@
+{% block title %}SignUp page{% endblock %}
+
+<br>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <p>아이디</p>
+    <input name="username" type="text">
+    <p>비밀번호</p>
+    <input name="password" type="password">
+    <p>닉네임</p>
+    <input name="nickname" type="text">
+    <p>이메일</p>
+    <input name="email" type="text">
+    <input type="submit" value="회원가입">
+
+</form>
