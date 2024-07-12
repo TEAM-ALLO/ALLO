@@ -1,13 +1,14 @@
-{% extends "base.html" %}
-{% block title %}Posts{% endblock %}
-{% block content %}
-<h1>Posts</h1>
-<a href="{% url 'create_post' %}">Create New Post</a>
-<ul>
-    {% for post in posts %}
-        <li>
-            <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> by {{ post.author.username }} on {{ post.created_at }}
-        </li>
-    {% endfor %}
-</ul>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Community Posts</title>
+</head>
+<body>
+    <h1>Community Posts</h1>
+    <ul>
+        {% for post in posts %}
+            <li>{{ post.title }} - {{ post.created_at }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
