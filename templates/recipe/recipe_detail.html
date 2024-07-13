@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ recipe.recipe_name }}</h1>
+<p>작성자: {{ recipe.author }}</p>
+<p>조리 시간: {{ recipe.cooking_time }}분</p>
+<p>난이도: {{ recipe.difficulty }}</p>
+<p>인분: {{ recipe.servings }}</p>
+
+<h2>재료</h2>
+<p>{{ recipe.ingredients|linebreaks }}</p>
+
+<h2>조리 방법</h2>
+<p>{{ recipe.instructions|linebreaks }}</p>
+
+{% if recipe.image %}
+<img src="{{ recipe.image.url }}" alt="{{ recipe.recipe_name }}">
+{% endif %}
+
+<p>작성일: {{ recipe.created_at }}</p>
+<p>수정일: {{ recipe.updated_at }}</p>
+
+{% if user == recipe.author %}
+<a href="{% url 'recipe_edit' id=recipe.id %}">수정</a>
+<a href="{% url 'recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+{% endif %}
+
+<a href="{% url 'recipe_list' %}">목록으로 돌아가기</a>
+{% endblock %}

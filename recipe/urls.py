@@ -1,26 +1,11 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import create_recipe_view, recipe_list_view, recipe_detail_view, edit_recipe_view, delete_recipe_view
-#레시피 하면 떠오르는 기능들 작성 crud
-#유저의 경우 회원가입, 로그인, 로그아웃
+from .views import recipe_create_view, recipe_list_view,recipe_detail_view, recipe_edit_view, recipe_delete_view
 
 urlpatterns = [
-    path('create_recipe/', login_required(create_recipe_view), name='create_recipe'),
+    path('recipe_create/', login_required(recipe_create_view), name='recipe_create'),
     path('recipe_list/', recipe_list_view, name='recipe_list'),
-    path('recipe/<int:pk>/', recipe_detail_view, name='recipe_detail'),
-    path('edit_recipe/', login_required(edit_recipe_view), name='edit_recipe'),
-    path('delete_recipe/', login_required(delete_recipe_view), name='delete_recipe'),
-]
-
-
-from django.urls import path
-from .views import home, signup_view, login_view, logout_view
-
-app_name = "user"
-
-urlpatterns = [
-    path('', home, name='home'),
-    path('signup/', signup_view, name='signup'),
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
+    path('recipe/<int:id>/', recipe_detail_view, name='recipe_detail'),
+    path('recipe/<int:id>/edit/', login_required(recipe_edit_view), name='recipe_edit'),
+    path('recipe/<int:id>/delete/', login_required(recipe_delete_view), name='recipe_delete'),
 ]

@@ -1,0 +1,7 @@
+<!-- recipes/recipe_edit.html -->
+<h2>레시피 수정</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">수정</button>
+</form>
