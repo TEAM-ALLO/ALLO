@@ -1,19 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create/Edit Post</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Post</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <a href="{% url 'post_list' %}" class="btn btn-secondary">Back to Home</a>
-    </div>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/community/community_create.css">
+{% endblock %}
+{% block content %}
+<div class="community-header">
+    <div class="community-categoty">이벤트</div>
+    <div class="community-categoty">채팅방</div>
+    <div class="community-categoty">커뮤니티</div>
+</div>
+<div class="community-title-box">
+    자유게시판
+</div>
+<h1>
+    {% if form.instance.pk %}
+    Edit
+    {% else %}
+    Create
+    {% endif %}
+    Post
+</h1>
+<form method="post" class="community-create-container">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+<a href="{% url 'post_list' %}">Back to Home</a>
+{% endblock %}

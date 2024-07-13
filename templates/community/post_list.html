@@ -1,42 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Community Posts</title>
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Community Posts</h1>
-        {% if posts %}
-            {% for post in posts %}
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ post.title }}</h2>
-                        <p class="card-text">{{ post.content }}</p>
-                        <p>Likes: {{ post.total_likes }}</p>
-                        <p>Bookmarks: {{ post.total_bookmarks }}</p>
-                        <a href="{% url 'like_post' post.id %}" class="btn btn-primary">Like</a>
-                        <a href="{% url 'bookmark_post' post.id %}" class="btn btn-info">
-                            {% if request.user in post.bookmarks.all %}
-                                Unbookmark
-                            {% else %}
-                                Bookmark
-                            {% endif %}
-                        </a>
-                        {% if request.user == post.author %}
-                            <a href="{% url 'post_update' post.id %}" class="btn btn-secondary">Edit</a>
-                            <a href="{% url 'post_delete' post.id %}" class="btn btn-danger">Delete</a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>No posts available.</p>
-        {% endif %}
-
-        {% if request.user.is_authenticated %}
-            <a href="{% url 'post_create' %}" class="btn btn-success mt-3">Add New Post</a>
-        {% endif %}
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/community/community_list.css">
+{% endblock %}
+{% block content %}
+    <div class="community-header">
+        <div class="community-categoty">이벤트</div>
+        <div class="community-categoty">채팅방</div>
+        <div class="community-categoty">커뮤니티</div>
     </div>
-</body>
-</html>
+    <div class="community-title-box">
+        자유게시판
+    </div>
+    <div class="community-post-container">
+        {% if posts %}
+        {% for post in posts %}
+        <div class="community-post-box">
+            <h2 >{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+            <p>Likes: {{ post.total_likes }}</p>
+            <p>Bookmarks: {{ post.total_bookmarks }}</p>
+            <a href="{% url 'like_post' post.id %}">Like</a>
+            <a href="{% url 'bookmark_post' post.id %}">
+                {% if request.user in post.bookmarks.all %}
+                    Unbookmark
+                {% else %}
+                    Bookmark
+                {% endif %}
+            </a>
+            {% if request.user == post.author %}
+                <a href="{% url 'post_update' post.id %}">Edit</a>
+                <a href="{% url 'post_delete' post.id %}">Delete</a>
+            {% endif %}   
+        </div>
+        {% endfor %} 
+        
+    {% else %}
+        <p>No posts available.</p>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'post_create' %}">Add New Post</a>
+    {% endif %}
+
+    </div>
+{% endblock %}
+{% block script %}
+
+{% endblock %}
