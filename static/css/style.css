@@ -19,6 +19,7 @@
 }
 #allo-logo-img1 {
     width: 70px;
+    object-fit: contain;
 }
 #allo-logo-img2 {
     width: 100px;
@@ -37,6 +38,7 @@
     display: flex;
     flex-direction: column;
     gap: 7px;
+    cursor: pointer;
 }
 #hamburger-btn > div {
     width: 40px;
@@ -50,6 +52,24 @@
 }
 #hamburger-btn>div:nth-child(3) {
     background-color: var(--main--blue--color);
+}
+
+/* sidenar */
+#sidebar {
+    background-color: var(--main--gray--color);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 75px);
+    width: 300px;
+    z-index: 5;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: none;
+}
+.sidebar-category {
+    margin: 30px;
+    font-size: 20px;
 }
 
 /* footer */

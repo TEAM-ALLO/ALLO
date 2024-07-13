@@ -12,35 +12,64 @@
     <div class="community-title-box">
         자유게시판
     </div>
+    <div class="community-top-box">
+        <div id="community-top-notice">
+            📣공지 및 규칙
+        </div>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'post_create' %}" id="community-top-btn">글쓰기</a>
+        {% endif %}
+    </div>
+    
     <div class="community-post-container">
         {% if posts %}
         {% for post in posts %}
         <div class="community-post-box">
-            <h2 >{{ post.title }}</h2>
-            <p>{{ post.content }}</p>
-            <p>Likes: {{ post.total_likes }}</p>
-            <p>Bookmarks: {{ post.total_bookmarks }}</p>
-            <a href="{% url 'like_post' post.id %}">Like</a>
-            <a href="{% url 'bookmark_post' post.id %}">
-                {% if request.user in post.bookmarks.all %}
-                    Unbookmark
-                {% else %}
-                    Bookmark
-                {% endif %}
-            </a>
+            <div class="community-post-box-left">
+                <div class="community-post-box-title">
+                    <h2>제목</h2>
+                    <h2 class="community-title">{{ post.title }}</h2>
+                </div>
+                <div class="community-post-box-author">
+                    <h2>작성자</h2>
+                    <h2>{{post.author}}</h2>
+                </div>
+                <div class="community-post-box-like">
+                    <a href="{% url 'like_post' post.id %}">Like</a>
+                    <p>{{ post.total_likes }}</p>
+                    <a href="{% url 'bookmark_post' post.id %}">
+                        {% if request.user in post.bookmarks.all %}
+                            <img src="/static/img/full-bookmark.svg" alt="북마크 아이콘" class="bookmark-icon">
+                        {% else %}
+                            <img src="/static/img/bookmark.svg" alt="비어있는 북마크 아이콘" class="bookmark-icon">
+                        {% endif %}
+                    </a>
+                    <p>{{ post.total_bookmarks }}</p>
+                </div>
+            </div>
+            <div class="community-post-box-right">
+                <div class="community-post-box-content">
+                    <h2>본문</h2>
+                    <p class="community-content">{{ post.content }}</p>
+                </div>
+                <div class="community-post-box-comment">
+                    <h2>댓글</h2>
+                    <!-- 첫번째 댓글 -->
+                     <h2>(댓글내용)</h2>
+                </div>
+            
+            <div class="community-post-box-ud">
             {% if request.user == post.author %}
                 <a href="{% url 'post_update' post.id %}">Edit</a>
                 <a href="{% url 'post_delete' post.id %}">Delete</a>
-            {% endif %}   
+            {% endif %}
+            </div>
+            </div>
         </div>
         {% endfor %} 
         
     {% else %}
         <p>No posts available.</p>
-    {% endif %}
-
-    {% if request.user.is_authenticated %}
-        <a href="{% url 'post_create' %}">Add New Post</a>
     {% endif %}
 
     </div>
