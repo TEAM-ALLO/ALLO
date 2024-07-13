@@ -1,11 +1,39 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <h1>{% if form.instance.id %}레시피 수정{% else %}새 레시피 작성{% endif %}</h1>
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" id="recipe-form">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form.recipe_name.label_tag }} {{ form.recipe_name }}
+    {{ form.cooking_time.label_tag }} {{ form.cooking_time }}
+    {{ form.servings.label_tag }} {{ form.servings }}
+    {{ form.difficulty.label_tag }} {{ form.difficulty }}
+    {{ form.image.label_tag }} {{ form.image }}
+
+    <div id="ingredients-container">
+        <h3>재료</h3>
+        <div class="ingredient-item">
+            <input type="text" name="ingredients[]" required>
+            <button type="button" class="remove-ingredient">삭제</button>
+        </div>
+    </div>
+    <button type="button" id="add-ingredient">재료 추가</button>
+
+    <div id="instructions-container">
+        <h3>조리 방법</h3>
+        <div class="instruction-item">
+            <textarea name="instructions[]" required></textarea>
+            <button type="button" class="remove-instruction">삭제</button>
+        </div>
+    </div>
+    <button type="button" id="add-instruction">조리 방법 추가</button>
+
     <button type="submit">저장</button>
 </form>
 <a href="{% url 'recipe:recipe_list' %}">목록으로 돌아가기</a>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/recipe/recipe_form.js' %}"></script>
 {% endblock %}
