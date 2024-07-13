@@ -1,0 +1,25 @@
+.community-header {
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    height: 50px;
+    display: flex;
+    align-items: center;    
+    justify-content: space-around;
+    color: #fff;
+    font-size: 20px;
+}
+.community-categoty:nth-child(3) {
+    color: black;
+}
+.community-title-box {
+    background-color: var(--main--gray--color);
+    font-size: 20px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+.community-create-container {
+    padding: 10px;
+}
