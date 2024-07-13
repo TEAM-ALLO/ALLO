@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>레시피 목록</h1>
+<a href="{% url 'recipe_create' %}">새 레시피 작성</a>
+<ul>
+{% for recipe in recipes %}
+    <li>
+        <a href="{% url 'recipe_detail' id=recipe.id %}">{{ recipe.recipe_name }}</a>
+        <p>조리 시간: {{ recipe.cooking_time }}분</p>
+        <p>난이도: {{ recipe.difficulty }}</p>
+    </li>
+{% empty %}
+    <li>등록된 레시피가 없습니다.</li>
+{% endfor %}
+</ul>
+{% endblock %}
