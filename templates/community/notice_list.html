@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notices</title>
+</head>
+<body>
+    <h1>Notices</h1>
+    <ul>
+        {% for notice in notices %}
+            <li>{{ notice.title }} - {{ notice.created_at }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
