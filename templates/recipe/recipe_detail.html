@@ -21,9 +21,9 @@
 <p>수정일: {{ recipe.updated_at }}</p>
 
 {% if user == recipe.author %}
-<a href="{% url 'recipe_edit' id=recipe.id %}">수정</a>
-<a href="{% url 'recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+<a href="{% url 'recipe:recipe_edit' id=recipe.id %}">수정</a>
+<a href="{% url 'recipe:recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
 {% endif %}
 
-<a href="{% url 'recipe_list' %}">목록으로 돌아가기</a>
+<a href="{% url 'recipe:recipe_list' %}">목록으로 돌아가기</a>
 {% endblock %}

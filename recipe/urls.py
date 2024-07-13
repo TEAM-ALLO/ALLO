@@ -4,6 +4,8 @@ from .views import recipe_create_view, recipe_list_view,recipe_detail_view, reci
 from django.conf import settings
 from django.conf.urls.static import static
 
+app_name = "recipe"
+
 urlpatterns = [
     path('recipe_create/', login_required(recipe_create_view), name='recipe_create'),
     path('recipe_list/', recipe_list_view, name='recipe_list'),
