@@ -2,9 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import User
 
-def users(request):
-    return render(request, 'users_main.html')
-
 def home(request):
     return render(request, 'users/home.html')
 
