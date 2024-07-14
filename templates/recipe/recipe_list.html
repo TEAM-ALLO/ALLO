@@ -1,17 +1,47 @@
 {% extends 'base.html' %}
-
+{% block head %}
+    <link rel="stylesheet" href="/static/css/recipe/recipe_list.css">
+{% endblock %}
 {% block content %}
-<h1>레시피 목록</h1>
-<a href="{% url 'recipe_create' %}">새 레시피 작성</a>
-<ul>
+<div class="recipe-nav">
+    <div>한식</div>
+    <div>일식</div>
+    <div>중식</div>
+    <div>양식</div>
+    <div>기타</div>
+</div>
+<h1 class="recipe-list-mention">지금 가장 인기있는 한식은?</h1>
+<div class="recipe-list-popular"> <!-- 좋아요수 가장 많은 음식 -->
+    <img src="" alt="">
+    <div>
+        <h2></h2> <!-- 요리 이름 -->
+        <h3></h3> <!-- 작성자 이름 -->
+        <h4></h4> <!-- 작성한 날짜 -->
+    </div>
+</div>
+<div class="recipe-list-btn-box">
+    <a href="{% url 'recipe_create' %}" class="recipe-list-btn">작성하기</a>
+</div>
+<ul class="recipe-list-container">
 {% for recipe in recipes %}
-    <li>
-        <a href="{% url 'recipe_detail' id=recipe.id %}">{{ recipe.recipe_name }}</a>
-        <p>조리 시간: {{ recipe.cooking_time }}분</p>
-        <p>난이도: {{ recipe.difficulty }}</p>
+    <li class="recipe-list-post">
+        {% if recipe.image %}
+            <img src="{{ recipe.image.url }}" alt="" class="recipe-list-img">
+        {% else %}
+            <img src="/static/img/empty2.svg" alt="" class="recipe-list-icon">
+        {% endif %}
+        <a href="{% url 'recipe_detail' id=recipe.id %}">
+            <div class="recipe-post-name">{{ recipe.recipe_name }}</div>
+            <div class="recipe-post-info">
+                <p>조리 시간: {{ recipe.cooking_time }}분</p>
+                <p>난이도: {{ recipe.difficulty }}</p>
+            </div>
+            
+        </a>        
     </li>
 {% empty %}
     <li>등록된 레시피가 없습니다.</li>
 {% endfor %}
 </ul>
+
 {% endblock %}
