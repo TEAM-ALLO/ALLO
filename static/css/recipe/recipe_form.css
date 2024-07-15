@@ -1,0 +1,118 @@
+#recipe-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 10px;
+}
+#recipe-form {
+    display: flex;
+    flex-direction: column;
+    
+}
+.recipe-input-container {
+    display: flex;
+    font-size: 20px;
+    align-items: center;
+    margin: 10px auto 10px calc((100vw - 450px)/2);
+}
+.recipe-input-container h2 {
+    font-weight: bold;
+    color: var(--main--red--color);
+    width: 140px;
+}
+.recipe-input-container select {
+    border: 0;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    padding: 10px;
+    width: 300px;
+}
+.recipe-input > input,
+.ingredient-item input {
+    border: 0;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    padding: 10px;
+    width: 300px;
+}
+.instruction-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.instruction-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.instruction-item textarea {
+    border: 0;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    padding: 10px;
+    width: 300px;
+}
+#ingredients-container {
+    margin: 10px;
+    display: flex;
+    margin: 10px auto 10px calc((100vw - 450px)/2);
+}
+.ingredient-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.remove-ingredient,
+.remove-instruction {
+    background-color: var(--main--red--color);
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: "Noto Sans KR", sans-serif;
+}
+#instructions-container {
+    margin: 10px;
+    display: flex;
+    margin: 10px auto 10px calc((100vw - 450px)/2);
+}
+#ingredients-container h3,
+#instructions-container h3 {
+    font-size: 20px;
+}
+#ingredients-container h3,
+#add-ingredient,
+#instructions-container h3,
+#add-instruction {
+    font-weight: bold;
+    color: var(--main--red--color);
+    width: 140px;
+}
+#add-ingredient,
+#add-instruction {
+    margin: 0 auto;
+}
+.ingredient-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.recipe-form-btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.recipe-form-btns a,
+.recipe-form-btns button {
+    background-color: var(--main--red--color);
+    color: #fff;
+    padding: 10px;
+    font-size: 20px;
+    margin: 10px;
+    border-radius: 10px;    
+    font-family: "Noto Sans KR", sans-serif;
+}
+.recipe-form-btns a {
+    height: 46.4px;
+    display: flex;
+    align-items: center;
+}

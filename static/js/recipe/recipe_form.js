@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const ingredientsContainer = document.getElementById('ingredients-container');
     const addInstruction = document.getElementById('add-instruction');
     const instructionsContainer = document.getElementById('instructions-container');
+    const ingredientGroup = ingredientsContainer.querySelector('.ingredient-group');
+    const instructionGroup = instructionsContainer.querySelector('.instruction-group')
 
     addIngredient.addEventListener('click', function() {
         const newIngredient = document.createElement('div');
@@ -11,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <input type="text" name="ingredients[]" required>
             <button type="button" class="remove-ingredient">삭제</button>
         `;
-        ingredientsContainer.appendChild(newIngredient);
+        ingredientGroup.appendChild(newIngredient);
     });
 
     addInstruction.addEventListener('click', function() {
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <textarea name="instructions[]" required></textarea>
             <button type="button" class="remove-instruction">삭제</button>
         `;
-        instructionsContainer.appendChild(newInstruction);
+        instructionGroup.appendChild(newInstruction);
     });
 
     document.addEventListener('click', function(e) {
@@ -33,5 +35,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-console.log('Recipe form script loaded');
