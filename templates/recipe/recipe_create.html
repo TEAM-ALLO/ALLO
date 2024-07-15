@@ -1,7 +1,0 @@
-<!-- recipes/recipe_create.html -->
-<h2>새 레시피 작성</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">저장</button>
-</form>
