@@ -3,25 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Bookmarked Posts</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container mt-5">
+    <div>
         <h1>Bookmarked Posts</h1>
         {% if posts %}
             {% for post in posts %}
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ post.title }}</h2>
-                        <p class="card-text">{{ post.content }}</p>
-                        <a href="{% url 'post_detail' post.id %}" class="btn btn-primary">View Post</a>
+                <div>
+                    <div>
+                        <h2>{{ post.title }}</h2>
+                        <p>{{ post.content }}</p>
+                        <a href="{% url 'community_user:post_detail' post.id %}">View Post</a>
                     </div>
                 </div>
             {% endfor %}
         {% else %}
             <p>No posts have been bookmarked yet.</p>
         {% endif %}
-        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+        <a href="{% url 'users_user:home' %}">Back to Home</a>
     </div>
 </body>
 </html>
