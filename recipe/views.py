@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import RecipeForm
 
-def recipe_list_view(request):
+def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'recipe/recipe_list.html', {'recipes': recipes})
 

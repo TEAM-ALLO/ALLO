@@ -23,5 +23,4 @@ urlpatterns = [
     path('recipe/', include('recipe.urls')),
     path('recycle/', include('recycle.urls')),
     path('', include('users.urls')),
-    path('auth/', include('users.urls')),
 ]

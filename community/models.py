@@ -25,6 +25,8 @@ class CommunityPost(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 기본값 제거
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='post_likes', blank=True)
     bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='post_bookmarks', blank=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.title
