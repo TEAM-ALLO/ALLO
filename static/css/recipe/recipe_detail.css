@@ -1,0 +1,68 @@
+.recipe-detail-img {
+    height: 100%;
+    width: 40%;
+    object-fit: contain;
+    max-height: 200px;
+}
+.recipe-title-container {
+    display: flex;
+    justify-content: space-between;
+    
+}
+.recipe-detail-info {
+    display: flex;
+    padding: 10px;
+    width: 80%;
+    margin: 0 auto;
+    gap: 10px;
+}
+.recipe-detail-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 60%;
+    font-size: 18px;
+    justify-content: space-between;
+}
+.recipe-detail-menu h1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.recipe-detail-info > div {
+    display: flex;
+}
+.recipe-detail-writer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.recipe-detail-btns {
+    text-decoration: underline;
+    display: flex;
+    gap: 10px;
+}
+.recipe-detail-ingredient {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+}
+.recipe-detail-ingredient h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+.recipe-detail-cook {
+    display: flex;
+    gap: 30px;
+}
+.recipe-detail-step {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.recipe-detail-step h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
