@@ -17,7 +17,20 @@
                 {% if user == recipe.author %}
                 <a href="{% url 'recipe_user:recipe_edit' id=recipe.id %}">수정</a>
                 <a href="{% url 'recipe_user:recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+            </div>
+            <div class="actions">  
+                <a href="{% url 'recipe_user:like_recipe' recipe.id %}" class="btn btn-primary">Like ({{ recipe.total_likes }})</a>
+                <a href="{% url 'recipe_user:bookmark_recipe' recipe.id %}" class="btn btn-info">
+                    {% if request.user in recipe.bookmarks.all %}
+                        Bookmark
+                    {% else %}
+                        Bookmarked
+                    {% endif %}
+                </a>
+                    {% endif %}
+
                 {% endif %}
+
             </div>
         </div>
         <p>작성자: {{ recipe.author }}</p>
@@ -50,4 +63,7 @@
 <div class="btn-div">
     <a href="{% url 'recipe_user:recipe_list' %}" class="recipe-detail-btn">목록</a>
 </div>
+
+<a href="{% url 'recipe_user:recipe_list' %}" class="">목록으로 돌아가기</a>
+
 {% endblock %}

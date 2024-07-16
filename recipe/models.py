@@ -17,7 +17,9 @@ class Recipe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="작성일")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="수정일")
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="작성자")
-
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='recipe_likes', blank=True)
+    bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='recipe_bookmarks', blank=True)
+    
     def __str__(self):
         return self.recipe_name
 
@@ -26,3 +28,9 @@ class Recipe(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+    def total_likes(self):
+        return self.likes.count()
+
+    def total_bookmarks(self):
+        return self.bookmarks.count()
