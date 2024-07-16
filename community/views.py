@@ -28,7 +28,7 @@ def post_create(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('post_list')
+            return redirect('community_user:post_list')
     else:
         form = PostForm()
     return render(request, 'community/post_form.html', {'form': form})
@@ -40,7 +40,7 @@ def post_update(request, pk):
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('post_list')
+            return redirect('community_user:post_list')
     else:
         form = PostForm(instance=post)
     return render(request, 'community/post_form.html', {'form': form})
@@ -50,7 +50,7 @@ def post_delete(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
     if request.user == post.author:
         post.delete()
-    return redirect('post_list')
+    return redirect('community_user:post_list')
 
 def like_post(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
@@ -58,7 +58,7 @@ def like_post(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-    return redirect('post_list')
+    return redirect('community_user:post_list')
 
 @login_required
 def bookmark_post(request, pk):
@@ -67,7 +67,7 @@ def bookmark_post(request, pk):
         post.bookmarks.remove(request.user)
     else:
         post.bookmarks.add(request.user)
-    return redirect('post_list')
+    return redirect('community_user:post_list')
 
 @login_required
 def bookmarked_posts(request):

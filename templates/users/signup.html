@@ -5,8 +5,8 @@
 {% endblock %}
 {% block content %}
 <div class="user-nav">
-    <a href="{% url 'user:signup' %}" class="user-nav-click">회원가입</a>
-    <a href="{% url 'user:login' %}">로그인</a>
+    <a href="{% url 'users_user:signup' %}" class="user-nav-click">회원가입</a>
+    <a href="{% url 'users_user:login' %}">로그인</a>
 </div>
 <form action="" method="POST" class="signup-big-container">
     {% csrf_token %}
