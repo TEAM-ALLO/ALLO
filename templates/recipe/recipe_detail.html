@@ -17,35 +17,32 @@
                 {% if user == recipe.author %}
                 <a href="{% url 'recipe_user:recipe_edit' id=recipe.id %}">수정</a>
                 <a href="{% url 'recipe_user:recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+                {% endif %}
             </div>
-            <div class="actions">  
+            <div class="actions">
                 <a href="{% url 'recipe_user:like_recipe' recipe.id %}" class="btn btn-primary">Like ({{ recipe.total_likes }})</a>
                 <a href="{% url 'recipe_user:bookmark_recipe' recipe.id %}" class="btn btn-info">
                     {% if request.user in recipe.bookmarks.all %}
-                        Bookmark
-                    {% else %}
                         Bookmarked
+                    {% else %}
+                        Bookmark
                     {% endif %}
                 </a>
-                    {% endif %}
-
-                {% endif %}
-
             </div>
         </div>
         <p>작성자: {{ recipe.author }}</p>
         <!-- <div>
             <p>작성일: {{ recipe.created_at }}</p>
-            <p>수정일: {{ recipe.updated_at }}</p>    
+            <p>수정일: {{ recipe.updated_at }}</p>
         </div> -->
         <p>{{ recipe.servings }}인분</p>
         <div class="recipe-detail-cook">
             <p>난이도: {{ recipe.difficulty }}</p>
             <p>조리 시간: {{ recipe.cooking_time }}분</p>
-        </div>        
+        </div>
     </div>
 </div>
-<h2 class="recipe-detila-ingredient-title">재료</h2>
+<h2 class="recipe-detail-ingredient-title">재료</h2>
 <div class="recipe-detail-ingredient">
     {% for ingredient in recipe.ingredients.splitlines %}
     <div>{{ ingredient }}</div>
@@ -56,7 +53,7 @@
     {% for index, instruction in instructions_with_index %}
     <div class="recipe-detail-steps">
         <div class="recipe-detail-step">{{ index }}단계</div>
-        <div class="receipe-detail-content">{{ instruction }}</div>
+        <div class="recipe-detail-content">{{ instruction }}</div>
     </div>
     {% endfor %}
 </div>
