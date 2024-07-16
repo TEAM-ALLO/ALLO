@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import RecipeForm
 
-def recipe_list_view(request):
+def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'recipe/recipe_list.html', {'recipes': recipes})
 
@@ -31,7 +31,7 @@ def recipe_create_view(request):
             recipe.ingredients = '\n'.join(request.POST.getlist('ingredients[]'))
             recipe.instructions = '\n'.join(request.POST.getlist('instructions[]'))
             recipe.save()
-            return redirect('recipe_detail', id=recipe.id)
+            return redirect('recipe_user:recipe_detail', id=recipe.id)
     else:
         form = RecipeForm()
     return render(request, 'recipe/recipe_form.html', {'form': form})
@@ -40,7 +40,7 @@ def recipe_create_view(request):
 def recipe_edit_view(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     if request.user != recipe.author:
-        return redirect('recipe_detail', id=recipe.id)
+        return redirect('recipe_user:recipe_detail', id=recipe.id)
     
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
@@ -49,7 +49,7 @@ def recipe_edit_view(request, id):
             recipe.ingredients = '\n'.join(request.POST.getlist('ingredients[]'))
             recipe.instructions = '\n'.join(request.POST.getlist('instructions[]'))
             recipe.save()
-            return redirect('recipe_detail', id=recipe.id)
+            return redirect('recipe_user:recipe_detail', id=recipe.id)
     else:
         form = RecipeForm(instance=recipe)
         initial_ingredients = recipe.ingredients.split('\n')
@@ -66,6 +66,6 @@ def recipe_delete_view(request, id):  # 변경
     recipe = get_object_or_404(Recipe, id=id)  # 변경
     if request.user == recipe.author:
         recipe.delete()
-        return redirect('recipe_list')
+        return redirect('recipe_user:recipe_list')
     else:
-        return redirect('recipe_detail', id=recipe.id)  # 변경
+        return redirect('recipe_user:recipe_detail', id=recipe.id)  # 변경

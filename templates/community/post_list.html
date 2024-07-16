@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="/static/css/community/community_list.css">
+    <link rel="stylesheet" href="/static/css/community/post_list.css">
 {% endblock %}
 {% block content %}
     <div class="community-header">
@@ -17,7 +17,7 @@
             📣공지 및 규칙
         </div>
         {% if request.user.is_authenticated %}
-            <a href="{% url 'post_create' %}" id="community-top-btn">글쓰기</a>
+            <a href="{% url 'community_user:post_create' %}" id="community-top-btn">글쓰기</a>
         {% endif %}
     </div>
     
@@ -35,9 +35,9 @@
                     <h2>{{post.author}}</h2>
                 </div>
                 <div class="community-post-box-like">
-                    <a href="{% url 'like_post' post.id %}">Like</a>
+                    <a href="{% url 'community_user:like_post' post.id %}">Like</a>
                     <p>{{ post.total_likes }}</p>
-                    <a href="{% url 'bookmark_post' post.id %}">
+                    <a href="{% url 'community_user:bookmark_post' post.id %}">
                         {% if request.user in post.bookmarks.all %}
                             <img src="/static/img/full-bookmark.svg" alt="북마크 아이콘" class="bookmark-icon">
                         {% else %}
@@ -60,8 +60,8 @@
 
                 <div class="community-post-box-ud">
                 {% if request.user == post.author %}
-                    <a href="{% url 'post_update' post.id %}">Edit</a>
-                    <a href="{% url 'post_delete' post.id %}">Delete</a>
+                    <a href="{% url 'community_userpost_update' post.id %}">Edit</a>
+                    <a href="{% url 'community_userpost_delete' post.id %}">Delete</a>
                 {% endif %}
                 </div>
             </div>

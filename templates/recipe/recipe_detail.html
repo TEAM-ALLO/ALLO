@@ -15,8 +15,8 @@
             <h1>{{ recipe.recipe_name }}</h1>
             <div class="recipe-detail-btns">
                 {% if user == recipe.author %}
-                <a href="{% url 'recipe_edit' id=recipe.id %}">수정</a>
-                <a href="{% url 'recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+                <a href="{% url 'recipe_user:recipe_edit' id=recipe.id %}">수정</a>
+                <a href="{% url 'recipe_user:recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
                 {% endif %}
             </div>
         </div>
@@ -48,7 +48,6 @@
     {% endfor %}
 </div>
 <div class="btn-div">
-    <a href="{% url 'recipe_list' %}" class="recipe-detail-btn">목록</a>
+    <a href="{% url 'recipe_user:recipe_list' %}" class="recipe-detail-btn">목록</a>
 </div>
-
 {% endblock %}

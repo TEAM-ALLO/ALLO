@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Interior Posts</h1>
+  <div class="interior-list">
+    {% for post in posts %}
+      <div class="post">
+        <a href="{% url 'interior_detail' post.pk %}">
+          <img src="{{ post.image.url }}" alt="{{ post.title }}">
+          <h2>{{ post.title }}</h2>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
