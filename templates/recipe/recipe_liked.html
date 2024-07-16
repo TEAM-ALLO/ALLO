@@ -2,24 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bookmarked Posts</title>
+    <title>Liked Recipes</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Bookmarked Posts</h1>
-        {% if posts %}
-            {% for post in posts %}
+        <h1>Liked Recipe</h1>
+        {% if reicipes %}
+            {% for recipe in recipes %}
                 <div class="card mb-2">
                     <div class="card-body">
-                        <h2 class="card-title">{{ post.title }}</h2>
-                        <p class="card-text">{{ post.content }}</p>
-                        <a href="{% url 'commutiny_user:post_detail' post.id %}" class="btn btn-primary">View Post</a>
+                        <h2 class="card-title">{{ recipe.title }}</h2>
+                        <p class="card-text">{{ recipe.content }}</p>
+                        <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary">View Recipes</a>
                     </div>
                 </div>
             {% endfor %}
         {% else %}
-            <p>No posts have been bookmarked yet.</p>
+            <p>No recipes have been liked yet.</p>
         {% endif %}
         <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
     </div>
