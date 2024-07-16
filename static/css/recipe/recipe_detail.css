@@ -3,18 +3,18 @@
     width: 40%;
     object-fit: contain;
     max-height: 200px;
+    background-color: black;
 }
 .recipe-title-container {
     display: flex;
-    justify-content: space-between;
-    
+    justify-content: space-between;    
 }
 .recipe-detail-info {
     display: flex;
-    padding: 10px;
-    width: 80%;
+    width: 70%;
     margin: 0 auto;
-    gap: 10px;
+    gap: 30px;
+    justify-content: center;
 }
 .recipe-detail-menu {
     display: flex;
@@ -29,9 +29,6 @@
     font-weight: bold;
 }
 
-.recipe-detail-info > div {
-    display: flex;
-}
 .recipe-detail-writer {
     display: flex;
     justify-content: space-between;
