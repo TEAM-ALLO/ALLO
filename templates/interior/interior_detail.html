@@ -1,8 +1,30 @@
 {% extends 'base.html' %}
-
 {% block content %}
-  <h1>{{ post.title }}</h1>
-  <img src="{{ post.image.url }}" alt="{{ post.title }}">
-  <p>{{ post.content }}</p>
-  <p><a href="{% url 'interior_user:interior_list' %}">Back to list</a></p>
+<div class="interior-header">
+    <h1>{{ post.title }}</h1>
+</div>
+<div class="interior-detail">
+    <p>{{ post.author }} - {{ post.created_at }}</p>
+    <p>{{ post.content }}</p>
+</div>
+<div class="interior-actions">
+    {% if request.user == post.author %}
+    <a href="{% url 'interior_user:interior_update' post.pk %}">수정</a>
+    <a href="{% url 'interior_user:interior_delete' post.pk %}">삭제</a>
+    {% endif %}
+    <a href="{% url 'interior_user:like_interior' post.pk %}">
+        {% if request.user in post.likes.all %}
+        좋아요 취소
+        {% else %}
+        좋아요
+        {% endif %}
+    </a>
+    <a href="{% url 'interior_user:bookmark_interior' post.pk %}">
+        {% if request.user in post.bookmarks.all %}
+        북마크 취소
+        {% else %}
+        북마크
+        {% endif %}
+    </a>
+</div>
 {% endblock %}
