@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/interior/interior_create.css">
+{% endblock %}
+{% block content %}
+<div class="interior-header">
+    <div class="interior-categoty">이벤트</div>
+    <div class="interior-categoty">채팅방</div>
+    <div class="interior-categoty">커뮤니티</div>
+</div>
+<div class="interior-title-box">
+    자유게시판
+</div>
+<h1>
+    {% if form.instance.pk %}
+    Edit
+    {% else %}
+    Create
+    {% endif %}
+    Post
+</h1>
+<form method="post" class="interior-create-container">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+<a href="{% url 'interior_user:interior_list' %}">Back to Home</a>
+{% endblock %}

@@ -58,7 +58,7 @@ def like_post(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-    return redirect('community_user:post_list')
+    return redirect('community_user:post_detail')
 
 @login_required
 def bookmark_post(request, pk):
@@ -67,7 +67,7 @@ def bookmark_post(request, pk):
         post.bookmarks.remove(request.user)
     else:
         post.bookmarks.add(request.user)
-    return redirect('community_user:post_list')
+    return redirect('community_user:post_detail')
 
 @login_required
 def bookmarked_posts(request):
