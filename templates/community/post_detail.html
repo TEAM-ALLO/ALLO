@@ -14,8 +14,8 @@
             <p>{{ post.content }}</p>
         </div>
         <div class="actions">
-            <a href="{% url 'like_post' post.id %}" class="btn btn-primary">Like ({{ post.total_likes }})</a>
-            <a href="{% url 'bookmark_post' post.id %}" class="btn btn-info">
+            <a href="{% url 'commutiny_user:like_post' post.id %}" class="btn btn-primary">Like ({{ post.total_likes }})</a>
+            <a href="{% url 'commutiny_user:bookmark_post' post.id %}" class="btn btn-info">
                 {% if request.user in post.bookmarks.all %}
                     Unbookmark
                 {% else %}
@@ -23,8 +23,8 @@
                 {% endif %}
             </a>
             {% if request.user == post.author %}
-                <a href="{% url 'post_update' post.id %}" class="btn btn-secondary">Edit</a>
-                <a href="{% url 'post_delete' post.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'commutiny_user:post_update' post.id %}" class="btn btn-secondary">Edit</a>
+                <a href="{% url 'commutiny_user:post_delete' post.id %}" class="btn btn-danger">Delete</a>
             {% endif %}
         </div>
         <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>

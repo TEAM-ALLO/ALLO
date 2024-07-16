@@ -8,7 +8,7 @@ def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'recipe/recipe_list.html', {'recipes': recipes})
 
-def recipe_detail_view(request, id):  # 변경
+def recipe_detail(request, id):  # 변경
     recipe = get_object_or_404(Recipe, id=id)  # 변경
     return render(request, 'recipe/recipe_detail.html', {'recipe': recipe})
 
@@ -22,7 +22,7 @@ def recipe_create_view(request):
             recipe.ingredients = '\n'.join(request.POST.getlist('ingredients[]'))
             recipe.instructions = '\n'.join(request.POST.getlist('instructions[]'))
             recipe.save()
-            return redirect('recipe_detail', id=recipe.id)
+            return redirect('recipe_user:recipe_detail', id=recipe.id)
     else:
         form = RecipeForm()
     return render(request, 'recipe/recipe_form.html', {'form': form})
@@ -31,7 +31,7 @@ def recipe_create_view(request):
 def recipe_edit_view(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     if request.user != recipe.author:
-        return redirect('recipe_detail', id=recipe.id)
+        return redirect('recipe_user:recipe_detail', id=recipe.id)
     
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
@@ -40,7 +40,7 @@ def recipe_edit_view(request, id):
             recipe.ingredients = '\n'.join(request.POST.getlist('ingredients[]'))
             recipe.instructions = '\n'.join(request.POST.getlist('instructions[]'))
             recipe.save()
-            return redirect('recipe_detail', id=recipe.id)
+            return redirect('recipe_user:recipe_detail', id=recipe.id)
     else:
         form = RecipeForm(instance=recipe)
         initial_ingredients = recipe.ingredients.split('\n')
@@ -57,6 +57,35 @@ def recipe_delete_view(request, id):  # 변경
     recipe = get_object_or_404(Recipe, id=id)  # 변경
     if request.user == recipe.author:
         recipe.delete()
-        return redirect('recipe_list')
+        return redirect('recipe_user:recipe_list')
     else:
-        return redirect('recipe_detail', id=recipe.id)  # 변경
+        return redirect('recipe_user:recipe_detail', id=recipe.id)  # 변경
+
+def like_recipe(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+    if recipe.likes.filter(id=request.user.id).exists():
+        recipe.likes.remove(request.user)
+    else:
+        recipe.likes.add(request.user)
+    return redirect('recipe_user:recipe_detail', id=recipe.id)
+
+@login_required
+def bookmark_recipe(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+    if request.user in recipe.bookmarks.all():
+        recipe.bookmarks.remove(request.user)
+    else:
+        recipe.bookmarks.add(request.user)
+    return redirect('recipe_user:recipe_detail', id=recipe.id)
+
+@login_required
+def liked_recipes(request):
+    user = request.user
+    recipes = Recipe.objects.filter(likes=user).order_by('-date_posted')
+    return render(request, 'recipe/recipe_liked.html', {'recipes': recipes})
+
+@login_required
+def bookmarked_recipes(request):
+    user = request.user
+    recipes = Recipe.objects.filter(bookmarks=user).order_by('-date_posted')
+    return render(request, 'recipe/recipe_bookmarked.html', {'recipes': recipes})
