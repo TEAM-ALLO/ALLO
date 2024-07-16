@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Recipe
-from django.contrib.auth.models import User
+from .models import Recipe, Comment
 from django.contrib.auth.decorators import login_required
-from .forms import RecipeForm
+from django.views.decorators.http import require_POST
+from .forms import RecipeForm, CommentForm
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
@@ -11,6 +11,8 @@ def recipe_list(request):
 
 def recipe_detail_view(request, id):
     recipe = get_object_or_404(Recipe, id=id)
+    comments = recipe.comments.all()
+    comment_form = CommentForm()
     instructions_with_index = [
         (index + 1, instruction)
         for index, instruction in enumerate(recipe.instructions.splitlines())
@@ -18,6 +20,8 @@ def recipe_detail_view(request, id):
     context = {
         'recipe': recipe,
         'instructions_with_index': instructions_with_index,
+        'comments' : comments,
+        'comment_form' : comment_form,
     }
     return render(request, 'recipe/recipe_detail.html', context)
 
@@ -99,3 +103,24 @@ def bookmarked_recipes(request):
     user = request.user
     recipes = Recipe.objects.filter(bookmarks=user).order_by('-date_posted')
     return render(request, 'recipe/recipe_bookmarked.html', {'recipes': recipes})
+
+@require_POST
+def comments_create(request, id):
+    if request.user.is_authenticated:
+        recipe = get_object_or_404(Recipe, id=id)
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.recipe = recipe
+            comment.user = request.user
+            comment.save()
+        return redirect('recipe_user:recipe_detail', recipe.id)
+    return redirect('users_user:login')
+
+@require_POST
+def comments_delete(request, recipe_id, comment_id):
+    if request.user.is_authenticated:
+        comment = get_object_or_404(Comment, id=comment_id)
+        if request.user == comment.user:
+            comment.delete()
+    return redirect('recipe_user:recipe_detail', recipe_id)
