@@ -21,7 +21,6 @@ def recipe_detail_view(request, id):
     }
     return render(request, 'recipe/recipe_detail.html', context)
 
-
 @login_required
 def recipe_create_view(request):
     if request.method == 'POST':
@@ -71,6 +70,7 @@ def recipe_delete_view(request, id):  # 변경
     else:
         return redirect('recipe_user:recipe_detail', id=recipe.id)  # 변경
 
+@login_required
 def like_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     if recipe.likes.filter(id=request.user.id).exists():
