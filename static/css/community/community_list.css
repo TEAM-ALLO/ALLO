@@ -54,6 +54,7 @@
 .community-post-box {
     border: 1px solid var(--main--gray--color);
     display: flex;
+    cursor: pointer;
 }
 .community-post-box-left {
     display: flex;

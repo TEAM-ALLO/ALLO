@@ -28,6 +28,9 @@
                     {% endif %}
                 </a>
                     {% endif %}
+
+                {% endif %}
+
             </div>
         </div>
         <p>작성자: {{ recipe.author }}</p>
@@ -42,13 +45,25 @@
         </div>        
     </div>
 </div>
+<h2 class="recipe-detila-ingredient-title">재료</h2>
 <div class="recipe-detail-ingredient">
-    <h2>재료</h2>
-    <p>{{ recipe.ingredients|linebreaks }}</p>
+    {% for ingredient in recipe.ingredients.splitlines %}
+    <div>{{ ingredient }}</div>
+    {% endfor %}
 </div>
-<div class="recipe-detail-step">
+<div class="recipe-detail-step-container">
     <h2>레시피</h2>
-    <p>{{ recipe.instructions|linebreaks }}</p>    
+    {% for index, instruction in instructions_with_index %}
+    <div class="recipe-detail-steps">
+        <div class="recipe-detail-step">{{ index }}단계</div>
+        <div class="receipe-detail-content">{{ instruction }}</div>
+    </div>
+    {% endfor %}
 </div>
+<div class="btn-div">
+    <a href="{% url 'recipe_user:recipe_list' %}" class="recipe-detail-btn">목록</a>
+</div>
+
 <a href="{% url 'recipe_user:recipe_list' %}" class="">목록으로 돌아가기</a>
+
 {% endblock %}

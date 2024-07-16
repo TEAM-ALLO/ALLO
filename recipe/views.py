@@ -8,9 +8,11 @@ def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'recipe/recipe_list.html', {'recipes': recipes})
 
+
 def recipe_detail(request, id):  # 변경
     recipe = get_object_or_404(Recipe, id=id)  # 변경
     return render(request, 'recipe/recipe_detail.html', {'recipe': recipe})
+
 
 @login_required
 def recipe_create_view(request):
