@@ -1,39 +1,70 @@
 {% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/recipe/recipe_list.css">
+    <link rel="stylesheet" href="/static/css/recipe/recipe_form.css">
+    <link rel="stylesheet" href="/static/css/recipe/recipe_edit.css">
+{% endblock %}
 {% load static %}
 
 {% block content %}
-<h2>레시피 수정</h2>
+<div class="recipe-nav">
+    <a>한식</a>
+    <a>일식</a>
+    <a>중식</a>
+    <a>양식</a>
+    <a>기타</a>
+</div>
+<h2 class="recipe-edit-title">레시피 수정</h2>
 <form method="post" enctype="multipart/form-data" id="recipe-form">
     {% csrf_token %}
-    {{ form.recipe_name.label_tag }} {{ form.recipe_name }}
-    {{ form.cooking_time.label_tag }} {{ form.cooking_time }}
-    {{ form.servings.label_tag }} {{ form.servings }}
-    {{ form.difficulty.label_tag }} {{ form.difficulty }}
-    {{ form.image.label_tag }} {{ form.image }}
-
+    <div class="recipe-input-container">
+        <h2>{{ form.recipe_name.label_tag }}</h2>
+        <div class="recipe-input">{{ form.recipe_name }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.cooking_time.label_tag }}</h2>
+        <div class="recipe-input">{{ form.cooking_time }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.servings.label_tag }}</h2>
+        <div class="recipe-input">{{ form.servings }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.difficulty.label_tag }}</h2>
+        <div>{{ form.difficulty }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.image.label_tag }}</h2>
+        <div>{{ form.image }}</div>
+    </div>
     <div id="ingredients-container">
         <h3>재료</h3>
-        {% for ingredient in initial_ingredients %}
-            <div class="ingredient-item">
-                <input type="text" name="ingredients[]" value="{{ ingredient }}" required>
-                <button type="button" class="remove-ingredient">삭제</button>
-            </div>
-        {% endfor %}
+        <div class="ingredient-group">
+            {% for ingredient in initial_ingredients %}
+                <div class="ingredient-item">
+                    <input type="text" name="ingredients[]" value="{{ ingredient }}" required>
+                    <button type="button" class="remove-ingredient">삭제</button>
+                </div>
+            {% endfor %}            
+        </div>
+        
     </div>
-    <button type="button" id="add-ingredient">재료 추가</button>
+    <button type="button" id="add-ingredient">+재료 추가</button>
 
     <div id="instructions-container">
         <h3>조리 방법</h3>
-        {% for instruction in initial_instructions %}
+        <div class="instruction-group">
+            {% for instruction in initial_instructions %}
             <div class="instruction-item">
                 <textarea name="instructions[]" required>{{ instruction }}</textarea>
                 <button type="button" class="remove-instruction">삭제</button>
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>        
     </div>
-    <button type="button" id="add-instruction">조리 방법 추가</button>
+    <button type="button" id="add-instruction">+조리 단계 추가</button>
 
-    <button type="submit">수정</button>
+    <button type="submit" class="recipe-edit-btn">수정</button>
 </form>
 
 {% endblock %}
