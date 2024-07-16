@@ -8,9 +8,11 @@ def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'recipe/recipe_list.html', {'recipes': recipes})
 
-def recipe_detail_view(request, id):  # 변경
+
+def recipe_detail(request, id):  # 변경
     recipe = get_object_or_404(Recipe, id=id)  # 변경
     return render(request, 'recipe/recipe_detail.html', {'recipe': recipe})
+
 
 @login_required
 def recipe_create_view(request):
@@ -60,3 +62,32 @@ def recipe_delete_view(request, id):  # 변경
         return redirect('recipe_user:recipe_list')
     else:
         return redirect('recipe_user:recipe_detail', id=recipe.id)  # 변경
+
+def like_recipe(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+    if recipe.likes.filter(id=request.user.id).exists():
+        recipe.likes.remove(request.user)
+    else:
+        recipe.likes.add(request.user)
+    return redirect('recipe_user:recipe_detail', id=recipe.id)
+
+@login_required
+def bookmark_recipe(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+    if request.user in recipe.bookmarks.all():
+        recipe.bookmarks.remove(request.user)
+    else:
+        recipe.bookmarks.add(request.user)
+    return redirect('recipe_user:recipe_detail', id=recipe.id)
+
+@login_required
+def liked_recipes(request):
+    user = request.user
+    recipes = Recipe.objects.filter(likes=user).order_by('-date_posted')
+    return render(request, 'recipe/recipe_liked.html', {'recipes': recipes})
+
+@login_required
+def bookmarked_recipes(request):
+    user = request.user
+    recipes = Recipe.objects.filter(bookmarks=user).order_by('-date_posted')
+    return render(request, 'recipe/recipe_bookmarked.html', {'recipes': recipes})
