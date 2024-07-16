@@ -114,3 +114,6 @@
     margin: 10px auto;
     color: #fff !important;
 }
+.main-container p>label {
+    display: none;
+ }
