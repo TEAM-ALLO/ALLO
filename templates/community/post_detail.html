@@ -11,7 +11,6 @@
         <div class="actions">
             <a href="{% url 'community_user:like_post' post.id %}" class="btn btn-primary">Like ({{ post.total_likes }})</a>
             <a href="{% url 'community_user:bookmark_post' post.id %}" class="btn btn-info">
-
                 {% if request.user in post.bookmarks.all %}
                     Unbookmark
                 {% else %}

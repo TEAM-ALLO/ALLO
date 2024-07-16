@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import recipe_create_view, recipe_list, recipe_detail_view , recipe_edit_view, recipe_delete_view, bookmarked_recipes, bookmark_recipe, like_recipe, liked_recipes
+from .views import recipe_create_view, recipe_list,recipe_detail_view, recipe_edit_view, recipe_delete_view, bookmarked_recipes, bookmark_recipe, like_recipe, liked_recipes
 from django.conf import settings
 from django.conf.urls.static import static
 
