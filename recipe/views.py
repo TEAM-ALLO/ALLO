@@ -8,9 +8,18 @@ def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'recipe/recipe_list.html', {'recipes': recipes})
 
-def recipe_detail_view(request, id):  # 변경
-    recipe = get_object_or_404(Recipe, id=id)  # 변경
-    return render(request, 'recipe/recipe_detail.html', {'recipe': recipe})
+def recipe_detail_view(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+    instructions_with_index = [
+        (index + 1, instruction)
+        for index, instruction in enumerate(recipe.instructions.splitlines())
+    ]
+    context = {
+        'recipe': recipe,
+        'instructions_with_index': instructions_with_index,
+    }
+    return render(request, 'recipe/recipe_detail.html', context)
+
 
 @login_required
 def recipe_create_view(request):
