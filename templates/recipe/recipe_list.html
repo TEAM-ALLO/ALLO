@@ -5,19 +5,26 @@
 {% endblock %}
 {% block content %}
 <div class="recipe-nav">
-    <a>한식</a>
-    <a>일식</a>
-    <a>중식</a>
-    <a>양식</a>
-    <a>기타</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=korean">한식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese">일식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese">중식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=western">양식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=snack">분식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=others">기타</a>
 </div>
-<h1 class="recipe-list-mention">지금 가장 인기있는 한식은?</h1>
+<h1 class="recipe-list-mention">
+    {% if category_name == '기타' %}
+        지금 가장 인기있는 음식은?
+    {% else %}
+        지금 가장 인기있는 {{ category_name }}은?
+    {% endif %}
+</h1>
 <div class="recipe-list-popular"> <!-- 좋아요수 가장 많은 음식 -->
-    <img src="" alt="">
+    <img src="{% if popular_recipe and popular_recipe.image %}{{ popular_recipe.image.url }}{% else %}/static/img/empty2.svg{% endif %}" alt="">
     <div>
-        <h2></h2> <!-- 요리 이름 -->
-        <h3></h3> <!-- 작성자 이름 -->
-        <h4></h4> <!-- 작성한 날짜 -->
+        <h2>{{ popular_recipe.recipe_name }}</h2> <!-- 요리 이름 -->
+        <h3>{{ popular_recipe.author }}</h3> <!-- 작성자 이름 -->
+        <h4>{{ popular_recipe.created_at }}</h4> <!-- 작성한 날짜 -->
     </div>
 </div>
 <div class="recipe-list-btn-box">
@@ -25,21 +32,20 @@
 </div>
 <ul class="recipe-list-container">
 {% for recipe in recipes %}
-    <a  href="{% url 'recipe_user:recipe_detail' id=recipe.id %}" class="recipe-list-post">
+    <a href="{% url 'recipe_user:recipe_detail' id=recipe.id %}" class="recipe-list-post">
         {% if recipe.image %}
             <img src="{{ recipe.image.url }}" alt="" class="recipe-list-img">
         {% else %}
             <img src="/static/img/empty2.svg" alt="" class="recipe-list-icon">
         {% endif %}
-            <div class="recipe-post-name">{{ recipe.recipe_name }}</div>
-            <div class="recipe-post-info">
-                <p>조리 시간: {{ recipe.cooking_time }}분</p>
-                <p>난이도: {{ recipe.difficulty }}</p>
-            </div>               
-        </a>
+        <div class="recipe-post-name">{{ recipe.recipe_name }}</div>
+        <div class="recipe-post-info">
+            <p>조리 시간: {{ recipe.cooking_time }}분</p>
+            <p>난이도: {{ recipe.difficulty }}</p>
+        </div>               
+    </a>
 {% empty %}
     <li>등록된 레시피가 없습니다.</li>
 {% endfor %}
 </ul>
-
 {% endblock %}
