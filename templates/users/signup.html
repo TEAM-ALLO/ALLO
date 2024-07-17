@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-<link rel="stylesheet" href="/static/css/users/signup.css">  
+    <link rel="stylesheet" href="{% static 'css/users/signup.css' %}">
 {% endblock %}
 {% block content %}
 <div class="user-nav">
@@ -12,22 +12,24 @@
     {% csrf_token %}
     <div class="signup-section">
         <p class="signup-sub">아이디</p>
-        <input name="username" type="text" class="signup-container">
+        <input name="id" type="text" class="signup-container">
+        <span class="error">{{ errors.id }}</span>
     </div>
     <div class="signup-section">
         <p class="signup-sub">비밀번호</p>
         <input name="password" type="password" class="signup-container">
+        <span class="error">{{ errors.password }}</span>
     </div>
     <div class="signup-section">
-        <p class="signup-sub">닉네임</p>
-        <input name="nickname" type="text" class="signup-container">
+        <p class="signup-sub">이름</p>
+        <input name="name" type="text" class="signup-container">
+        <span class="error">{{ errors.name }}</span>
     </div>
     <div class="signup-section">
         <p class="signup-sub">이메일</p>
-        <input name="email" type="text" class="signup-container">    
+        <input name="email" type="email" class="signup-container">
+        <span class="error">{{ errors.email }}</span>
     </div>
-    
     <input type="submit" value="회원가입" class="signup-btn">
-
 </form>
 {% endblock %}
