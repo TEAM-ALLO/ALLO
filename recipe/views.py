@@ -35,6 +35,8 @@ def recipe_create_view(request):
             recipe.ingredients = '\n'.join(request.POST.getlist('ingredients[]'))
             recipe.instructions = '\n'.join(request.POST.getlist('instructions[]'))
             recipe.save()
+            request.user.participation_score += 2
+            request.user.save()
             return redirect('recipe_user:recipe_detail', id=recipe.id)
     else:
         form = RecipeForm()
@@ -81,6 +83,8 @@ def like_recipe(request, id):
         recipe.likes.remove(request.user)
     else:
         recipe.likes.add(request.user)
+        recipe.author.participation_score += 1
+        recipe.author.save()
     return redirect('recipe_user:recipe_detail', id=recipe.id)
 
 @login_required
