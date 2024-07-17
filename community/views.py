@@ -29,7 +29,7 @@ def post_create(request):
             post.save()
             request.user.participation_score += 2
             request.user.save()
-            return redirect('community:post_list')
+            return redirect('community_user:post_list')
     else:
         form = PostForm()
     return render(request, 'community/post_form.html', {'form': form})
@@ -41,7 +41,7 @@ def post_update(request, pk):
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('community:post_list')
+            return redirect('community_user:post_list')
     else:
         form = PostForm(instance=post)
     return render(request, 'community/post_form.html', {'form': form})
@@ -51,27 +51,27 @@ def post_delete(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
     if request.user == post.author:
         post.delete()
-    return redirect('community:post_list')
+    return redirect('community_user:post_list')
 
 @login_required
 def like_post(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
-    if post.likes.filter(id=request.user.id).exists():
+    if post.likes.filter(username=request.user.username).exists():
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
         post.author.participation_score += 1
         post.author.save()
-    return redirect('community:post_detail', pk=pk)
+    return redirect('community_user:post_detail', pk=pk)
 
 @login_required
 def bookmark_post(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
-    if post.bookmarks.filter(id=request.user.id).exists():
+    if post.bookmarks.filter(username=request.user.username).exists():
         post.bookmarks.remove(request.user)
     else:
         post.bookmarks.add(request.user)
-    return redirect('community:post_detail', pk=pk)
+    return redirect('community_user:post_detail', pk=pk)
 
 @login_required
 def bookmarked_posts(request):

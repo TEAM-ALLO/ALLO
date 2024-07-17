@@ -16,16 +16,16 @@ def home(request):
 def signup_view(request):
     if request.method == "POST":
         print(request.POST)
-        id = request.POST['id']
+        username = request.POST['username']
         password = request.POST['password']
         name = request.POST['name']
         email = request.POST['email']
 
         errors = {}
-        if not id:
-            errors['id'] = "아이디를 입력하세요."
-        elif User.objects.filter(id=id).exists():
-            errors['id'] = "이미 사용중인 아이디입니다."
+        if not username:
+            errors['username'] = "아이디를 입력하세요."
+        elif User.objects.filter(username=username).exists():
+            errors['username'] = "이미 사용중인 아이디입니다."
 
         if not password:
             errors['password'] = "비밀번호를 입력하세요."
@@ -46,19 +46,19 @@ def signup_view(request):
         if errors:
             return render(request, 'users/signup.html', {'errors': errors})
 
-        user = User.objects.create_user(id=id, name=name, email=email, password=password)
+        user = User.objects.create_user(username=username, name=name, email=email, password=password)
         user.save()
         return redirect("users_user:login")
     return render(request, 'users/signup.html')
         
 def login_view(request):
     if request.method == "POST":
-        id = request.POST["id"]
+        username = request.POST["username"]
         password = request.POST["password"]
-        user = authenticate(username=id, password=password)
+        user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            today = timezone.now().date()
+            today = timezone.now(). date()
             if not user.last_login or user.last_login.date() < today:
                 user.attendance_score += 1
                 user.save()

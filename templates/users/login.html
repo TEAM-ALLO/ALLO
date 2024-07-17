@@ -20,7 +20,7 @@
         {% csrf_token %}
         <div class="login-section">
             <p class="login-sub">아이디</p>
-            <input name="id" type="text" class="login-container" id="login-id">    
+            <input name="username" type="text" class="login-container" id="login-username">    
             <span id="login-id-error" class="error"></span>
         </div>
         <div class="login-section">
@@ -41,14 +41,14 @@
         function validateLoginForm() {
             var isValid = true;
     
-            var id = document.getElementById('login-id').value;
+            var id = document.getElementById('login-username').value;
             var password = document.getElementById('login-password').value;
     
             if (!id) {
-                document.getElementById('login-id-error').textContent = '아이디를 입력하세요.';
+                document.getElementById('login-username-error').textContent = '아이디를 입력하세요.';
                 isValid = false;
             } else {
-                document.getElementById('login-id-error').textContent = '';
+                document.getElementById('login-username-error').textContent = '';
             }
     
             if (!password) {

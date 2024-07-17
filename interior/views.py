@@ -56,7 +56,7 @@ def like_interior(request, pk):
 @login_required
 def bookmark_interior(request, pk):
     post = get_object_or_404(InteriorPost, pk=pk)
-    if post.bookmarks.filter(id=request.user.id).exists():
+    if post.bookmarks.filter(username=request.user.id).exists():
         post.bookmarks.remove(request.user)
     else:
         post.bookmarks.add(request.user)

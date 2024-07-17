@@ -96,7 +96,7 @@ def recipe_delete_view(request, id):  # 변경
 @login_required
 def like_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
-    if recipe.likes.filter(id=request.user.id).exists():
+    if recipe.likes.filter(username=request.user.username).exists():
         recipe.likes.remove(request.user)
     else:
         recipe.likes.add(request.user)
