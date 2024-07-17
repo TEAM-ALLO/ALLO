@@ -17,6 +17,8 @@ def interior_new(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
+            request.user.participation_score += 2
+            request.user.save()
             return redirect('interior_user:interior_detail', pk=post.pk)
     else:
         form = InteriorPostForm()
@@ -47,6 +49,8 @@ def like_interior(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
+        post.author.participation_score += 1
+        post.author.save()
     return redirect('interior_user:interior_list')
 
 @login_required
