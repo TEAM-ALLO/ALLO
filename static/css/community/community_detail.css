@@ -8,6 +8,9 @@
     color: #fff;
     font-size: 20px;
 }
+.community-categoty:nth-child(3) {
+    color: black!important;
+}
 .post-detail-top {
     display: flex;
     justify-content: space-between;
