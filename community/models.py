@@ -12,9 +12,25 @@ class Notice(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+
 class ChatRoom(models.Model):
-    name = models.CharField(max_length=200)
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='chatrooms')
+    name = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+class Message(models.Model):
+    chatroom = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.sender.username}: {self.content}'
+    
+
 
 class CommunityPost(models.Model):
     title = models.CharField(max_length=200)
@@ -37,3 +53,10 @@ class CommunityPost(models.Model):
     def total_bookmarks(self):
         return self.bookmarks.count()
 
+class FriendRequest(models.Model):
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_requests', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_requests', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.from_user} -> {self.to_user}"
