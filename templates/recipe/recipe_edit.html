@@ -8,11 +8,12 @@
 
 {% block content %}
 <div class="recipe-nav">
-    <a>한식</a>
-    <a>일식</a>
-    <a>중식</a>
-    <a>양식</a>
-    <a>기타</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=korean">한식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese">일식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese">중식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=western">양식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=snack">분식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=others">기타</a>
 </div>
 <h2 class="recipe-edit-title">레시피 수정</h2>
 <form method="post" enctype="multipart/form-data" id="recipe-form">
@@ -32,6 +33,10 @@
     <div class="recipe-input-container">
         <h2>{{ form.difficulty.label_tag }}</h2>
         <div>{{ form.difficulty }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.category.label_tag }}</h2>
+        <div>{{ form.category }}</div>
     </div>
     <div class="recipe-input-container">
         <h2>{{ form.image.label_tag }}</h2>

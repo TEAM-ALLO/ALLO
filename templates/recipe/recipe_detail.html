@@ -8,7 +8,7 @@
     {% if recipe.image %}
     <img src="{{ recipe.image.url }}" alt="{{ recipe.recipe_name }}" class="recipe-detail-img">
     {% else %}
-    <img src="/static/img/empty2.svg" alt="" class="recipe-detail-img">
+    <img src="/static/img/empty2.svg" alt="" class="recipe-detail-img" id="empty-icon">
     {% endif %}
     <div class="recipe-detail-menu">
         <div class="recipe-title-container">
@@ -19,16 +19,6 @@
                 <a href="{% url 'recipe_user:recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
             </div>
             {% endif %}
-            <div class="actions">  
-                <a href="{% url 'recipe_user:like_recipe' recipe.id %}" class="btn btn-primary">Like ({{ recipe.total_likes }})</a>
-                <a href="{% url 'recipe_user:bookmark_recipe' recipe.id %}" class="btn btn-info">
-                {% if request.user in recipe.bookmarks.all %}
-                    Bookmark
-                {% else %}
-                    Bookmarked
-                {% endif %}
-                </a>
-            </div>
         </div>
         <p>작성자: {{ recipe.author }}</p>
         <!-- <div>
@@ -41,6 +31,23 @@
             <p>조리 시간: {{ recipe.cooking_time }}분</p>
         </div>        
     </div>
+</div>
+<div class="actions">
+  <a href="{% url 'recipe_user:bookmark_recipe' recipe.id %}" class="btn btn-info">
+  {% if request.user in recipe.bookmarks.all %}
+    <img src="/static/img/full-bookmark.svg" alt="북마크 아이콘" class="bookmark-icon">
+  {% else %}
+      <img src="/static/img/bookmark.svg" alt="비어있는 북마크 아이콘" class="bookmark-icon">
+  {% endif %}
+  </a> 
+  <a href="{% url 'recipe_user:like_recipe' recipe.id %}" class="btn btn-primary">
+    {% if request.user in recipe.likes.all %}
+      <img src="/static/img/full-heart.svg" alt="좋아요 눌렀을 때 아이콘" class="like-icon">
+    {% else %}
+      <img src="/static/img/heart.svg" alt="좋아요 안 눌렀을 때 아이콘" class="like-icon">
+    {% endif %}
+    <p>{{ recipe.total_likes }}</p>
+  </a>
 </div>
 <h2 class="recipe-detila-ingredient-title">재료</h2>
 <div class="recipe-detail-ingredient">
@@ -60,42 +67,43 @@
 
 <!-- 기존 레시피 상세 정보 아래에 추가 -->
 
-<h3>댓글</h3>
-<!--로그인 안됏을때 멘트 뜨도록 ㅇㅇ 섭밋 이런건 없어두댐-->
+<!--read-->
+{% if comments %}
+  <p class="recipe-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
+{% endif %}
+<ul>
+  {% for comment in comments %}
+    <li class="recipe-detail-comment-container">
+      <div class="recipe-detail-comment-user">
+        {{ comment.user }}
+        {% if user == comment.user %}
+        <form action="{% url 'recipe_user:comments_delete' recipe.id comment.id %}" method="POST" class="d-inline">
+          {% csrf_token %}
+          <input type="submit" value="삭제" class="recipe-detail-comment-delete">
+          </form>
+        {% endif %}
+      </div>
+      <div>
+        {{ comment.content }}
+      </div>
+      <!--delete-->
+      
+    </li>
+  {% empty %}
+    <p class="recipe-detail-comment-title">작성된 댓글이 없습니다.</p>
+  {% endfor %}
+</ul>
+
+<h3 class="recipe-detail-comment-title">댓글</h3>
 {% if request.user.is_authenticated %}
   <form action="{% url 'recipe_user:comments_create' recipe.id %}" method="POST">
     {% csrf_token %}
     {{ comment_form.as_p }}
-    <input type="submit">
+    <input type="submit" class="recipe-detail-comment-btn" value="댓글 작성">
   </form>
 {% else %}
   <a href="{% url 'users_user:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
 {% endif %}
-
-
-<h4>댓글 목록</h4>
-<!--read-->
-{% if comments %}
-  <p><b>{{ comments|length }}개의 댓글이 있습니다.</b></p>
-{% endif %}
-<ul>
-  {% for comment in comments %}
-    <li>
-      {{ comment.user }} - {{ comment.content }}
-      <!--delete-->
-      {% if user == comment.user %}
-        <form action="{% url 'recipe_user:comments_delete' recipe.id comment.id %}" method="POST" class="d-inline">
-          {% csrf_token %}
-          <input type="submit" value="DELETE">
-        </form>
-      {% endif %}
-    </li>
-  {% empty %}
-    <p>댓글이 없어요..</p>
-  {% endfor %}
-</ul>
-<hr>
-
 
 <div class="btn-div">
     <a href="{% url 'recipe_user:recipe_list' %}" class="recipe-detail-btn">목록</a>

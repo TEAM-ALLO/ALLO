@@ -6,11 +6,12 @@
 {% endblock %}
 {% block content %}
 <div class="recipe-nav">
-    <a>한식</a>
-    <a>일식</a>
-    <a>중식</a>
-    <a>양식</a>
-    <a>기타</a>
+    <a href="?category=korean">한식</a>
+    <a href="?category=japanese">일식</a>
+    <a href="?category=chinese">중식</a>
+    <a href="?category=western">양식</a>
+    <a href="?category=snack">분식</a>
+    <a href="?category=others">기타</a>
 </div>
 <h1 id="recipe-title">
     {% if form.instance.id %}
@@ -36,6 +37,10 @@
     <div class="recipe-input-container">
         <h2>{{ form.difficulty.label_tag }}</h2>
         <div>{{ form.difficulty }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.category.label_tag }}</h2>
+        <div>{{ form.category }}</div>
     </div>
     <div class="recipe-input-container">
         <h2>{{ form.image.label_tag }}</h2>

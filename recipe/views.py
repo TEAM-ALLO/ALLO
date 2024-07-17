@@ -5,9 +5,22 @@ from django.views.decorators.http import require_POST
 from .forms import RecipeForm, CommentForm
 
 def recipe_list(request):
-    recipes = Recipe.objects.all()
-    return render(request, 'recipe/recipe_list.html', {'recipes': recipes})
+    category = request.GET.get('category')
+    if category:
+        recipes = Recipe.objects.filter(category=category)
+        category_name = dict(Recipe.CATEGORY_CHOICES).get(category, '레시피')
+    else:
+        recipes = Recipe.objects.all()
+        category_name = '레시피'
+    
+    popular_recipe = recipes.order_by('-likes').first()
 
+    context = {
+        'recipes': recipes,
+        'category_name': category_name,
+        'popular_recipe': popular_recipe,
+    }
+    return render(request, 'recipe/recipe_list.html', context)
 
 def recipe_detail_view(request, id):
     recipe = get_object_or_404(Recipe, id=id)
@@ -48,6 +61,9 @@ def recipe_edit_view(request, id):
     if request.user != recipe.author:
         return redirect('recipe_user:recipe_detail', id=recipe.id)
     
+    initial_ingredients = recipe.ingredients.split('\n') if recipe.ingredients else []
+    initial_instructions = recipe.instructions.split('\n') if recipe.instructions else []
+    
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
         if form.is_valid():
@@ -56,10 +72,11 @@ def recipe_edit_view(request, id):
             recipe.instructions = '\n'.join(request.POST.getlist('instructions[]'))
             recipe.save()
             return redirect('recipe_user:recipe_detail', id=recipe.id)
+        else: 
+            print('땡')
     else:
         form = RecipeForm(instance=recipe)
-        initial_ingredients = recipe.ingredients.split('\n')
-        initial_instructions = recipe.instructions.split('\n')
+
     return render(request, 'recipe/recipe_edit.html', {
         'form': form, 
         'recipe': recipe,

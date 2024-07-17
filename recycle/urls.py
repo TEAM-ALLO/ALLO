@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import recycle
+from . import views
 
-app_name = "recycle"
+app_name = "recycle_user"
 
 urlpatterns = [
-    path('recycle/', recycle, name='recycle'),
+    path('recycle/', views.recycle, name='recycle'),
 ]
