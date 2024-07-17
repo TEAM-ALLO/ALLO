@@ -16,7 +16,11 @@
 .recipe-list-popular {
     margin: 10px;
     border: 1px solid black;
-    height: 100px;
+    height: 150px;
+    display: flex;
+}
+.recipe-list-popular img {
+    max-width: 50%;
 }
 .recipe-list-btn-box {
     display: flex;
@@ -44,13 +48,15 @@
     overflow-wrap: anywhere;
 }
 .recipe-list-img {
-    max-width: 100%;
-    height: auto;
+    width: 180px;
+    height: 120px;
+    object-fit: cover;
+    margin: 0 auto;
 }
-
 .recipe-list-icon {
-    max-width: 100%;
-    height: auto;
+    width: 180px;
+    height: 120px;
+    margin: 0 auto;
 }
 .recipe-post-name {
     font-weight: bold;
@@ -60,18 +66,5 @@
 }
 .recipe-list-popular img {
     max-width: 100%;
-    height: 100px;
-}
-
-.recipe-list-popular div {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding: 10px;
-}
-
-.recipe-list-popular {
-    position: relative;
+    height: 150px;
 }

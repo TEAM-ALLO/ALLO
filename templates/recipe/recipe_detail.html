@@ -33,21 +33,23 @@
     </div>
 </div>
 <div class="actions">
-  <a href="{% url 'recipe_user:bookmark_recipe' recipe.id %}" class="btn btn-info">
-  {% if request.user in recipe.bookmarks.all %}
-    <img src="/static/img/full-bookmark.svg" alt="북마크 아이콘" class="bookmark-icon">
-  {% else %}
-      <img src="/static/img/bookmark.svg" alt="비어있는 북마크 아이콘" class="bookmark-icon">
-  {% endif %}
-  </a> 
   <a href="{% url 'recipe_user:like_recipe' recipe.id %}" class="btn btn-primary">
     {% if request.user in recipe.likes.all %}
       <img src="/static/img/full-heart.svg" alt="좋아요 눌렀을 때 아이콘" class="like-icon">
     {% else %}
       <img src="/static/img/heart.svg" alt="좋아요 안 눌렀을 때 아이콘" class="like-icon">
     {% endif %}
-    <p>{{ recipe.total_likes }}</p>
   </a>
+  <p>{{ recipe.total_likes }}</p>
+  <a href="{% url 'recipe_user:bookmark_recipe' recipe.id %}" class="btn btn-info">
+    {% if request.user in recipe.bookmarks.all %}
+      <img src="/static/img/full-bookmark.svg" alt="북마크 아이콘" class="bookmark-icon">
+    {% else %}
+        <img src="/static/img/bookmark.svg" alt="비어있는 북마크 아이콘" class="bookmark-icon">
+    {% endif %}
+  </a>
+  <p>{{ recipe.total_bookmarks }}</p>
+  
 </div>
 <h2 class="recipe-detila-ingredient-title">재료</h2>
 <div class="recipe-detail-ingredient">

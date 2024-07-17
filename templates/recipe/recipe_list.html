@@ -12,13 +12,13 @@
     <a href="{% url 'recipe_user:recipe_list' %}?category=snack">분식</a>
     <a href="{% url 'recipe_user:recipe_list' %}?category=others">기타</a>
 </div>
-<h1 class="recipe-list-mention">
+<div class="recipe-list-mention">
     {% if category_name == '기타' %}
         지금 가장 인기있는 음식은?
     {% else %}
         지금 가장 인기있는 {{ category_name }}은?
     {% endif %}
-</h1>
+</div>
 <div class="recipe-list-popular"> <!-- 좋아요수 가장 많은 음식 -->
     <img src="{% if popular_recipe and popular_recipe.image %}{{ popular_recipe.image.url }}{% else %}/static/img/empty2.svg{% endif %}" alt="">
     <div>
