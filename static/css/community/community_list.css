@@ -22,9 +22,11 @@
     height: 50px;
     display: flex;
     gap: 10px;
+    margin-top: 10px;
+    width: 100%;
 }
 #community-top-notice {
-    width: 80%;
+    width: 100%;
     background-color: var(--main--gray--color);
     height: 50px;
     font-size: 20px;
@@ -102,8 +104,6 @@
     display: flex;
     gap: 10px;
 }
-.bookmark-icon {
-    width: 30px;
-    display: flex;
-    align-items: center;
+.community-post-icon {
+    width: 20px;
 }

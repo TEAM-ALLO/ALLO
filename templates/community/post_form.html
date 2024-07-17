@@ -7,23 +7,19 @@
 <div class="community-header">
     <div class="community-categoty">이벤트</div>
     <div class="community-categoty">채팅방</div>
-    <div class="community-categoty">커뮤니티</div>
+    <div class="community-categoty">자유게시판</div>
 </div>
-<div class="community-title-box">
-    자유게시판
-</div>
-<h1>
+<h1 class="post-title">
     {% if form.instance.pk %}
-    Edit
+    게시글 수정
     {% else %}
-    Create
+    게시글 작성
     {% endif %}
-    Post
 </h1>
 <form method="post" class="community-create-container">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Submit</button>
+    <button type="submit" class="community-create-btn">작성하기</button>
 </form>
-<a href="{% url 'community_user:post_list' %}">목록</a>
+<a href="{% url 'community_user:post_list' %}" class="detail-list-btn">목록</a>
 {% endblock %}
