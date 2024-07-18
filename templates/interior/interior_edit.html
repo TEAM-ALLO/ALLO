@@ -1,13 +1,31 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="interior-header">
-    <h1>{% if form.instance.pk %}게시물 수정{% else %}새 게시물{% endif %}</h1>
-</div>
-<div class="interior-form">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Interior Post</title>
+    <script>
+        function addFurnitureField() {
+            var container = document.getElementById("furniture_fields");
+            var input = document.createElement("input");
+            input.type = "text";
+            input.name = "furniture_list[]";
+            input.className = "form-control";
+            container.appendChild(input);
+        }
+    </script>
+</head>
+<body>
+    <h2>New Interior Post</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">저장</button>
+        
+        <label for="furniture_list">Furniture List</label>
+        <div id="furniture_fields">
+            <input type="text" name="furniture_list[]" class="form-control">
+        </div>
+        <button type="button" onclick="addFurnitureField()">Add More Furniture</button>
+        
+        <button type="submit">Save</button>
     </form>
-</div>
-{% endblock %}
+</body>
+</html>

@@ -4,7 +4,14 @@ from django.utils import timezone
 
 
 class InteriorPost(models.Model):
-    
+    CATEGORY_CHOICES = [
+        ('modern', 'Modern'),
+        ('classic', 'Classic'),
+        ('industrial', 'Industrial'),
+        ('scandinavian', 'Scandinavian'),
+        ('bohemian', 'Bohemian'),
+    ]
+
     title = models.CharField(max_length=200)
     content = models.TextField()
     image = models.ImageField(upload_to='interior_images/')
@@ -15,6 +22,8 @@ class InteriorPost(models.Model):
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='interior_likes', blank=True)
     bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='interior_bookmarks', blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default=None, null=True, blank=True)
+    furniture_list = models.TextField(null=True, blank=True)
 
 
     def __str__(self):
