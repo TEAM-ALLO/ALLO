@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>분리수거</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="query" placeholder="예)우유, 형광등, 프링글스통">
+    <button type="submit">검색</button>
+</form>
+
+{% if items %}
+    <ul>
+    {% for item in items %}
+        <li>{{ item.name }} - {{ item.category }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}
