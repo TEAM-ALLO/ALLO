@@ -4,6 +4,7 @@ from .models import Event, Notice, ChatRoom, CommunityPost, Message, FriendReque
 from .forms import PostForm, MessageForm
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect
 
 User = get_user_model()
 
@@ -56,7 +57,7 @@ def send_friend_request(request, username):
     else:
         FriendRequest.objects.create(from_user=request.user, to_user=to_user)
         messages.success(request, '친구 요청을 보냈습니다.')
-    return redirect('community_user:post_detail', pk=to_user.username)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def accept_friend_request(request, request_id):
