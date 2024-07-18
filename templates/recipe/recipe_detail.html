@@ -96,15 +96,16 @@
   {% endfor %}
 </ul>
 
-<h3 class="recipe-detail-comment-title">댓글</h3>
 {% if request.user.is_authenticated %}
+<h3 class="recipe-detail-comment-title">댓글을 작성해주세요!</h3>
   <form action="{% url 'recipe_user:comments_create' recipe.id %}" method="POST">
     {% csrf_token %}
     {{ comment_form.as_p }}
     <input type="submit" class="recipe-detail-comment-btn" value="댓글 작성">
   </form>
 {% else %}
-  <a href="{% url 'users_user:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
+  <p class="recipe-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
+  
 {% endif %}
 
 <div class="btn-div">

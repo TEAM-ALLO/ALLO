@@ -1,0 +1,142 @@
+.mypage-bar {
+    width: 100%;
+    height: 50px;
+    background-color: var(--main--yellow--color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+.categories {
+    display: flex;
+    justify-content: center;
+}
+.categories button {
+    display: flex;
+    align-items: center;
+}
+/* #my_posts {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+#bookmarked {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+} */
+#my_posts button,
+#bookmarked button {
+    margin: 10px 20px;
+    font-size: 20px;
+}
+.sub-categories {
+    text-align: center;
+}
+.hidden {
+    display: none;
+}
+.content-section > article {
+    border: 6px solid var(--light--gray--color);
+    width: 70%;
+    margin: 10px auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.content-section > article h4 {
+    font-weight: bold;
+}
+
+/*  */
+.mypage-user-info {
+    width: 70%;
+    margin: 30px auto;
+    display: flex;
+    gap: 10px;
+    min-height: 300px;
+    align-items: center;
+}
+.mypage-user-info-l {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+}
+.mypage-img {
+    width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+}
+.mypage-update-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: var(--main--yellow--color);
+    padding: 10px;
+    font-size: 16px;
+    width: 150px;
+    justify-content: space-around;
+}
+.mypage-user-info-r {
+    width: 60%;    
+    padding: 50px;
+    background-color: rgba(255, 215, 50, 0.45);
+    
+}
+.mypage-user-info-r > h2 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+.mypage-ranking-divs {
+    display: flex;
+    width: 210px;
+    align-items: end;
+    position: relative;
+}
+.mypage-ranking-divs-title {
+    position: absolute;
+    width: 70%;
+    bottom: 30%;
+    left: 50px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.mypage-ranking-divs > div {
+    width: 70%
+    
+}
+.mypage-ranking-divs > div:nth-child(1) {
+    background-color: var(--main--red--color);
+    height: 150px;
+}
+.mypage-ranking-divs > div:nth-child(2) {
+    background-color: var(--main--yellow--color);
+    height: 210px;
+}
+.mypage-ranking-divs > div:nth-child(3) {
+    background-color: var(--main--blue--color);
+    height: 100px;
+}
+.mypage-postit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.mypage-my-ranking {
+    font-size: 40px;
+    font-weight: bold;
+}
+.categories {
+    display: flex;
+    justify-content: center;
+}
+.categories button {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    margin: 10px 20px;
+}
