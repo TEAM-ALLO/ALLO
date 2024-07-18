@@ -5,5 +5,5 @@ app_name = "recycle_user"
 
 urlpatterns = [
     path('', views.recycle_main, name='recycle_main'),
-    path('list/', views.recycle_list, name='recycle_list'),
+    path('<int:pk>', views.recycle_detail, name='recycle_detail'),
 ]
