@@ -72,7 +72,6 @@
     {% endfor %}
 </section>
 <section id="posts-recipe" class="content-section hidden">
-    
     {% for post in recipe_posts %}
     <a href="{% url 'recipe_user:recipe_detail' id=post.id %}">
         <article>
