@@ -36,11 +36,11 @@
 
 <section class="categories">
     <button onclick="showSubCategory('my_posts')">
-        <img src="/static/img/grid.svg" alt="">
+        <img src="/static/img/grid.svg" alt="격자 아이콘">
         <p>내 글</p>
     </button>
     <button onclick="showSubCategory('bookmarked')">
-        <img src="/static/img/bookmark.svg" alt="">
+        <img src="/static/img/bookmark.svg" alt="북마크 아이콘">
         <p>북마크 한 글</p>
     </button>
 </section>
@@ -59,105 +59,130 @@
         <button onclick="showContent('bookmarks', 'community')">자유게시판</button>
     </div>
 </section>
-
+<!-- 내 글 -->
 <section id="posts-community" class="content-section hidden">
     {% for post in community_posts %}
-        <article>
-            <h4>{{ post.title }}</h4>
-            <p>{{ post.content }}</p>
-            <span>{{ post.created_at }}</span>
-        </article>
+        <a href="{% url 'community_user:post_detail' pk=post.id %}">
+            <article>
+                <h4>{{ post.title }}</h4>
+                <p>{{ post.content }}</p>
+                <span>{{ post.created_at }}</span>
+            </article>
+        </a>
     {% endfor %}
 </section>
 <section id="posts-recipe" class="content-section hidden">
+    
     {% for post in recipe_posts %}
+    <a href="{% url 'recipe_user:recipe_detail' id=post.id %}">
         <article>
             <h4>{{ post.recipe_name }}</h4>
             <p>{{ post.ingredients }}</p>
             <span>{{ post.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
 </section>
 <section id="posts-interior" class="content-section hidden">
     {% for post in interior_posts %}
+    <a href="{% url 'interior_user:interior_detail' id=post.id %}">
         <article>
             <h4>{{ post.title }}</h4>
             <p>{{ post.content }}</p>
             <span>{{ post.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
 </section>
 <section id="posts-all" class="content-section hidden">
     {% for post in community_posts %}
+    <a href="{% url 'community_user:post_detail' pk=post.id %}">
         <article>
             <h4>{{ post.title }}</h4>
             <p>{{ post.content }}</p>
             <span>{{ post.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
     {% for post in recipe_posts %}
+    <a href="{% url 'recipe_user:recipe_detail' id=post.id %}">
         <article>
             <h4>{{ post.recipe_name }}</h4>
             <p>{{ post.ingredients }}</p>
             <span>{{ post.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
     {% for post in interior_posts %}
+    <a href="{% url 'interior_user:interior_detail' id=post.id %}">
         <article>
             <h4>{{ post.title }}</h4>
             <p>{{ post.content }}</p>
             <span>{{ post.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
 </section>
 <section id="bookmarks-community" class="content-section hidden">
     {% for bookmark in community_bookmarks %}
+    <a href="{% url 'community_user:post_detail' pk=bookmark.id %}">
         <article>
             <h4>{{ bookmark.title }}</h4>
             <p>{{ bookmark.content }}</p>
             <span>{{ bookmark.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
 </section>
 <section id="bookmarks-recipe" class="content-section hidden">
     {% for bookmark in recipe_bookmarks %}
+    <a href="{% url 'recipe_user:recipe_detail' id=bookmark.id %}">
         <article>
             <h4>{{ bookmark.recipe_name }}</h4>
             <p>{{ bookmark.ingredients }}</p>
             <span>{{ bookmark.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
 </section>
 <section id="bookmarks-interior" class="content-section hidden">
     {% for bookmark in interior_bookmarks %}
+    <a href="{% url 'interior_user:interior_detail' id=bookmark.id %}">
         <article>
             <h4>{{ bookmark.title }}</h4>
             <p>{{ bookmark.content }}</p>
             <span>{{ bookmark.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
 </section>
 <section id="bookmarks-all" class="content-section hidden">
     {% for bookmark in community_bookmarks %}
+    <a href="{% url 'community_user:post_detail' pk=bookmark.id %}">
         <article>
             <h4>{{ bookmark.title }}</h4>
             <p>{{ bookmark.content }}</p>
             <span>{{ bookmark.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
     {% for bookmark in recipe_bookmarks %}
+    <a href="{% url 'recipe_user:recipe_detail' id=bookmark.id %}">
         <article>
             <h4>{{ bookmark.recipe_name }}</h4>
             <p>{{ bookmark.ingredients }}</p>
             <span>{{ bookmark.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
     {% for bookmark in interior_bookmarks %}
+    <a href="{% url 'interior_user:interior_detail' id=bookmark.id %}">
         <article>
             <h4>{{ bookmark.title }}</h4>
             <p>{{ bookmark.content }}</p>
             <span>{{ bookmark.created_at }}</span>
         </article>
+    </a>
     {% endfor %}
 </section>
 {% endblock %}

@@ -36,7 +36,7 @@
 .hidden {
     display: none;
 }
-.content-section > article {
+.content-section a {
     border: 6px solid var(--light--gray--color);
     width: 70%;
     margin: 10px auto;
@@ -45,7 +45,7 @@
     flex-direction: column;
     gap: 10px;
 }
-.content-section > article h4 {
+.content-section article h4 {
     font-weight: bold;
 }
 
