@@ -20,9 +20,22 @@
     {% endif %}
     Post
 </h1>
-<form method="post" class="interior-create-container">
+<form method="post" class="interior-create-container" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+    
+    <label for="furniture_list">Furniture List</label>
+    <div id="furniture_fields">
+        {% if form.instance.furniture_list %}
+            {% for item in form.instance.furniture_list.splitlines %}
+                <input type="text" name="furniture_list[]" class="form-control" value="{{ item }}">
+            {% endfor %}
+        {% else %}
+            <input type="text" name="furniture_list[]" class="form-control">
+        {% endif %}
+    </div>
+    <button type="button" onclick="addFurnitureField()">Add More Furniture</button>
+    
     <button type="submit">Submit</button>
 </form>
 <a href="{% url 'interior_user:interior_list' %}">Back to Home</a>

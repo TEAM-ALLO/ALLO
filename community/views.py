@@ -128,7 +128,7 @@ def like_post(request, pk):
         post.likes.add(request.user)
         post.author.participation_score += 1
         post.author.save()
-    return redirect('community_user:post_detail', pk=pk)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def bookmark_post(request, pk):
@@ -137,7 +137,7 @@ def bookmark_post(request, pk):
         post.bookmarks.remove(request.user)
     else:
         post.bookmarks.add(request.user)
-    return redirect('community_user:post_detail', pk=pk)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def bookmarked_posts(request):
