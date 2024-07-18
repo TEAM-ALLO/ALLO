@@ -1,31 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>New Interior Post</title>
-    <script>
-        function addFurnitureField() {
-            var container = document.getElementById("furniture_fields");
-            var input = document.createElement("input");
-            input.type = "text";
-            input.name = "furniture_list[]";
-            input.className = "form-control";
-            container.appendChild(input);
-        }
-    </script>
-</head>
-<body>
-    <h2>New Interior Post</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        
-        <label for="furniture_list">Furniture List</label>
-        <div id="furniture_fields">
-            <input type="text" name="furniture_list[]" class="form-control">
-        </div>
-        <button type="button" onclick="addFurnitureField()">Add More Furniture</button>
-        
-        <button type="submit">Save</button>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/interior/interior_create.css">
+{% endblock %}
+{% block content %}
+<h2>새 인테리어</h2>
+<form method="post" enctype="multipart/form-data" class="interior-create-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <div id="furniture_fields">
+        <input type="text" name="furniture_list[]" class="form-control">
+    </div>
+    <button type="button" onclick="addFurnitureField()" class="interior-furniture-add-btn">+가구 추가</button>
+    
+    <button type="submit" class="interior-create-btn">작성하기</button>
+</form>
+{% endblock %}
+{% block script %}
+<script src="/static/js/interior/interior_create.js"></script>
+{% endblock %}

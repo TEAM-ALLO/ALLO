@@ -1,0 +1,39 @@
+.interior-nav {
+    height: 50px;
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 20px;
+}
+.interior-create-btn-div {
+    display: flex;
+    justify-content: flex-end;
+    width: 80%;
+    margin: 0 auto;
+}
+.interior-create-btn {
+    background-color: var(--main--red--color);
+    padding: 10px;
+    margin: 10px 0;
+    color: #fff!important;
+    border-radius: 10px;
+}
+.interior-list-big-container {
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin: 10px auto;
+}
+.interior-list-post {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.interior-list-img {
+    max-width: 80%;
+}

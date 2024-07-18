@@ -1,14 +1,6 @@
 {% extends 'base.html' %}
 {% block head %}
     <link rel="stylesheet" href="/static/css/recipe/recipe_list.css">
-    <script src="/static/js/recipe_list.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            {% if message %}
-                alert("{{ message }}");
-            {% endif %}
-        });
-    </script>
 {% endblock %}
 {% block content %}
 <div class="recipe-nav">
@@ -85,4 +77,14 @@
     {% endif %}
 </div>
 
+{% endblock %}
+{% block script %}
+<script src="/static/js/recipe_list.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if message %}
+            alert("{{ message }}");
+        {% endif %}
+    });
+</script>
 {% endblock %}

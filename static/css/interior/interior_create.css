@@ -1,0 +1,36 @@
+h2 {
+    text-align: center;
+    margin: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.interior-create-form > p > label {
+    /* display: none; */
+}
+.interior-create-form > p > input {
+    border: 0;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    padding: 10px;
+}
+.interior-create-form > p > textarea {
+    border: 0;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    resize: none;
+    padding: 10px;
+}
+.interior-create-form > p > textarea:focus {
+    outline: none;
+}
+.interior-furniture-add-btn {
+    color: var(--main--red--color);
+    font-weight: bold;
+    font-size: 20px;
+}
+.interior-create-btn {
+    background-color: var(--main--red--color);
+    border-radius: 10px;
+    padding: 10px;
+    color: #fff !important;
+}

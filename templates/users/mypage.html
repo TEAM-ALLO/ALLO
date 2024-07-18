@@ -84,7 +84,7 @@
 </section>
 <section id="posts-interior" class="content-section hidden">
     {% for post in interior_posts %}
-    <a href="{% url 'interior_user:interior_detail' id=post.id %}">
+    <a href="{% url 'interior_user:interior_detail' pk=post.pk %}">
         <article>
             <h4>{{ post.title }}</h4>
             <p>{{ post.content }}</p>
@@ -113,7 +113,7 @@
     </a>
     {% endfor %}
     {% for post in interior_posts %}
-    <a href="{% url 'interior_user:interior_detail' id=post.id %}">
+    <a href="{% url 'interior_user:interior_detail' pk=post.pk %}">
         <article>
             <h4>{{ post.title }}</h4>
             <p>{{ post.content }}</p>
@@ -188,5 +188,5 @@
 {% endblock %}
 
 {% block script %}
-<script src="/static/js/user/mypage.js"></script>
+    <script src="/static/js/user/mypage.js"></script>
 {% endblock %}
