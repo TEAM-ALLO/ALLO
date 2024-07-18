@@ -36,6 +36,7 @@
             {% if request.user.is_authenticated %}
             <a class="sidebar-category" href="{% url 'community_user:friend' request.user.username %}">친구 요청</a>
             <a class="sidebar-category" href="{% url 'users_user:mypage' %}">마이페이지</a>
+            <a class="sidebar-category" href="{% url 'users_user:logout' %}">로그아웃</a>
             {% else %}
             <a class="sidebar-category" href="{% url 'users_user:signup' %}">회원가입</a>
             <a class="sidebar-category" href="{% url 'users_user:login' %}">로그인</a>

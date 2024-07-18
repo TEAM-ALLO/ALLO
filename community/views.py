@@ -171,4 +171,4 @@ def friend(request, username):
         'user': user,
         'received_requests': received_requests
     }
-    return render(request, 'community/friend.html', context)
+    return render(request, 'users/friend.html', context)

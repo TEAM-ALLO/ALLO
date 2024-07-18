@@ -1,0 +1,56 @@
+h3 {
+    font-weight: bold;
+    font-size: 20px;
+    width: 70%;
+    margin: 10px  auto;
+}
+.friend-title {
+    font-size: 20px;
+    text-align: center;
+    margin: 0;
+    background-color: var(--main--yellow--color);
+    height: 50px;
+    line-height: 50px;
+}
+.friend-received-big-container {
+
+}
+.friend-received-container {
+    display: flex;
+    background-color: var(--light--gray--color);
+    width: 70%;
+    margin: 10px auto;
+    border-radius: 10px;
+}
+.friend-received-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.friend-received-info-mention {
+    display: flex;
+}
+.friend-received-name {
+    font-weight: bold;
+}
+.friend-received-container-btns {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.mypage-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    padding: 10px;
+}
+.btn-success,
+.btn-danger {
+    background-color: var(--main--red--color);
+    padding: 5px 10px;
+    color: #fff;
+    border-radius: 10px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+}
