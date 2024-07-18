@@ -178,6 +178,13 @@
     text-decoration: underline;
     background-color: var(--light--gray--color);
 }
+.recipe-detail-before-login {
+    width: 70%;
+    margin: 0 auto;
+}
+.recipe-detail-before-login a{
+    text-decoration: underline;
+}
 .main-container p>label {
     display: none;
 }

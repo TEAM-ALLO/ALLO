@@ -79,26 +79,27 @@
             {% csrf_token %}
             <input type="submit" value="삭제" class="recipe-detail-comment-delete">
           </form>
-          {% endif %}
-        </div>
-        <div>
-          {{ comment.content }}
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p class="recipe-detail-comment-title">작성된 댓글이 없습니다.</p>
-  <p class="recipe-detail-comment-title">후기를 작성해 주세요!</p>
-{% endif %}
+        {% endif %}
+      </div>
+      <div>
+        {{ comment.content }}
+      </div>
+    </li>
+  {% empty %}
+    <p class="recipe-detail-comment-title">작성된 댓글이 없습니다.</p>
+  {% endfor %}
+</ul>
+
 {% if request.user.is_authenticated %}
+<h3 class="recipe-detail-comment-title">댓글을 작성해주세요!</h3>
   <form action="{% url 'recipe_user:comments_create' recipe.id %}" method="POST">
     {% csrf_token %}
     {{ comment_form.as_p }}
     <input type="submit" class="recipe-detail-comment-btn" value="댓글 작성">
   </form>
 {% else %}
-  <a href="{% url 'users_user:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
+  <p class="recipe-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
+  
 {% endif %}
 
 <div class="btn-div">

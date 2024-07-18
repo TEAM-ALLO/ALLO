@@ -1,204 +1,194 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
-<style>
-    .profile-image {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        background-color: #d3d3d3; /* 기본 회색 배경 */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-    }
-    .profile-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    .hidden {
-        display: none;
-    }
-    .categories, .sub-categories {
-        margin-bottom: 20px;
-    }
-    .posts, .bookmarks {
-        display: none;
-    }
-</style>
+{% block head %}
+    <link rel="stylesheet" href="/static/css/users/mypage.css">
+{% endblock %}
 
-<header>
-    <h1>ALLO</h1>
-</header>
-<main>
-    <section class="profile">
-        <div class="profile-image">
-            {% if user.profile_image %}
-                <img src="{{ user.profile_image.url }}" alt="프로필 사진">
-            {% else %}
-                <p>Profile image: 현재: 없음</p>
-            {% endif %}
+{% block content %}
+<div class="mypage-bar">
+    마이페이지
+</div>
+<div class="mypage-user-info">
+    <div class="mypage-user-info-l">
+    {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+    {% else %}
+        <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+    {% endif %}
+        <a href="{% url 'users_user:profile_edit' %}" class="mypage-update-btn">
+            <img src="/static/img/setting.svg" alt="프로필 편집 아이콘" class="mypage-update-icon">
+            <p>프로필 편집</p>
+        </a>
+    </div>
+    <div class="mypage-user-info-r"> <!-- 왼쪽 노란 부분 -->
+        <h2>{{ user.name }}님</h2> <!-- 상단 -->
+        <div class="mypage-postit"> <!--하단-->
+            <div class="mypage-ranking-divs"> <!-- 단상 -->
+                <div></div>
+                <div></div>
+                <div></div>
+                <div class="mypage-ranking-divs-title">My ranking</div>
+            </div>
+            <div class="mypage-my-ranking">{{ ranking }}위</div>
         </div>
-        <h2>{{ user.name }}</h2>
-        <a href="{% url 'users_user:profile_edit' %}">프로필 편집</a>
-    </section>
-    <section class="ranking">
-        <h3>My ranking</h3>
-        <p>{{ ranking }} 위</p>
-    </section>
-    <section class="categories">
-        <button onclick="showSubCategory('my_posts')">내 글</button>
-        <button onclick="showSubCategory('bookmarked')">북마크 한 글</button>
-    </section>
-    <section class="sub-categories">
-        <div id="my_posts" class="hidden">
-            <button onclick="showContent('posts', 'community')">자유게시판</button>
-            <button onclick="showContent('posts', 'recipe')">요리</button>
-            <button onclick="showContent('posts', 'interior')">인테리어</button>
-            <button onclick="showContent('posts', 'all')">전체</button>
-        </div>
-        <div id="bookmarked" class="hidden">
-            <button onclick="showContent('bookmarks', 'community')">자유게시판</button>
-            <button onclick="showContent('bookmarks', 'recipe')">요리</button>
-            <button onclick="showContent('bookmarks', 'interior')">인테리어</button>
-            <button onclick="showContent('bookmarks', 'all')">전체</button>
-        </div>
-    </section>
-    <section id="posts-community" class="posts content-section posts-community hidden">
-        <h3>자유게시판 내 글</h3>
-        {% for post in community_posts %}
-            <article>
-                <h4><a href="{% url 'community_user:post_detail' pk=post.id %}">{{ post.title }}</a></h4>
-                <p>{{ post.content }}</p>
-                <span>{{ post.created_at }}</span>
-            </article>
-        {% endfor %}
-    </section>
-    <section id="posts-recipe" class="posts content-section posts-recipe hidden">
-        <h3>요리 내 글</h3>
-        {% for post in recipe_posts %}
-            <article>
-                <h4><a href="{% url 'recipe_user:recipe_detail' id=post.id %}">{{ post.recipe_name }}</a></h4>
-                <p>{{ post.ingredients }}</p>
-                <span>{{ post.created_at }}</span>
-            </article>
-        {% endfor %}
-    </section>
-    <section id="posts-interior" class="posts content-section posts-interior hidden">
-        <h3>인테리어 내 글</h3>
-        {% for post in interior_posts %}
+    </div>    
+</div>
+
+<section class="categories">
+    <button onclick="showSubCategory('my_posts')">
+        <img src="/static/img/grid.svg" alt="격자 아이콘">
+        <p>내 글</p>
+    </button>
+    <button onclick="showSubCategory('bookmarked')">
+        <img src="/static/img/bookmark.svg" alt="북마크 아이콘">
+        <p>북마크 한 글</p>
+    </button>
+</section>
+
+<section class="sub-categories">
+    <div id="my_posts" class="hidden">
+        <button onclick="showContent('posts', 'all')">전체</button>
+        <button onclick="showContent('posts', 'interior')">인테리어</button>
+        <button onclick="showContent('posts', 'recipe')">요리</button>
+        <button onclick="showContent('posts', 'community')">자유게시판</button>
+    </div>
+    <div id="bookmarked" class="hidden">
+        <button onclick="showContent('bookmarks', 'all')">전체</button>
+        <button onclick="showContent('bookmarks', 'interior')">인테리어</button>
+        <button onclick="showContent('bookmarks', 'recipe')">요리</button>
+        <button onclick="showContent('bookmarks', 'community')">자유게시판</button>
+    </div>
+</section>
+<!-- 내 글 -->
+<section id="posts-community" class="content-section hidden">
+    {% for post in community_posts %}
+        <a href="{% url 'community_user:post_detail' pk=post.id %}">
+
             <article>
                 <h4><a href="{% url 'interior_user:interior_detail' id=post.id %}">{{ post.title }}</a></h4>
                 <p>{{ post.content }}</p>
                 <span>{{ post.created_at }}</span>
             </article>
-        {% endfor %}
-    </section>
-    <section id="posts-all" class="posts content-section posts-all hidden">
-        <h3>전체 내 글</h3>
-        {% for post in community_posts %}
-            <article>
-                <h4><a href="{% url 'community_user:post_detail' pk=post.id %}">{{ post.title }}</a></h4>
-                <p>{{ post.content }}</p>
-                <span>{{ post.created_at }}</span>
-            </article>
-        {% endfor %}
-        {% for post in recipe_posts %}
-            <article>
-                <h4><a href="{% url 'recipe_user:recipe_detail' id=post.id %}">{{ post.recipe_name }}</a></h4>
-                <p>{{ post.ingredients }}</p>
-                <span>{{ post.created_at }}</span>
-            </article>
-        {% endfor %}
-        {% for post in interior_posts %}
-            <article>
-                <h4><a href="{% url 'interior_user:interior_detail' id=post.id %}">{{ post.title }}</a></h4>
-                <p>{{ post.content }}</p>
-                <span>{{ post.created_at }}</span>
-            </article>
-        {% endfor %}
-    </section>
-    <section id="bookmarks-community" class="bookmarks content-section bookmarks-community hidden">
-        <h3>자유게시판 북마크</h3>
-        {% for bookmark in community_bookmarks %}
-            <article>
-                <h4><a href="{% url 'community_user:post_detail' pk=bookmark.id %}">{{ bookmark.title }}</a></h4>
-                <p>{{ bookmark.content }}</p>
-                <span>{{ bookmark.created_at }}</span>
-            </article>
-        {% endfor %}
-    </section>
-    <section id="bookmarks-recipe" class="bookmarks content-section bookmarks-recipe hidden">
-        <h3>요리 북마크</h3>
-        {% for bookmark in recipe_bookmarks %}
-            <article>
-                <h4><a href="{% url 'recipe_user:recipe_detail' id=bookmark.id %}">{{ bookmark.recipe_name }}</a></h4>
-                <p>{{ bookmark.ingredients }}</p>
-                <span>{{ bookmark.created_at }}</span>
-            </article>
-        {% endfor %}
-    </section>
-    <section id="bookmarks-interior" class="bookmarks content-section bookmarks-interior hidden">
-        <h3>인테리어 북마크</h3>
-        {% for bookmark in interior_bookmarks %}
-            <article>
-                <h4><a href="{% url 'interior_user:interior_detail' id=bookmark.id %}">{{ bookmark.title }}</a></h4>
-                <p>{{ bookmark.content }}</p>
-                <span>{{ bookmark.created_at }}</span>
-            </article>
-        {% endfor %}
-    </section>
-    <section id="bookmarks-all" class="bookmarks content-section bookmarks-all hidden">
-        <h3>전체 북마크</h3>
-        {% for bookmark in community_bookmarks %}
-            <article>
-                <h4><a href="{% url 'community_user:post_detail' pk=bookmark.id %}">{{ bookmark.title }}</a></h4>
-                <p>{{ bookmark.content }}</p>
-                <span>{{ bookmark.created_at }}</span>
-            </article>
-        {% endfor %}
-        {% for bookmark in recipe_bookmarks %}
-            <article>
-                <h4><a href="{% url 'recipe_user:recipe_detail' id=bookmark.id %}">{{ bookmark.recipe_name }}</a></h4>
-                <p>{{ bookmark.ingredients }}</p>
-                <span>{{ bookmark.created_at }}</span>
-            </article>
-        {% endfor %}
-        {% for bookmark in interior_bookmarks %}
-            <article>
-                <h4><a href="{% url 'interior_user:interior_detail' id=bookmark.id %}">{{ bookmark.title }}</a></h4>
-                <p>{{ bookmark.content }}</p>
-                <span>{{ bookmark.created_at }}</span>
-            </article>
-        {% endfor %}
-    </section>
-</main>
+        </a>
+    {% endfor %}
+</section>
+<section id="posts-recipe" class="content-section hidden">
+    
+    {% for post in recipe_posts %}
+    <a href="{% url 'recipe_user:recipe_detail' id=post.id %}">
+        <article>
+            <h4>{{ post.recipe_name }}</h4>
+            <p>{{ post.ingredients }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="posts-interior" class="content-section hidden">
+    {% for post in interior_posts %}
+    <a href="{% url 'interior_user:interior_detail' id=post.id %}">
+        <article>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.content }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="posts-all" class="content-section hidden">
+    {% for post in community_posts %}
+    <a href="{% url 'community_user:post_detail' pk=post.id %}">
+        <article>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.content }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+    {% for post in recipe_posts %}
+    <a href="{% url 'recipe_user:recipe_detail' id=post.id %}">
+        <article>
+            <h4>{{ post.recipe_name }}</h4>
+            <p>{{ post.ingredients }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+    {% for post in interior_posts %}
+    <a href="{% url 'interior_user:interior_detail' id=post.id %}">
+        <article>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.content }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="bookmarks-community" class="content-section hidden">
+    {% for bookmark in community_bookmarks %}
+    <a href="{% url 'community_user:post_detail' pk=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.title }}</h4>
+            <p>{{ bookmark.content }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="bookmarks-recipe" class="content-section hidden">
+    {% for bookmark in recipe_bookmarks %}
+    <a href="{% url 'recipe_user:recipe_detail' id=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.recipe_name }}</h4>
+            <p>{{ bookmark.ingredients }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="bookmarks-interior" class="content-section hidden">
+    {% for bookmark in interior_bookmarks %}
+    <a href="{% url 'interior_user:interior_detail' id=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.title }}</h4>
+            <p>{{ bookmark.content }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="bookmarks-all" class="content-section hidden">
+    {% for bookmark in community_bookmarks %}
+    <a href="{% url 'community_user:post_detail' pk=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.title }}</h4>
+            <p>{{ bookmark.content }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+    {% for bookmark in recipe_bookmarks %}
+    <a href="{% url 'recipe_user:recipe_detail' id=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.recipe_name }}</h4>
+            <p>{{ bookmark.ingredients }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+    {% for bookmark in interior_bookmarks %}
+    <a href="{% url 'interior_user:interior_detail' id=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.title }}</h4>
+            <p>{{ bookmark.content }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+
 {% endblock %}
 
 {% block script %}
-<script>
-    function showCategory(category) {
-        document.querySelectorAll('.posts, .bookmarks').forEach(function(section) {
-            section.style.display = 'none';
-        });
-        document.getElementById(category).style.display = 'block';
-    }
-    
-    function showSubCategory(type) {
-        document.querySelectorAll('.sub-categories > div').forEach(function(section) {
-            section.style.display = 'none';
-        });
-        document.getElementById(type).style.display = 'block';
-    }
-
-    function showContent(type, category) {
-        document.querySelectorAll('.content-section').forEach(function(section) {
-            section.style.display = 'none';
-        });
-        document.querySelectorAll(`.${type}-${category}`).forEach(function(section) {
-            section.style.display = 'block';
-        });
-    }
-</script>
+<script src="/static/js/user/mypage.js"></script>
 {% endblock %}
