@@ -2,6 +2,13 @@
 {% block head %}
     <link rel="stylesheet" href="/static/css/recipe/recipe_list.css">
     <script src="/static/js/recipe_list.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% if message %}
+                alert("{{ message }}");
+            {% endif %}
+        });
+    </script>
 {% endblock %}
 {% block content %}
 <div class="recipe-nav">
@@ -12,6 +19,7 @@
     <a href="{% url 'recipe_user:recipe_list' %}?category=snack">분식</a>
     <a href="{% url 'recipe_user:recipe_list' %}?category=others">기타</a>
 </div>
+
 <h1 class="recipe-list-mention">
     {% if category_name == '기타' %}
         지금 가장 인기있는 음식!
@@ -20,15 +28,20 @@
     {% endif %}
 </h1>
 {% if popular_recipe %}
-<a href="{% url 'recipe_user:recipe_detail' id=popular_recipe.id %}" class="recipe-list-popular"> <!-- 좋아요수 가장 많은 음식 -->
+<a href="{% url 'recipe_user:recipe_detail' id=popular_recipe.id %}" class="recipe-list-popular">
     <img src="{% if popular_recipe.image %}{{ popular_recipe.image.url }}{% else %}/static/img/empty2.svg{% endif %}" alt="">
     <div>
-        <h2>{{ popular_recipe.recipe_name }}</h2> <!-- 요리 이름 -->
-        <h3>{{ popular_recipe.author }}</h3> <!-- 작성자 이름 -->
-        <h4>{{ popular_recipe.created_at }}</h4> <!-- 작성한 날짜 -->
+        <h2>{{ popular_recipe.recipe_name }}</h2>
+        <h3>{{ popular_recipe.author }}</h3>
+        <h4>{{ popular_recipe.created_at }}</h4>
     </div>
 </a>
 {% endif %}
+<form method="GET" action="{% url 'recipe_user:recipe_list' %}" class="search-form">
+    <input type="text" name="search" placeholder="검색어를 입력하세요" value="{{ request.GET.search }}">
+    <button type="submit">검색</button>
+</form>
+
 <div class="recipe-list-btn-box">
     <a href="{% url 'recipe_user:recipe_create' %}" class="recipe-list-btn">작성하기</a>
 </div>
@@ -50,4 +63,26 @@
     <li>등록된 레시피가 없습니다.</li>
 {% endfor %}
 </ul>
+
+<!-- 페이지네이션 추가 -->
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; 처음</a>
+        <a href="?page={{ page_obj.previous_page_number }}">이전</a>
+    {% endif %}
+
+    {% for num in page_range %}
+        {% if page_obj.number == num %}
+            <strong>{{ num }}</strong>
+        {% else %}
+            <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">다음</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+    {% endif %}
+</div>
+
 {% endblock %}

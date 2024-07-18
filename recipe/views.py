@@ -1,26 +1,74 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Recipe, Comment
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .forms import RecipeForm, CommentForm
+from django.views.generic import ListView
+from django.db.models import Q
 
-def recipe_list(request):
-    category = request.GET.get('category')
-    if category:
-        recipes = Recipe.objects.filter(category=category)
-        category_name = dict(Recipe.CATEGORY_CHOICES).get(category, '레시피')
-    else:
-        recipes = Recipe.objects.all()
-        category_name = '레시피'
-    
-    popular_recipe = recipes.order_by('-likes').first()
+class RecipeListView(ListView):
+    model = Recipe  # 사용할 모델 지정
+    paginate_by = 6  # 페이지당 항목 수
+    template_name = 'recipe/recipe_list.html'  # 사용할 템플릿
+    context_object_name = 'recipes'  # 템플릿에서 사용할 컨텍스트 변수 이름
 
-    context = {
-        'recipes': recipes,
-        'category_name': category_name,
-        'popular_recipe': popular_recipe,
-    }
-    return render(request, 'recipe/recipe_list.html', context)
+    def get_queryset(self):
+        # 기본적으로 모든 레시피를 ID의 역순으로 정렬하여 가져옴
+        queryset = Recipe.objects.order_by('-id')
+
+        # GET 요청에서 카테고리와 검색어를 가져옴
+        category = self.request.GET.get('category', '')
+        search_query = self.request.GET.get('search', '')
+
+        # 카테고리가 존재하면 해당 카테고리의 레시피만 필터링
+        if category:
+            queryset = queryset.filter(category=category)
+        # 검색어가 1자보다 길면 레시피 이름과 작성자 이름에서 검색어가 포함된 레시피를 필터링
+        if search_query and len(search_query) > 1:
+            queryset = queryset.filter(
+                Q(recipe_name__icontains=search_query) |
+                Q(author__username__icontains=search_query)
+            )
+
+        return queryset  # 필터링된 레시피 목록 반환
+
+    def get_context_data(self, **kwargs):
+        # 기본 컨텍스트 데이터를 가져옴
+        context = super().get_context_data(**kwargs)
+        paginator = context['paginator']  # 페이지네이터 객체 가져오기
+        page_numbers_range = 5  # 페이지네이션 범위 설정
+        max_index = len(paginator.page_range)  # 페이지 범위의 최대 인덱스 가져오기
+        page = self.request.GET.get('page')  # 현재 페이지 번호 가져오기
+        current_page = int(page) if page else 1  # 현재 페이지 번호 설정 (기본값은 1)
+        # 페이지네이션 범위 계산
+        start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
+        end_index = start_index + page_numbers_range
+        if end_index >= max_index:
+            end_index = max_index
+
+        page_range = paginator.page_range[start_index:end_index]  # 페이지네이션 범위 설정
+        context['page_range'] = page_range  # 페이지네이션 범위를 컨텍스트에 추가
+
+        category = self.request.GET.get('category', '')  # 카테고리 가져오기
+        search_query = self.request.GET.get('search', '')  # 검색어 가져오기
+
+        # 카테고리가 존재하면 해당 카테고리 이름을 컨텍스트에 추가, 그렇지 않으면 '레시피'로 설정
+        if category:
+            context['category_name'] = dict(Recipe.CATEGORY_CHOICES).get(category, '레시피')
+        else:
+            context['category_name'] = '레시피'
+
+        context['search_query'] = search_query  # 검색어를 컨텍스트에 추가
+
+        # 가장 인기 있는 레시피를 좋아요 수를 기준으로 가져오기
+        popular_recipe = self.get_queryset().order_by('-likes').first()
+        context['popular_recipe'] = popular_recipe  # 인기 레시피를 컨텍스트에 추가
+
+        return context  # 최종 컨텍스트 반환
+
+# 기존 recipe_list 뷰는 삭제합니다.
+
+
 
 def recipe_detail_view(request, id):
     recipe = get_object_or_404(Recipe, id=id)
