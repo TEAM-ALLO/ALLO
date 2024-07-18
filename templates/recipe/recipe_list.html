@@ -19,15 +19,16 @@
         지금 가장 인기있는 {{ category_name }}!
     {% endif %}
 </h1>
-{% for recipe in recipes %}
-<a href="{% url 'recipe_user:recipe_detail' id=recipe.id %}" class="recipe-list-popular"> <!-- 좋아요수 가장 많은 음식 -->
-    <img src="{% if popular_recipe and popular_recipe.image %}{{ popular_recipe.image.url }}{% else %}/static/img/empty2.svg{% endif %}" alt="">
+{% if popular_recipe %}
+<a href="{% url 'recipe_user:recipe_detail' id=popular_recipe.id %}" class="recipe-list-popular"> <!-- 좋아요수 가장 많은 음식 -->
+    <img src="{% if popular_recipe.image %}{{ popular_recipe.image.url }}{% else %}/static/img/empty2.svg{% endif %}" alt="">
     <div>
         <h2>{{ popular_recipe.recipe_name }}</h2> <!-- 요리 이름 -->
         <h3>{{ popular_recipe.author }}</h3> <!-- 작성자 이름 -->
         <h4>{{ popular_recipe.created_at }}</h4> <!-- 작성한 날짜 -->
     </div>
 </a>
+{% endif %}
 <div class="recipe-list-btn-box">
     <a href="{% url 'recipe_user:recipe_create' %}" class="recipe-list-btn">작성하기</a>
 </div>
@@ -49,5 +50,4 @@
     <li>등록된 레시피가 없습니다.</li>
 {% endfor %}
 </ul>
-{% endfor %}
 {% endblock %}
