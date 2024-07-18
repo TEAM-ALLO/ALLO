@@ -12,9 +12,9 @@ class InteriorPost(models.Model):
         ('bohemian', 'Bohemian'),
     ]
 
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-    image = models.ImageField(upload_to='interior_images/')
+    title = models.CharField(max_length=200, verbose_name="제목")
+    content = models.TextField( verbose_name="내용")
+    image = models.ImageField(upload_to='interior_images/', verbose_name="인테리어 이미지")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     date_posted = models.DateTimeField(default=timezone.now)
