@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Chat Rooms</title>
-</head>
-<body>
-    <h1>Chat Rooms</h1>
-    <ul>
-        {% for chatroom in chatrooms %}
-            <li>{{ chatroom.name }} - {{ chatroom.created_at }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Chat Rooms</h2>
+<ul>
+    {% for friend in friends %}
+        <li>
+            <a href="{% url 'community_user:start_chat' friend.username %}">{{ friend.username }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -23,14 +23,14 @@
         <p>작성자: {{ recipe.author }}</p>
         <!-- <div>
             <p>작성일: {{ recipe.created_at }}</p>
-            <p>수정일: {{ recipe.updated_at }}</p>    
-        </div> -->
+            <p>수정일: {{ recipe.updated_at }}</p>
+            </div> -->
         <p>{{ recipe.servings }}인분</p>
         <div class="recipe-detail-cook">
             <p>난이도: {{ recipe.difficulty }}</p>
             <p>조리 시간: {{ recipe.cooking_time }}분</p>
-        </div>        
-    </div>
+        </div>
+            </div>
 </div>
 <div class="actions">
   <a href="{% url 'recipe_user:like_recipe' recipe.id %}" class="btn btn-primary">
@@ -49,8 +49,7 @@
     {% endif %}
   </a>
   <p>{{ recipe.total_bookmarks }}</p>
-  
-</div>
+   </div>
 <h2 class="recipe-detila-ingredient-title">재료</h2>
 <div class="recipe-detail-ingredient">
     {% for ingredient in recipe.ingredients.splitlines %}
@@ -67,29 +66,24 @@
     {% endfor %}
 </div>
 
-<!-- 기존 레시피 상세 정보 아래에 추가 -->
-
-<!--read-->
+<!-- 수정된 댓글 부분 -->
 {% if comments %}
   <p class="recipe-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
-{% endif %}
-<ul>
-  {% for comment in comments %}
-    <li class="recipe-detail-comment-container">
-      <div class="recipe-detail-comment-user">
-        {{ comment.user }}
-        {% if user == comment.user %}
-        <form action="{% url 'recipe_user:comments_delete' recipe.id comment.id %}" method="POST" class="d-inline">
-          {% csrf_token %}
-          <input type="submit" value="삭제" class="recipe-detail-comment-delete">
+  <ul>
+    {% for comment in comments %}
+      <li class="recipe-detail-comment-container">
+        <div class="recipe-detail-comment-user">
+          {{ comment.user }}
+          {% if user == comment.user %}
+          <form action="{% url 'recipe_user:comments_delete' recipe.id comment.id %}" method="POST" class="d-inline">
+            {% csrf_token %}
+            <input type="submit" value="삭제" class="recipe-detail-comment-delete">
           </form>
         {% endif %}
       </div>
       <div>
         {{ comment.content }}
       </div>
-      <!--delete-->
-      
     </li>
   {% empty %}
     <p class="recipe-detail-comment-title">작성된 댓글이 없습니다.</p>

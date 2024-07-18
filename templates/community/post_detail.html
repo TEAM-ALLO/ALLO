@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="/static/css/community/community_detail.css">
+    <link rel="stylesheet" href="{% static 'css/community/community_detail.css' %}">
 {% endblock %}
 {% block content %}
 <div class="community-header">
-    <div class="community-categoty">이벤트</div>
-    <div class="community-categoty">채팅방</div>
-    <div class="community-categoty">자유게시판</div>
+    <div class="community-categoty"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-categoty"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
+    <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
 </div>
 <div class="post-detail-big-container">
     <div class="post-detail-top">
@@ -16,7 +16,7 @@
             {% if request.user == post.author %}
                 <a href="{% url 'community_user:post_update' post.id %}" class="btn btn-secondary">수정</a>
                 <a href="{% url 'community_user:post_delete' post.id %}" class="btn btn-danger">삭제</a>
-            {% endif %}              
+            {% endif %}
         </div>
     </div>
     <div class="post-detail-bottom">
@@ -32,12 +32,23 @@
                     Bookmark
                 {% endif %}
             </a>
+            {% if request.user != post.author %}
+                {% if friends %}
+                    <button class="btn btn-success">친구 중</button>
+                {% elif friend_request_sent %}
+                    <button class="btn btn-warning">신청함</button>
+                {% elif friend_request_received %}
+                    <button class="btn btn-info">친구 요청 대기 중</button>
+                {% else %}
+                    <a href="{% url 'community_user:send_friend_request' post.author.username %}" class="btn btn-success">친구 추가</a>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
-        <div class="post-detail-content-box">
-            {{ post.content }}
-            <img src="/static/img/bubble-writer.svg" alt="말풍선 꼬리 이미지" class="bubble-writer">
-        </div>
+    <div class="post-detail-content-box">
+        {{ post.content }}
+        <img src="{% static 'img/bubble-writer.svg' %}" alt="말풍선 꼬리 이미지" class="bubble-writer">
+    </div>
     <div class="post-detail-btn-div">
         <a href="{% url 'community_user:post_list' %}" class="post-detail-btn">목록</a>
     </div>

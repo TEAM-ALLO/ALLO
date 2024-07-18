@@ -63,8 +63,9 @@
 <section id="posts-community" class="content-section hidden">
     {% for post in community_posts %}
         <a href="{% url 'community_user:post_detail' pk=post.id %}">
+
             <article>
-                <h4>{{ post.title }}</h4>
+                <h4><a href="{% url 'interior_user:interior_detail' id=post.id %}">{{ post.title }}</a></h4>
                 <p>{{ post.content }}</p>
                 <span>{{ post.created_at }}</span>
             </article>
@@ -185,6 +186,7 @@
     </a>
     {% endfor %}
 </section>
+
 {% endblock %}
 
 {% block script %}
