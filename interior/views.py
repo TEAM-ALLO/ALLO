@@ -7,8 +7,12 @@ from django.http import HttpResponseRedirect
 
 
 def interior_list(request):
-    posts = InteriorPost.objects.all().order_by('-created_at')
-    return render(request, 'interior/interior_list.html', {'posts': posts})
+    category = request.GET.get('category', 'all')
+    if category == 'all':
+        posts = InteriorPost.objects.all().order_by('-created_at')
+    else:
+        posts = InteriorPost.objects.filter(category=category).order_by('-created_at')
+    return render(request, 'interior/interior_list.html', {'posts': posts, 'category': category})
 
 def interior_detail(request, pk):
     post = get_object_or_404(InteriorPost, pk=pk)
@@ -25,9 +29,10 @@ def interior_new(request):
             post.save()
             request.user.participation_score += 2
             request.user.save()
-            return redirect('interior_user:interior_detail', pk=post.pk)
+            return redirect('interior_user:interior_list')
     else:
         form = InteriorPostForm()
+    
     return render(request, 'interior/interior_form.html', {'form': form})
 
 @login_required
