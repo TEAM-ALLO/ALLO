@@ -1,42 +1,37 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="/static/css/interior/interior_create.css">
+    <link rel="stylesheet" href="{% static 'css/interior/interior_create.css' %}">
 {% endblock %}
 {% block content %}
-<div class="interior-header">
-    <div class="interior-categoty">이벤트</div>
-    <div class="interior-categoty">채팅방</div>
-    <div class="interior-categoty">커뮤니티</div>
-</div>
-<div class="interior-title-box">
-    자유게시판
-</div>
-<h1>
+<h1 class="post-title">
     {% if form.instance.pk %}
-    Edit
+    게시글 수정
     {% else %}
-    Create
+    게시글 작성
     {% endif %}
-    Post
 </h1>
-<form method="post" class="interior-create-container" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="interior-create-form">
     {% csrf_token %}
     {{ form.as_p }}
-    
-    <label for="furniture_list">Furniture List</label>
+
     <div id="furniture_fields">
-        {% if form.instance.furniture_list %}
-            {% for item in form.instance.furniture_list.splitlines %}
-                <input type="text" name="furniture_list[]" class="form-control" value="{{ item }}">
-            {% endfor %}
-        {% else %}
-            <input type="text" name="furniture_list[]" class="form-control">
-        {% endif %}
+        <input type="text" name="furniture_list[]" class="form-control">
     </div>
-    <button type="button" onclick="addFurnitureField()">Add More Furniture</button>
+    <button type="button" onclick="addFurnitureField()" class="interior-furniture-add-btn">+가구 추가</button>
     
-    <button type="submit">Submit</button>
+    <button type="submit" class="interior-create-btn">작성하기</button>
 </form>
-<a href="{% url 'interior_user:interior_list' %}">Back to Home</a>
+{% endblock %}
+{% block script %}
+<script src="{% static 'js/interior/interior_create.js' %}"></script>
+<script>
+    function addFurnitureField() {
+        var field = document.createElement('input');
+        field.type = 'text';
+        field.name = 'furniture_list[]';
+        field.className = 'form-control';
+        document.getElementById('furniture_fields').appendChild(field);
+    }
+</script>
 {% endblock %}

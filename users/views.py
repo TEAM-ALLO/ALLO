@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .models import User
+from community.models import FriendRequest
 from django.contrib.auth.decorators import login_required
 from community.models import CommunityPost
 from recipe.models import Recipe
@@ -80,6 +81,7 @@ def mypage_view(request):
     recipe_posts = Recipe.objects.filter(author=user)
     interior_posts = InteriorPost.objects.filter(author=user)
 
+
     community_bookmarks = CommunityPost.objects.filter(bookmarks=user)
     recipe_bookmarks = Recipe.objects.filter(bookmarks=user)
     interior_bookmarks = InteriorPost.objects.filter(bookmarks=user)
@@ -101,7 +103,6 @@ def mypage_view(request):
     }
     return render(request, 'users/mypage.html', context)
 
-
 @login_required
 def profile_edit_view(request):
     if request.method == 'POST':
@@ -112,3 +113,24 @@ def profile_edit_view(request):
     else:
         form = CustomUserChangeForm(instance=request.user)
     return render(request, 'users/profile_edit.html', {'form': form})
+
+@login_required
+def friend_list(request, username):
+    user = get_object_or_404(User, username=username)
+    friends = user.friends.all()
+    received_requests = FriendRequest.objects.filter(to_user=user)
+    return render(request, 'users/friend.html', {'friends': friends, 'user': user, 'received_requests': received_requests})
+
+
+@login_required
+def friend_profile_view(request, username):
+    user = get_object_or_404(User, username=username)
+    all_users = User.objects.all()
+    sorted_users = sorted(all_users, key=lambda u: (u.attendance_score + u.participation_score), reverse=True)
+    ranking = {user: rank+1 for rank, user in enumerate(sorted_users)}
+    
+    context = {
+        'user': user,
+        'ranking': ranking[user],
+    }
+    return render(request, 'users/friend_profile.html', context)
