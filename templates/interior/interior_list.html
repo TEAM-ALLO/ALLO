@@ -4,11 +4,12 @@
 {% endblock %}
 {% block content %}
 <div class="interior-nav">
-    <a href="">모던</a>
-    <a href="">클래식</a>
-    <a href="">인더스트리얼</a>
-    <a href="">스칸디나비안</a>
-    <a href="">보헤미안</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=all" class="{% if category == 'all' %}active{% endif %}">전체</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=modern" class="{% if category == 'modern' %}active{% endif %}">모던</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=classic" class="{% if category == 'classic' %}active{% endif %}">클래식</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=industrial" class="{% if category == 'industrial' %}active{% endif %}">인더스트리얼</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=scandinavian" class="{% if category == 'scandinavian' %}active{% endif %}">스칸디나비안</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=bohemian" class="{% if category == 'bohemian' %}active{% endif %}">보헤미안</a>
 </div>
 <div class="interior-create-btn-div">
     <a href="{% url 'interior_user:interior_new' %}" class="interior-create-btn">작성하기</a>
@@ -18,31 +19,6 @@
     <a href="{% url 'interior_user:interior_detail' post.pk %}" class="interior-list-post">
             <img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-list-img">
             <h2>{{ post.title }}</h2>
-            <!-- <p>{{ post.author }} - {{ post.created_at }}</p>
-            <p>{{ post.content|truncatewords:30 }}</p>
-            <div>
-                <form method="post" action="{% url 'interior_user:like_interior' post.pk %}">
-                    {% csrf_token %}
-                    <button type="submit">
-                        {% if user in post.likes.all %}
-                        Unlike
-                        {% else %}
-                        Like
-                        {% endif %}
-                    </button>
-                </form>
-                <form method="post" action="{% url 'interior_user:bookmark_interior' post.pk %}">
-                    {% csrf_token %}
-                    <button type="submit">
-                        {% if user in post.bookmarks.all %}
-                        Remove Bookmark
-                        {% else %}
-                        Bookmark
-                        {% endif %}
-                    </button>
-                </form>
-            </div> -->
-
     </a>
     {% endfor %}
 </div>

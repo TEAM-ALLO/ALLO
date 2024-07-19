@@ -38,8 +38,6 @@ def chatroom_detail(request, pk):
     else:
         form = MessageForm()
     return render(request, 'community/chatroom_detail.html', {'chatroom': chatroom, 'messages': messages, 'form': form})
-
-
 @login_required
 def start_chat(request, username):
     other_user = get_object_or_404(User, username=username)
