@@ -4,14 +4,98 @@ h2 {
     font-size: 20px;
     font-weight: bold;
 }
-.interior-create-form > p > label {
-    /* display: none; */
+.interior-input-container {
+    display: flex;
+    margin: 10px;
+    justify-content: center;
+}
+.interior-box {
+    align-items: center;
+}
+.interior-input-container h4 {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--main--red--color);
+    width: 150px;
+}
+.interior-input-container input, 
+.interior-input-container textarea{
+    width: 300px;
+}
+.interior-input-container textarea {
+    resize: none;
+}
+.interior-input-container textarea:focus {
+    outline: none;
+}
+#id_title,
+#id_content,
+.form-control {
+    border-radius: 10px;
+    background-color: var(--light--gray--color);
+    padding: 10px;
+    border: 0;
+    width: 300px;
+}
+#id_category {
+    border: 0;
+    border-radius: 10px;
+    background-color: var(--light--gray--color);
+    padding: 10px;
+    width: 300px;
+}
+.interior-furniture-list-container {
+    display: flex;
+    margin: 10px;
+    justify-content: center;
+}
+.interior-furniture-list {
+    color: var(--main--red--color);
+    font-size: 20px;
+    font-weight: bold;
+    width: 150px;
+}
+.furniture-fields-container {
+    display: flex;
+    flex-direction: column;
+}
+#furniture_fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.interior-furniture-add-btn {
+    color: var(--main--red--color);
+    font-weight: bold;
+    margin: 10px;
+    text-align: end;
+}
+.interior-create-btn {
+    background-color: var(--main--red--color);
+    border-radius: 10px;
+    padding: 10px;
+    color: #fff !important;
+    margin: 0;
+    width: 70px;
+    display: flex;
+    margin: 10px auto;
+}
+.interior-box-title,
+.interior-furniture-list {
+    margin-top: 10px;
+}
+/* .interior-create-form > p > label {
+    color: var(--main--red--color);
+    font-size: 20px;
+    font-weight: bold;
+    width: 150px;
 }
 .interior-create-form > p > input {
     border: 0;
     background-color: var(--light--gray--color);
     border-radius: 10px;
     padding: 10px;
+    width: 300px;
 }
 .interior-create-form > p > textarea {
     border: 0;
@@ -19,9 +103,26 @@ h2 {
     border-radius: 10px;
     resize: none;
     padding: 10px;
+    width: 300px;
 }
 .interior-create-form > p > textarea:focus {
     outline: none;
+}
+#id_category {
+    border: 0;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    padding: 10px;
+
+}
+#furniture_fields input {
+    border: 0;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
 }
 .interior-furniture-add-btn {
     color: var(--main--red--color);
@@ -34,3 +135,9 @@ h2 {
     padding: 10px;
     color: #fff !important;
 }
+.interior-create-form p:nth-child(3)  {
+    background-color: #ffffff00 !important;
+}
+.interior-furniture-list-container {
+    display: flex;
+} */
