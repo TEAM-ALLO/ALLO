@@ -76,15 +76,6 @@
         <a href="?page={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
     {% endif %}
 </div>
-
 {% endblock %}
 {% block script %}
-<script src="/static/js/recipe_list.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        {% if message %}
-            alert("{{ message }}");
-        {% endif %}
-    });
-</script>
 {% endblock %}
