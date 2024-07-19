@@ -1,24 +1,34 @@
 {% extends 'base.html' %}
-
+{% block head %}
+    <link rel="stylesheet" href="/static/css/recycle/recycle_main.css">
+{% endblock %}
 {% block content %}
+<div class="recyle-nav">
+    <a>분리수거</a>
+    <a>의류 수거함</a>
+    {% if user.is_staff %}
+        <a href="{% url 'recycle_user:recycle_create' %}" class="btn btn-primary">새 글 작성</a>
+    {% endif %}
+</div>
 <div class="recycle-header">
-    <h1>매번 헷갈리는 분리수거 방법,</h1>
-    <h1>ALLO와 함께 알아보아요!</h1>
-    <form method="post">
+    <div class="recycle-header-ment">
+        <h1>매번 헷갈리는 분리수거 방법,</h1>
+        <h1>ALLO와 함께 알아보아요!</h1>
+    </div>
+    <form method="post" class="recyle-search-container">
         {% csrf_token %}
-        <input type="text" name="query" placeholder="예)우유, 형광등, 프링글스통">
-        <button type="submit">검색</button>
+        <input type="text" name="query" placeholder="예)우유, 형광등, 프링글스통" class="recyle-main-search">
+        <button type="submit"><img src="/static/img/search.png" alt="검색 아이콘" class="search-icon"></button>
     </form>
 {% if items %}
     <ul>
     {% for item in items %}
-        <a href="{% url 'recycle_user:recycle_detail' item.pk %}">{{ item.name }} - {{ item.category }}</a>
+        <a href="{% url 'recycle_user:recycle_detail' item.pk %}" class="recyle-post-container">
+            <p>{{ item.name }}</p>
+            <p>{{ item.category }}</p>
+        </a>
     {% endfor %}
     </ul>
-{% endif %}
-
-{% if user.is_staff %}
-    <a href="{% url 'recycle_user:recycle_create' %}" class="btn btn-primary">새 글 작성</a>
 {% endif %}
 
 {% endblock %}
