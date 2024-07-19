@@ -4,7 +4,7 @@ from .models import CommunityPost, Message, Comment
 class PostForm(forms.ModelForm):
     class Meta:
         model = CommunityPost
-        fields = ['title', 'content']
+        fields = ['title', 'content','image']
 
 class MessageForm(forms.ModelForm):
     class Meta:

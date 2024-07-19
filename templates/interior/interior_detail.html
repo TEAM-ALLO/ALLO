@@ -1,8 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block head %}
-{% endblock %}
-
 {% block content %}
 <div class="interior-header">
     <h1>{{ post.title }}</h1>
@@ -33,6 +30,17 @@
         북마크
         {% endif %}
     </button>
+    {% if request.user != post.author %}
+        {% if friends %}
+            <button class="btn btn-success">친구 중</button>
+        {% elif friend_request_sent %}
+            <button class="btn btn-warning">신청함</button>
+        {% elif friend_request_received %}
+            <button class="btn btn-info">친구 요청 대기 중</button>
+        {% else %}
+            <button id="friend-request-button" data-username="{{ post.author.username }}" class="btn btn-success">친구 추가</button>
+        {% endif %}
+    {% endif %}
 </div>
 {% endblock %}
 

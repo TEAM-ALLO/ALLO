@@ -36,6 +36,7 @@ class Message(models.Model):
 class CommunityPost(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
+    image = models.ImageField(upload_to='post_images/', verbose_name="자유게시판 이미지", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     date_posted = models.DateTimeField(default=timezone.now)
@@ -55,13 +56,12 @@ class CommunityPost(models.Model):
         return self.bookmarks.count()
 
 class FriendRequest(models.Model):
-    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_requests', on_delete=models.CASCADE)
-    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_requests', on_delete=models.CASCADE)
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_requests_community', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_requests_community', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.from_user} -> {self.to_user}"
-    
 
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='community_comments')
@@ -72,5 +72,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
-    
 

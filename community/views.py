@@ -38,10 +38,10 @@ def chatroom_detail(request, pk, username):
             message.sender = request.user
             message.receiver = receiver
             message.save()
-            return redirect('community_user:chatroom_detail', pk=pk)
+            return redirect('community_user:chatroom_detail', pk=pk, username=username)
     else:
         form = MessageForm()
-    return render(request, 'community/chatroom_detail.html', {'chatroom': chatroom, 'messages': messages, 'form': form})
+    return render(request, 'community/chatroom_detail.html', {'chatroom': chatroom, 'messages': messages, 'form': form, 'receiver':receiver})
 
 
 @login_required
@@ -51,7 +51,7 @@ def start_chat(request, username):
     chatroom_name = f'chat_{"_".join(sorted_usernames)}'
     chatroom, created = ChatRoom.objects.get_or_create(name=chatroom_name)
     chatroom.participants.add(request.user, other_user)
-    return redirect('community_user:chatroom_detail', pk=chatroom.pk)
+    return redirect('community_user:chatroom_detail', pk=chatroom.pk, username=username)
 
 
 @login_required

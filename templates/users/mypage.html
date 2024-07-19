@@ -146,7 +146,7 @@
 </section>
 <section id="bookmarks-interior" class="content-section hidden">
     {% for bookmark in interior_bookmarks %}
-    <a href="{% url 'interior_user:interior_detail' id=bookmark.id %}">
+    <a href="{% url 'interior_user:interior_detail' pk=bookmark.pk %}">
         <article>
             <h4>{{ bookmark.title }}</h4>
             <p>{{ bookmark.content }}</p>
@@ -175,7 +175,7 @@
     </a>
     {% endfor %}
     {% for bookmark in interior_bookmarks %}
-    <a href="{% url 'interior_user:interior_detail' id=bookmark.id %}">
+    <a href="{% url 'interior_user:interior_detail' pk=bookmark.pk %}">
         <article>
             <h4>{{ bookmark.title }}</h4>
             <p>{{ bookmark.content }}</p>
