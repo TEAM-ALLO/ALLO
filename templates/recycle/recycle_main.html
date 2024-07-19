@@ -12,8 +12,13 @@
 {% if items %}
     <ul>
     {% for item in items %}
-        <a href="{% url 'recycle_user:recycle_detail' item.pk %}">{{ item.name }} - {{ item.category }}</a><
+        <a href="{% url 'recycle_user:recycle_detail' item.pk %}">{{ item.name }} - {{ item.category }}</a>
     {% endfor %}
     </ul>
 {% endif %}
+
+{% if user.is_staff %}
+    <a href="{% url 'recycle_user:recycle_create' %}" class="btn btn-primary">새 글 작성</a>
+{% endif %}
+
 {% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>분리수거 항목 수정</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="{{ form.category.id_for_label }}">카테고리:</label>
+        {{ form.category }}
+    </div>
+    
+    <div class="form-group">
+        <label for="{{ form.name.id_for_label }}">이름:</label>
+        {{ form.name }}
+    </div>
+    
+    <div class="form-group">
+        <label for="{{ form.description.id_for_label }}">설명:</label>
+        {{ form.description }}
+    </div>
+    
+    <div class="form-group">
+        <label for="{{ form.image.id_for_label }}">이미지:</label>
+        {{ form.image }}
+        {% if recycle.image %}
+            <p>현재 이미지: {{ recycle.image.name }}</p>
+        {% endif %}
+    </div>
+    
+    <button type="submit" class="btn btn-primary">수정 완료</button>
+</form>
+
+<a href="{% url 'recycle_user:recycle_detail' recycle.pk %}" class="btn btn-secondary">취소</a>
+{% endblock %}

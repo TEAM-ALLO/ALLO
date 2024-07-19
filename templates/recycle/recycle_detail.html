@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ recycle.name }}</h1>
+<p>카테고리: {{ recycle.get_category_display }}</p>
+<p>{{ recycle.description }}</p>
+
+{% if recycle.image %}
+    <img src="{{ recycle.image.url }}" alt="{{ recycle.name }}">
+{% endif %}
+
+{% if user.is_staff %}
+    <a href="{% url 'recycle_user:recycle_update' recycle.pk %}" class="btn btn-secondary">수정</a>
+    <a href="{% url 'recycle_user:recycle_confirm_delete' recycle.pk %}" class="btn btn-danger">삭제</a>
+{% endif %}
+
+<a href="{% url 'recycle_user:recycle_main' %}" class="btn btn-primary">메인으로 돌아가기</a>
+{% endblock %}
