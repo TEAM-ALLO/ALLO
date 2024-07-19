@@ -6,6 +6,7 @@ from .forms import PostForm, MessageForm, CommentForm
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -38,6 +39,8 @@ def chatroom_detail(request, pk):
     else:
         form = MessageForm()
     return render(request, 'community/chatroom_detail.html', {'chatroom': chatroom, 'messages': messages, 'form': form})
+
+
 @login_required
 def start_chat(request, username):
     other_user = get_object_or_404(User, username=username)
@@ -59,26 +62,25 @@ def send_friend_request(request, username):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
+@require_POST
 def accept_friend_request(request, request_id):
     friend_request = get_object_or_404(FriendRequest, id=request_id)
     if friend_request.to_user == request.user:
         request.user.friends.add(friend_request.from_user)
         friend_request.from_user.friends.add(request.user)
         friend_request.delete()
-        messages.success(request, '친구 요청을 수락했습니다.')
-    else:
-        messages.warning(request, '유효하지 않은 요청입니다.')
-    return redirect('community_user:friend', username=request.user.username)
+        return JsonResponse({'status': 'success', 'message': '친구 요청을 수락했습니다.'})
+    return JsonResponse({'status': 'error', 'message': '유효하지 않은 요청입니다.'})
 
 @login_required
+@require_POST
 def decline_friend_request(request, request_id):
     friend_request = get_object_or_404(FriendRequest, id=request_id)
     if friend_request.to_user == request.user:
         friend_request.delete()
-        messages.success(request, '친구 요청을 거절했습니다.')
-    else:
-        messages.warning(request, '유효하지 않은 요청입니다.')
-    return redirect('community_user:friend', username=request.user.username)
+        return JsonResponse({'status': 'success', 'message': '친구 요청을 거절했습니다.'})
+    return JsonResponse({'status': 'error', 'message': '유효하지 않은 요청입니다.'})
+
 
 def post_list(request):
     posts = CommunityPost.objects.all()
