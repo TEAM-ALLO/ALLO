@@ -15,7 +15,7 @@
     {% for friend in friends %}
         <a href="{% url 'community_user:start_chat' friend.username %}" class="chatroom-friend-container">
             {% if friend.profile_image %}
-                <img src="{{ request.from_user.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+                <img src="{{ friend.profile_image.url }}" alt="프로필 사진" class="mypage-img">
             {% else %}
                 <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
             {% endif %}

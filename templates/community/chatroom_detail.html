@@ -9,7 +9,7 @@
     <div class="community-categoty"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
     <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
 </div>
-<h2>Chat Room: {{ chatroom.name }}</h2>
+<!-- <h2>Chat Room: {{ chatroom.name }}</h2> -->
 <div>
     {% for message in messages %}
     {% if message.sender == request.user %}

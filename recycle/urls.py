@@ -9,4 +9,5 @@ urlpatterns = [
     path('create/', views.RecycleCreate.as_view(), name='recycle_create'),
     path('<int:pk>/update/', views.RecycleUpdate.as_view(), name='recycle_update'),
     path('<int:pk>/delete/', views.RecycleDelete.as_view(), name='recycle_confirm_delete'),
+    path('category', views.recycle_category, name='recycle_category'),
 ]
