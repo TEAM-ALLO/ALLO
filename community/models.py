@@ -23,7 +23,8 @@ class ChatRoom(models.Model):
 
 class Message(models.Model):
     chatroom = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, related_name='messages')
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_messages')
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -61,7 +62,7 @@ class FriendRequest(models.Model):
     def __str__(self):
         return f"{self.from_user} -> {self.to_user}"
     
-    
+
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='community_comments')
     post = models.ForeignKey(CommunityPost, on_delete=models.CASCADE, related_name='comments')

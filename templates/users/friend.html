@@ -31,7 +31,6 @@
     {% for friend in friends %}
         <li>
             <a href="{% url 'users_user:friend_profile' friend.username %}">{{ friend.username }}</a>
-            <button class="btn btn-danger" onclick="deleteFriend('{{ friend.username }}')">삭제</button>
         </li>
     {% endfor %}
 </ul>
@@ -48,44 +47,25 @@
     function handleFriendRequest(action, requestId) {
         let url = '';
         if (action === 'accept') {
-            url = "{% url 'community_user:accept_friend_request' 0 %}".replace('0', requestId);
+            url = `/community/accept_friend_request/${requestId}/`;
         } else if (action === 'decline') {
-            url = "{% url 'community_user:decline_friend_request' 0 %}".replace('0', requestId);
+            url = `/community/decline_friend_request/${requestId}/`;
         }
-        
+
         fetch(url, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': getCsrfToken(),
                 'Content-Type': 'application/json'
-            },
+            }
         })
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
+                alert(data.message);
                 document.getElementById(`request-${requestId}`).remove();
-                location.reload();  // 페이지 새로고침
             } else {
                 alert(data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-    function deleteFriend(username) {
-        const url = `{% url 'users_user:delete_friend' 'username' %}`.replace('username', username);
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': getCsrfToken(),
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => {
-            if (response.ok) {
-                location.reload();  // 페이지 새로고침
-            } else {
-                alert('친구 삭제에 실패했습니다.');
             }
         })
         .catch(error => console.error('Error:', error));
