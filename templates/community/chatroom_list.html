@@ -1,12 +1,26 @@
 {% extends 'base.html' %}
-
+{% block head %}
+    <link rel="stylesheet" href="/static/css/community/community_list.css">
+    <link rel="stylesheet" href="/static/css/community/chatroom_list.css">
+{% endblock %}
 {% block content %}
-<h2>Chat Rooms</h2>
-<ul>
+<div class="community-header">
+    <div class="community-categoty"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-categoty"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
+    <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+</div>
+<h3 class="community-chatroom-title">친구와 채팅을 시작해보세요!</h3>
+<!-- <h4 class="community-friend-title">친구 목록</h4> -->
+<div class="community-friend-big-container">
     {% for friend in friends %}
-        <li>
-            <a href="{% url 'community_user:start_chat' friend.username %}">{{ friend.username }}</a>
-        </li>
+        <a href="{% url 'community_user:start_chat' friend.username %}" class="chatroom-friend-container">
+            {% if friend.profile_image %}
+                <img src="{{ request.from_user.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
+            <p class="community-friend-name">{{ friend.username }}</p>
+        </a>
     {% endfor %}
-</ul>
+    </div>
 {% endblock %}
