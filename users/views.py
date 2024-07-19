@@ -10,6 +10,7 @@ from .forms import CustomUserChangeForm
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.contrib import messages
 
 def home(request):
     return render(request, 'users/home.html')
@@ -134,3 +135,14 @@ def friend_profile_view(request, username):
         'ranking': ranking[user],
     }
     return render(request, 'users/friend_profile.html', context)
+
+@login_required
+def delete_friend(request, username):
+    friend = get_object_or_404(User, username=username)
+    if friend in request.user.friends.all():
+        request.user.friends.remove(friend)
+        friend.friends.remove(request.user)
+        messages.success(request, f'{friend.username}님을 친구 목록에서 삭제했습니다.')
+    else:
+        messages.warning(request, '유효하지 않은 요청입니다.')
+    return redirect('users_user:friend_list', username=request.user.username)
