@@ -18,7 +18,7 @@
     {% for post in posts %}
     <a href="{% url 'interior_user:interior_detail' post.pk %}" class="interior-list-post">
             <img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-list-img">
-            <h2>{{ post.title }}</h2>
+            <h2 class="interior-list-post-title">{{ post.title }}</h2>
     </a>
     {% endfor %}
 </div>

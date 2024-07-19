@@ -57,3 +57,5 @@ class RecycleDelete(AuthorRequiredMixin, DeleteView):
     model = Recycle
     success_url = reverse_lazy('recycle_user:recycle_main')
 
+def recycle_category(request):
+    return render(request, 'recycle/recycle_category.html')

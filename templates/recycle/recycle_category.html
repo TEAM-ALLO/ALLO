@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/recycle/recycle_category.css">
+{% endblock %}
+{% block content %}
+<div class="recycle-nav">
+    <a href="" id="recycle-nav-trash">분리수거</a>
+    <a href="">의료수거함</a>
+</div>
+<div id="recycle-sub-nav">
+    <div id="nav1">일반쓰레기</div>
+    <div id="nav2">비닐류</div>
+    <div id="nav3">플라스틱</div>
+    <div id="nav4">병*캔류</div>
+    <div id="nav5">종이류</div>
+    <div id="nav6">음식물쓰레기</div>
+</div>
+
+<!-- 일반쓰레기 -->
+<div id="recycle-main1" class="recycle-main">
+    <h2>일반쓰레기</h2>
+</div>
+
+<!-- 비닐류 -->
+<div id="recycle-main2" class="recycle-main">
+    <h2>비닐류</h2>
+</div>
+
+<!-- 플라스틱 -->
+<div id="recycle-main3" class="recycle-main">
+    <h2>플라스틱</h2>
+</div>
+
+<!-- 병*캔류 -->
+<div id="recycle-main4" class="recycle-main">
+    <h2>병*캔류</h2>
+</div>
+
+<!-- 종이류 -->
+<div id="recycle-main5" class="recycle-main">
+    <h2>종이류</h2>
+</div>
+
+<!-- 음식물쓰레기 -->
+<div id="recycle-main6" class="recycle-main">
+    <h2>음식물쓰레기</h2>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="/static/js/recycle/recycle_category.js"></script>
+{% endblock %}
