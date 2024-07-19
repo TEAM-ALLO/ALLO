@@ -40,7 +40,7 @@ def interior_update(request, pk):
             return redirect('interior_user:interior_list')
     else:
         form = InteriorPostForm(instance=post)
-    return render(request, 'interior/post_form.html', {'form': form})
+    return render(request, 'interior/interior_edit.html', {'form': form})
 
 @login_required
 def interior_delete(request, pk):
@@ -68,7 +68,7 @@ def like_interior(request, pk):
 @login_required
 def bookmark_interior(request, pk):
     post = get_object_or_404(InteriorPost, pk=pk)
-    if post.bookmarks.filter(username=request.user.id).exists():
+    if post.bookmarks.filter(username=request.user.username).exists():
         post.bookmarks.remove(request.user)
     else:
         post.bookmarks.add(request.user)
