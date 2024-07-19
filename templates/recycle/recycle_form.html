@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% if object %}글 수정{% else %}새 글 작성{% endif %}</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">저장</button>
+</form>
+
+<a href="{% url 'recycle_user:recycle_main' %}" class="btn btn-secondary">취소</a>
+{% endblock %}
