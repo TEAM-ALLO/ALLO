@@ -22,7 +22,7 @@ class InteriorPost(models.Model):
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='interior_likes', blank=True)
     bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='interior_bookmarks', blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default=None, null=True, blank=True)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default=None, null=True, blank=True, verbose_name="카테고리")
     furniture_list = models.TextField(null=True, blank=True)
 
 

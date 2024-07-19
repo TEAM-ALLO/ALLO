@@ -48,7 +48,7 @@ h3 {
 .btn-danger {
     background-color: var(--main--red--color);
     padding: 5px 10px;
-    color: #fff;
+    color: #fff !important;
     border-radius: 10px;
     height: 35px;
     display: flex;
