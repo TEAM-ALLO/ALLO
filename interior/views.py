@@ -4,6 +4,7 @@ from .forms import InteriorPostForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 
 
 def interior_list(request):
@@ -59,25 +60,35 @@ def like_interior(request, pk):
     post = get_object_or_404(InteriorPost, pk=pk)
 
     if isinstance(request.user, AnonymousUser):
-        return redirect('login')
+        return redirect('users_user:login')
     
     if post.likes.filter(pk=request.user.pk).exists():
         post.likes.remove(request.user)
+        liked = False
     else:
         post.likes.add(request.user)
+        liked = True
         if post.author is not None:  # post.author가 None이 아닌 경우에만 점수 추가
             post.author.participation_score += 1
             post.author.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+    return JsonResponse({'liked': liked, 'likes_count': post.total_likes()})
 
 @login_required
 def bookmark_interior(request, pk):
     post = get_object_or_404(InteriorPost, pk=pk)
+
+    if isinstance(request.user, AnonymousUser):
+        return redirect('users_user:login')
+    
     if post.bookmarks.filter(username=request.user.username).exists():
         post.bookmarks.remove(request.user)
+        bookmarked = False
     else:
         post.bookmarks.add(request.user)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        bookmarked = True
+    return JsonResponse({'bookmarked': bookmarked})
+
 
 @login_required
 def bookmarked_interiors(request):
