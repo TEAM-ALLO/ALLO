@@ -33,6 +33,7 @@ def chatroom_detail(request, pk):
             message = form.save(commit=False)
             message.chatroom = chatroom
             message.sender = request.user
+            message.receiver = request.user
             message.save()
             return redirect('community_user:chatroom_detail', pk=pk)
     else:

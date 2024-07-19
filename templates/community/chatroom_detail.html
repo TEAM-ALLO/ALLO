@@ -1,15 +1,29 @@
 {% extends 'base.html' %}
-
+{% block head %}
+    <link rel="stylesheet" href="/static/css/community/community_list.css">
+    <link rel="stylesheet" href="/static/css/community/chatroom_detail.css">
+{% endblock %}
 {% block content %}
+<div class="community-header">
+    <div class="community-categoty"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-categoty"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
+    <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+</div>
 <h2>Chat Room: {{ chatroom.name }}</h2>
 <div>
     {% for message in messages %}
-        <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+    {% if message.sender == request.user %}
+            <!-- <p>내가 보냄</p> -->
+            <p><strong>{{ message.sender.name }}:</strong> {{ message.content }}</p>
+        {% else %}
+            <!-- <p>남이 보냄</p> -->
+            <p><strong>{{ message.sender.name }}:</strong> {{ message.content }}</p>
+        {% endif %}
     {% endfor %}
 </div>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Send</button>
+    <button type="submit">전송</button>
 </form>
 {% endblock %}
