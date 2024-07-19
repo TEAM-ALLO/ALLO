@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
+from django.contrib.auth.models import AnonymousUser
 
 User = get_user_model()
 
@@ -55,11 +56,11 @@ def start_chat(request, username):
 def send_friend_request(request, username):
     to_user = get_object_or_404(User, username=username)
     if FriendRequest.objects.filter(from_user=request.user, to_user=to_user).exists():
-        messages.warning(request, '이미 친구 요청을 보냈습니다.')
+        return JsonResponse({'status': 'error', 'message': '이미 친구 요청을 보냈습니다.'})
     else:
         FriendRequest.objects.create(from_user=request.user, to_user=to_user)
-        messages.success(request, '친구 요청을 보냈습니다.')
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return JsonResponse({'status': 'success', 'message': '친구 요청을 보냈습니다.'})
+
 
 @login_required
 @require_POST
@@ -123,22 +124,37 @@ def post_delete(request, pk):
 @login_required
 def like_post(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
+    
+    if isinstance(request.user, AnonymousUser):
+        return redirect('users_user:login')
+    
     if post.likes.filter(username=request.user.username).exists():
         post.likes.remove(request.user)
+        liked = False
     else:
         post.likes.add(request.user)
-        post.author.participation_score += 1
-        post.author.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        liked = True
+        if post.author is not None:
+            post.author.participation_score += 1
+            post.author.save()
+
+    return JsonResponse({'liked': liked, 'likes_count': post.total_likes()})
 
 @login_required
 def bookmark_post(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
+
+    if isinstance(request.user, AnonymousUser):
+        return redirect('users_user:login')
+    
     if post.bookmarks.filter(username=request.user.username).exists():
         post.bookmarks.remove(request.user)
+        bookmarked = False
     else:
         post.bookmarks.add(request.user)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        bookmarked = True
+        
+    return JsonResponse({'bookmarked': bookmarked})
 
 @login_required
 def bookmarked_posts(request):

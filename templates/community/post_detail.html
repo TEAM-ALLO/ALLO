@@ -24,14 +24,21 @@
             {{ post.author.username }} | {{ post.date_posted|date:"Y-m-d H:i" }}
         </p>
         <div class="actions">
-            <a href="{% url 'community_user:like_post' post.id %}" class="btn btn-primary">Like ({{ post.total_likes }})</a>
-            <a href="{% url 'community_user:bookmark_post' post.id %}" class="btn btn-info">
-                {% if request.user in post.bookmarks.all %}
-                    Unbookmark
+            <button id="like-button" data-post-id="{{ post.pk }}">
+                {% if request.user in post.likes.all %}
+                좋아요 취소
                 {% else %}
-                    Bookmark
+                좋아요
                 {% endif %}
-            </a>
+            </button>
+            <span id="likes-count">{{ post.total_likes }}</span>
+            <button id="bookmark-button" data-post-id="{{ post.pk }}" class="btn btn-info">
+                {% if request.user in post.bookmarks.all %}
+                    북마크 취소
+                {% else %}
+                    북마크
+                {% endif %}
+            </button>
             {% if request.user != post.author %}
                 {% if friends %}
                     <button class="btn btn-success">친구 중</button>
@@ -53,4 +60,8 @@
         <a href="{% url 'community_user:post_list' %}" class="post-detail-btn">목록</a>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/community/community_detail.js' %}"></script>
 {% endblock %}
