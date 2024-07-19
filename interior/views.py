@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import InteriorPost
+from community.models import FriendRequest
 from .forms import InteriorPostForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
@@ -14,9 +15,21 @@ def interior_list(request):
         posts = InteriorPost.objects.filter(category=category).order_by('-created_at')
     return render(request, 'interior/interior_list.html', {'posts': posts, 'category': category})
 
+@login_required
 def interior_detail(request, pk):
     post = get_object_or_404(InteriorPost, pk=pk)
-    return render(request, 'interior/interior_detail.html', {'post': post})
+    friend_request_sent = FriendRequest.objects.filter(from_user=request.user, to_user=post.author).exists()
+    friend_request_received = FriendRequest.objects.filter(from_user=post.author, to_user=request.user).exists()
+    friends = request.user.friends.filter(username=post.author.username).exists()
+    
+    context = {
+        'post': post,
+        'friend_request_sent': friend_request_sent,
+        'friend_request_received': friend_request_received,
+        'friends': friends
+    }
+    return render(request, 'interior/interior_detail.html', context)
+
 
 @login_required
 def interior_new(request):
