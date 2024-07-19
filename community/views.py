@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Event, Notice, ChatRoom, CommunityPost, Message, FriendRequest
-from .forms import PostForm, MessageForm
+from django.views.decorators.http import require_POST
+from .models import Event, Notice, ChatRoom, CommunityPost, Message, FriendRequest, Comment
+from .forms import PostForm, MessageForm, CommentForm
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
@@ -172,3 +173,30 @@ def friend(request, username):
         'received_requests': received_requests
     }
     return render(request, 'users/friend.html', context)
+
+
+@login_required
+def liked_posts(request):
+    user = request.user
+    posts = CommunityPost.objects.filter(likes=user).order_by('-date_posted')
+    return render(request, 'community/liked_posts.html', {'posts': posts})
+
+@require_POST
+@login_required
+def comments_create(request, id):
+    post = get_object_or_404(CommunityPost, id=id)
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.post = post
+        comment.user = request.user
+        comment.save()
+    return redirect('community_user:post_detail', post.id)
+
+@require_POST
+@login_required
+def comments_delete(request, post_id, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user == comment.user:
+        comment.delete()
+    return redirect('community_user:post_detail', post_id)
