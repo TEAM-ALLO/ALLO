@@ -4,4 +4,4 @@ from .models import InteriorPost
 class InteriorPostForm(forms.ModelForm):
     class Meta:
         model = InteriorPost
-        fields = ['title', 'content', 'image', 'category', 'furniture_list']
+        fields = ['title', 'content', 'image', 'category']

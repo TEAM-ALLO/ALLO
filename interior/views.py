@@ -28,7 +28,7 @@ def interior_new(request):
             return redirect('interior_user:interior_detail', pk=post.pk)
     else:
         form = InteriorPostForm()
-    return render(request, 'interior/interior_edit.html', {'form': form})
+    return render(request, 'interior/interior_form.html', {'form': form})
 
 @login_required
 def interior_update(request, pk):
@@ -40,7 +40,7 @@ def interior_update(request, pk):
             return redirect('interior_user:interior_list')
     else:
         form = InteriorPostForm(instance=post)
-    return render(request, 'interior/interior_edit.html', {'form': form})
+    return render(request, 'interior/interior_form.html', {'form': form})
 
 @login_required
 def interior_delete(request, pk):

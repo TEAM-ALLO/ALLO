@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/users/friend.css">
+{% endblock %}
+
+{% block content %}
+<div class="mypage-bar">
+    {{ user.username }}님의 프로필
+</div>
+<div class="mypage-user-info">
+    <div class="mypage-user-info-l">
+    {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+    {% else %}
+        <img src="/static/img/user.svg"  alt="기본 프로필 사진" class="mypage-img">
+    {% endif %}
+    </div>
+    <div class="mypage-user-info-r"> <!-- 왼쪽 노란 부분 -->
+        <h2>{{ user.name }}님</h2> <!-- 상단 -->
+        <div class="mypage-postit"> <!--하단-->
+            <div class="mypage-ranking-divs"> <!-- 단상 -->
+                <div></div>
+                <div></div>
+                <div></div>
+                <div class="mypage-ranking-divs-title">My ranking</div>
+            </div>
+            <div class="mypage-my-ranking">{{ ranking }}위</div>
+        </div>
+    </div>    
+</div>
+{% endblock %}
