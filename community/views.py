@@ -26,8 +26,9 @@ def chatroom_list(request):
 
 
 @login_required
-def chatroom_detail(request, pk):
+def chatroom_detail(request, pk, username):
     chatroom = get_object_or_404(ChatRoom, pk=pk)
+    receiver = get_object_or_404(User, username=username)
     messages = chatroom.messages.all().order_by('timestamp')
     if request.method == 'POST':
         form = MessageForm(request.POST)
@@ -35,7 +36,7 @@ def chatroom_detail(request, pk):
             message = form.save(commit=False)
             message.chatroom = chatroom
             message.sender = request.user
-            message.receiver = request.user
+            message.receiver = receiver
             message.save()
             return redirect('community_user:chatroom_detail', pk=pk)
     else:

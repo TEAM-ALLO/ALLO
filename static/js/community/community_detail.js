@@ -43,6 +43,29 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error:', error));
     });
+
+    document.getElementById('friend-request-button').addEventListener('click', function() {
+        const username = this.dataset.username;
+        const url = `/community/send_friend_request/${username}/`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                this.textContent = '신청함';
+                this.disabled = true;
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
 });
 
 function getCsrfToken() {

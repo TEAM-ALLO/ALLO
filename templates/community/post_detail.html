@@ -47,7 +47,7 @@
                 {% elif friend_request_received %}
                     <button class="btn btn-info">친구 요청 대기 중</button>
                 {% else %}
-                    <a href="{% url 'community_user:send_friend_request' post.author.username %}" class="btn btn-success">친구 추가</a>
+                    <button id="friend-request-button" data-username="{{ post.author.username }}" class="btn btn-success">친구 추가</button>
                 {% endif %}
             {% endif %}
         </div>
