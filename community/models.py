@@ -5,11 +5,18 @@ from django.utils import timezone
 class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    date = models.DateTimeField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    image = models.ImageField(upload_to='event_images/', verbose_name="이벤트 포스터", null=True, blank=True)
+
+    def __str__(self):
+        return self.title
+    
 
 class Notice(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
+    image = models.ImageField(upload_to='notice_images/', verbose_name="공지 이미지", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 

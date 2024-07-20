@@ -5,7 +5,11 @@ app_name = 'community_user'
 
 urlpatterns = [
     path('events/', views.event_list, name='event_list'),
+    path('events/create/', views.event_create, name='event_create'),
+    path('events/<int:pk>/', views.event_detail, name='event_detail'),
     path('notices/', views.notice_list, name='notice_list'),
+    path('notices/<int:pk>/', views.notice_detail, name='notice_detail'),
+    path('notices/create/', views.notice_create, name='notice_create'),
     path('chatrooms/', views.chatroom_list, name='chatroom_list'),
     path('chatroom/<int:pk>/<str:username>/', views.chatroom_detail, name='chatroom_detail'),
     path('start_chat/<str:username>/', views.start_chat, name='start_chat'),
