@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib import messages
+import datetime
 
 def home(request):
     return render(request, 'users/home.html')
@@ -92,6 +93,8 @@ def mypage_view(request):
     sorted_users = sorted(all_users, key=lambda u: (u.attendance_score + u.participation_score), reverse=True)
     ranking = {user: rank+1 for rank, user in enumerate(sorted_users)}
     
+    today = datetime.date.today()
+
     context = {
         'user': user,
         'ranking': ranking[user],
@@ -101,6 +104,7 @@ def mypage_view(request):
         'community_bookmarks': community_bookmarks,
         'recipe_bookmarks': recipe_bookmarks,
         'interior_bookmarks': interior_bookmarks,
+        'today': today,
     }
     return render(request, 'users/mypage.html', context)
 
