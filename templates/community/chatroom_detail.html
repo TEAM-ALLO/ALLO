@@ -9,20 +9,30 @@
     <div class="community-categoty"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
     <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
 </div>
-<!-- <h2>Chat Room: {{ chatroom.name }}</h2> -->
-<div>
+<h2 class="receiver-username">{{receiver.username}}님과의 채팅</h2>
+<div class="chatroom-detail-big-contaienr">
     {% for message in messages %}
         {% if message.sender == request.user %}
-            message.sender.name
+        <!-- 내가 보낸 메시지 -->
+        <div class="bubble-container-right">
+            {{ message.content }}
+            <img src="/static/img/my-bubble.svg" alt="말풍선 꼬리 이미지" class="my-bubble">
+        </div>
         {% else %}
-            message.receiver.name
+        <!-- 내가 받은 메시지 -->
+        <div>
+            {{message.receiver.name}}
+        </div>
+        <div class="bubble-container-left">
+            {{ message.content }}
+            <img src="/static/img/bubble-writer.svg" alt="말풍선 꼬리 이미지" class="bubble-writer">
+        </div>
         {% endif %}
-        <p><strong>{{ message.sender.username }}</strong> to <strong>{{ message.receiver.username }}</strong>: {{ message.content }}</p>
     {% endfor %}
 </div>
-<form method="post">
+<form method="post" class="comment-container">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">전송</button>
+    {{ form.content }}
+    <button type="submit" class="send-icon-button"><img src="/static/img/send.svg" alt="채팅 전송 아이콘" class="send-icon"></button>
 </form>
 {% endblock %}
