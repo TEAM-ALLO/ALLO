@@ -11,65 +11,65 @@
 .community-categoty:nth-child(3) {
     color: black;
 }
+.community-create-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 .post-title {
     font-size: 20px;
     font-weight: bold;
     text-align: center;
-    margin-top: 10px;
+    margin: 10px auto;
 }
-/* .community-title-box {
-    background-color: var(--main--gray--color);
-    font-size: 20px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10px;
-} */
-.community-create-container {
-    padding: 10px;
-    position: relative;
-}
-.community-create-container > p {
-    display: flex;
-    justify-content: center;
-}
-.community-create-container > p > label {
-    display: none;
-}
-/* 게시글 제목 */
-.community-create-container > p > input  {
-    width: 70%;
-    border: 6px solid var(--main--gray--color);
+#id_title {
+    width: 80%;
+    margin: 0 auto;
     padding: 10px 20px;
+    border: 6px solid var(--light--gray--color);
 }
-/* 게시글 내용 */
-.community-create-container > p > textarea {
-    width: 70%;
-    resize: none;
-    border: 6px solid var(--main--gray--color);
-    border-top: 0;
+#id_content {
+    width: 80%;
+    margin: 0 auto;
+    min-height: 300px;
     padding: 20px;
-    min-height: 350px;
+    border-left: 6px solid var(--light--gray--color);
+    border-right: 6px solid var(--light--gray--color);
+    border-top: 0;
+    border-bottom: 0;
+    resize: none;
 }
-.community-create-container > p > textarea:focus {
-    outline: none;
+#id-content:focus {
+    outline: none!important;
 }
+#id_image {
+    display: flex;
+}
+.community-form-bottom {
+    width: 80% !important;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    border: 6px solid var(--light--gray--color);
+}
+/* .community-create-form-container {
+    min-width: 300px;
+} */
 .community-create-btn {
     background-color: var(--main--red--color);
     padding: 10px;
     color: #fff;
     border-radius: 10px;
+    font-size: 16px;
+    
     /* 지금 폰트 사이즈 13.33px */
-    position: absolute;
-    bottom: 29.2px;
-    right: 0;
-    right: calc((100vw - 70%) / 2 + 20px);
 }
-.detail-list-btn {
+.community-list-btn {
     display: flex;
     justify-content: center;
-    margin: 0 auto 10px auto;
+    margin: 10px auto;
     background-color: var(--main--red--color);
     padding: 10px;
     border-radius: 10px;
