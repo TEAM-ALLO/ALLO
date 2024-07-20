@@ -1,47 +1,58 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/interior/interior_detail.css">
+{% endblock%}
+
 {% block content %}
-<div class="interior-header">
+<div class="interior-detail-title">
+    <p class="interior-detail-category">{{ post.get_category_display }}</p>
     <h1>{{ post.title }}</h1>
 </div>
-<div class="interior-detail">
-    <img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-detail-img">
-    <p>{{ post.author }} - {{ post.created_at }}</p>
-    <p>카테고리: {{ post.get_category_display }}</p>
-    <p>{{ post.content }}</p>
+<div class="interior-detail-info">
+    <div class="author-info">
+        <img src="{{ post.author.profile_image.url }}" alt="작성자의 프로필 사진" class="author-img">
+        <p>{{ post.author }}</p>
+    </div>
+    <p class="interior-detail-user-btns">
+        {% if request.user == post.author %}
+        <a href="{% url 'interior_user:interior_update' post.pk %}">수정</a>
+        <a href="{% url 'interior_user:interior_delete' post.pk %}">삭제</a>
+        {% else %}
+            {% if friends %}
+                <button class="btn btn-success">친구 중</button>
+            {% elif friend_request_sent %}
+                <button class="btn btn-warning">신청함</button>
+            {% elif friend_request_received %}
+                <button class="btn btn-info">친구 요청 대기 중</button>
+            {% else %}
+                <button id="friend-request-button" data-username="{{ post.author.username }}" class="btn btn-success">친구 추가</button>
+            {% endif %}
+        {% endif %}
+    </p>
 </div>
-<div class="interior-actions">
-    {% if request.user == post.author %}
-    <a href="{% url 'interior_user:interior_update' post.pk %}">수정</a>
-    <a href="{% url 'interior_user:interior_delete' post.pk %}">삭제</a>
-    {% endif %}
-    <button id="like-button" data-post-id="{{ post.pk }}">
-        {% if request.user in post.likes.all %}
-        좋아요 취소
-        {% else %}
-        좋아요
-        {% endif %}
-    </button>
-    <span id="likes-count">{{ post.total_likes }}</span>
-    <button id="bookmark-button" data-post-id="{{ post.pk }}">
-        {% if request.user in post.bookmarks.all %}
-        북마크 취소
-        {% else %}
-        북마크
-        {% endif %}
-    </button>
-    {% if request.user != post.author %}
-        {% if friends %}
-            <button class="btn btn-success">친구 중</button>
-        {% elif friend_request_sent %}
-            <button class="btn btn-warning">신청함</button>
-        {% elif friend_request_received %}
-            <button class="btn btn-info">친구 요청 대기 중</button>
-        {% else %}
-            <button id="friend-request-button" data-username="{{ post.author.username }}" class="btn btn-success">친구 추가</button>
-        {% endif %}
-    {% endif %}
+<div class="interior-detail-info2">
+    <div class="interior-detail-btns">
+        <button id="like-button" data-post-id="{{ post.pk }}">
+                {% if request.user in post.likes.all %}
+                <img src="/static/img/full-heart.svg" alt="좋아요 눌렀을 때 아이콘">
+            {% else %}
+            <img src="/static/img/heart.svg" alt="좋아요 안 눌렀을 때 아이콘">
+            {% endif %}
+        </button>
+        <span id="likes-count">{{ post.total_likes }}</span>
+        <button id="bookmark-button" data-post-id="{{ post.pk }}">
+            {% if request.user in post.bookmarks.all %}
+                <img src="/static/img/full-bookmark.svg" alt="북마크 눌렀을 때 아이콘">
+            {% else %}
+                <img src="/static/img/bookmark.svg" alt="북마크 안 눌렀을 때 아이콘">
+            {% endif %}
+        </button>
+    </div>
+    <p class="interior-detail-date">{{ post.created_at }}</p>
 </div>
+<img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-detail-img">
+<p class="interior-detail-content">{{ post.content }}</p>
 {% endblock %}
 
 {% block script %}
