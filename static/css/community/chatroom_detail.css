@@ -4,3 +4,81 @@
 .community-categoty:nth-child(3) {
     color: #fff !important;
 }
+.receiver-username {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+.chatroom-detail-big-contaienr {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+}
+/* 내가 받은 메시지 */
+.bubble-container-left {
+    background-color: var(--light--gray--color);
+    max-width: 80%;
+    width: fit-content;
+    position: relative;
+    padding: 20px;
+    min-width: 80px;
+    font-family: "Noto Sans KR", sans-serif;
+    margin: 30px;
+}
+.bubble-writer {
+    position: absolute;
+    bottom: -20px;
+    left: -10px;
+    z-index: -1;
+}
+/* 내가 보낸 메시지 */
+.bubble-container-right {
+    background-color: var(--main--gray--color);
+    max-width: 80%;
+    width: fit-content;
+    position: relative;
+    padding: 20px;
+    right: 15px;
+    min-width: 80px;
+    font-family: "Noto Sans KR", sans-serif;
+    margin: 30px 0 30px auto;
+}
+.my-bubble {
+    position: absolute;
+    bottom: -10px;
+    right: -20px;
+    z-index: -1;
+}
+.comment-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 6px solid var(--main--gray--color);
+    border-radius: 10px;
+    width: 80%;
+    margin: 10px auto;
+}
+#id_content {
+    width: 100%;
+    margin: 10px 0;
+    resize: none;
+    min-height: 50px;
+    padding: 10px;
+    border: 0;
+    /* background-color: var(--main--gray--color); */
+    height: 80px;
+    display: block;
+}
+#id_content:focus {
+    outline: none;
+}
+.send-icon-button {
+    display: flex;
+}
+.send-icon {
+    width: 30px;
+    height: 30px;
+    margin: 10px;
+}
