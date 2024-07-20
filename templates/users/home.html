@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
-
+{% block head %}
+<link rel="stylesheet" href="/static/css/users/home.css">
+{% endblock %}
 {% block content %}
-<h1>Welcome to the Home Page</h1>
-
-<h2>Top 3 Users</h2>
-<ol>
-    {% for user in top_users %}
-        <li>{{ user.username }} - Score: {{ user.score }}</li>
-    {% endfor %}
-</ol>
+<div class="home-hof-container">
+    <h2>명예의 전당</h2>
+</div>
+{% if top_users|length >= 1 %}
+    <div>1등 {{ top_users.0.username }}, {{ top_users.0.score }}</div>
+{% endif %}
+{% if top_users|length >= 2 %}
+    <div>2등 {{ top_users.1.username }}, {{ top_users.1.score }}</div>
+{% endif %}
+{% if top_users|length >= 3 %}
+    <div>3등 {{ top_users.2.username }}, {{ top_users.2.score }}</div>
+{% endif %}
 
 {% endblock %}
