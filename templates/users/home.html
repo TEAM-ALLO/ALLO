@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block head %}
 
-{% endblock %}
 {% block content %}
-{% endblock %}
-{% block script %}
-    
+<h1>Welcome to the Home Page</h1>
+
+<h2>Top 3 Users</h2>
+<ol>
+    {% for user in top_users %}
+        <li>{{ user.username }} - Score: {{ user.score }}</li>
+    {% endfor %}
+</ol>
+
 {% endblock %}

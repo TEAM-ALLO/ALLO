@@ -20,7 +20,9 @@
             <img src="/static/img/ALLO.svg" alt="올로 로고 이미지" id="allo-logo-img2">
         </a>
         <nav id="header-nav">
-            <img src="/static/img/search2.png" alt="검색창 아이콘" id="notification-icon">
+            <a href="{% url 'users_user:search' %}" id="search_logo">
+                <img src="/static/img/search2.png" alt="검색창 아이콘" id="notification-icon">
+            </a>
             <img src="/static/img/notification2.png" alt="알림창 아이콘" id="search-icon">
             <div id="hamburger-btn">
                 <div></div>
