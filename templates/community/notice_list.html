@@ -7,7 +7,10 @@
     <h1>Notices</h1>
     <ul>
         {% for notice in notices %}
-            <li>{{ notice.title }} - {{ notice.created_at }}</li>
+            <li>
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width: 100px;">
+                <a href="{% url 'community_user:event_detail' event.pk %}">{{ event.title }}</a> - 
+            </li>
         {% endfor %}
     </ul>
 </body>

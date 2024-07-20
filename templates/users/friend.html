@@ -19,7 +19,7 @@
                     <p>님이 친구 요청을 보냈습니다.</p>
                 </div>           
                 <div class="friend-received-container-btns">
-                    <button class="btn btn-success" onclick="handleFriendRequest('accept', {{ request.id }})">수락</button>
+                    <button class="btn btn-success" onclick="handleFriendRequest('accept', {{ request.id }}, '{{ request.from_user.username }}')">수락</button>
                     <button class="btn btn-danger" onclick="handleFriendRequest('decline', {{ request.id }})">거절</button>
                 </div>
             </div>
@@ -27,7 +27,7 @@
     {% endfor %}
 </ul>
 <h3>친구 목록</h3>
-<ul>
+<ul id="friend-list">
     {% for friend in friends %}
         <li>
             <a href="{% url 'users_user:friend_profile' friend.username %}">{{ friend.username }}</a>
@@ -44,7 +44,7 @@
         return cookieValue;
     }
 
-    function handleFriendRequest(action, requestId) {
+    function handleFriendRequest(action, requestId, username = '') {
         let url = '';
         if (action === 'accept') {
             url = `/community/accept_friend_request/${requestId}/`;
@@ -64,11 +64,24 @@
             if (data.status === 'success') {
                 alert(data.message);
                 document.getElementById(`request-${requestId}`).remove();
+                if (action === 'accept' && username !== '') {
+                    addToFriendList(username);
+                }
             } else {
                 alert(data.message);
             }
         })
         .catch(error => console.error('Error:', error));
+    }
+
+    function addToFriendList(username) {
+        const friendList = document.getElementById('friend-list');
+        const newFriend = document.createElement('li');
+        const friendLink = document.createElement('a');
+        friendLink.href = `/users_user/friend_profile/${username}/`;
+        friendLink.textContent = username;
+        newFriend.appendChild(friendLink);
+        friendList.appendChild(newFriend);
     }
 </script>
 {% endblock %}
