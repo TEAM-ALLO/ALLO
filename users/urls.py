@@ -13,5 +13,6 @@ urlpatterns = [
     path('friend/<str:username>/', views.friend_list, name='friend_list'),
     path('friend/profile/<str:username>/', views.friend_profile_view, name='friend_profile'),
     path('friend/delete/<str:username>/', views.delete_friend, name='delete_friend'), 
+    path('change_pw/', views.change_pw, name='change_pw')
     
 ]

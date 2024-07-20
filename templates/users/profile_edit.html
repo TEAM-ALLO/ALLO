@@ -17,6 +17,7 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
+            <a href="{% url 'users_user:change_pw' %}" class="pw-change-btn"> 비밀번호 변경 </a>
             <button type="submit">저장</button>
         </form>
     </main>
