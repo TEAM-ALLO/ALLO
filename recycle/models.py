@@ -11,16 +11,13 @@ class Recycle(models.Model):
         ('food', '음식물 쓰레기'),
         ('clothing', '의류 수거함')
     ]
-    TYPE_CHOICES = [
-        ('searched', '검색'),
-        ('bar', '상단바')
-    ]
+   
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     name = models.CharField(max_length=100)  # 항목의 이름
     description = models.TextField()  # 항목의 설명
     image = models.ImageField(upload_to='recycle_images/', blank=True, null=True)  # 항목의 이미지
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    
     
     def __str__(self):
         return self.name
