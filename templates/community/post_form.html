@@ -18,8 +18,12 @@
 </h1>
 <form method="post" class="community-create-container">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="community-create-btn">작성하기</button>
+    {{ form.title }}
+    {{ form.content }}
+    <div class="community-form-bottom">
+        {{ form.image }}
+        <button type="submit" class="community-create-btn">작성하기</button>
+    </div>
 </form>
-<a href="{% url 'community_user:post_list' %}" class="detail-list-btn">목록</a>
+<a href="{% url 'community_user:post_list' %}" class="community-list-btn">목록</a>
 {% endblock %}

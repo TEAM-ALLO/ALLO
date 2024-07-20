@@ -36,7 +36,7 @@ class Message(models.Model):
 class CommunityPost(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
-    image = models.ImageField(upload_to='post_images/', verbose_name="자유게시판 이미지", null=True, blank=True)
+    image = models.ImageField(upload_to='post_images/', verbose_name="이미지", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     date_posted = models.DateTimeField(default=timezone.now)
