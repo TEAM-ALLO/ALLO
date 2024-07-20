@@ -5,21 +5,7 @@
     <link rel="stylesheet" href="/static/css/recipe/recipe_form.css">
 {% endblock %}
 {% block content %}
-<div class="recipe-nav">
-    <a href="?category=korean">한식</a>
-    <a href="?category=japanese">일식</a>
-    <a href="?category=chinese">중식</a>
-    <a href="?category=western">양식</a>
-    <a href="?category=snack">분식</a>
-    <a href="?category=others">기타</a>
-</div>
-<h1 id="recipe-title">
-    {% if form.instance.id %}
-    레시피 수정
-    {% else %}
-    새 레시피 작성
-    {% endif %}
-</h1>
+
 <form method="post" enctype="multipart/form-data" id="recipe-form">
     {% csrf_token %}
     <div class="recipe-input-container">
