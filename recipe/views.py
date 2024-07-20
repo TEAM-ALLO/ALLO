@@ -5,6 +5,8 @@ from django.views.decorators.http import require_POST
 from .forms import RecipeForm, CommentForm
 from django.views.generic import ListView
 from django.db.models import Q
+from community.models import FriendRequest
+from django.http import JsonResponse
 
 class RecipeListView(ListView):
     model = Recipe  # 사용할 모델 지정
@@ -74,6 +76,8 @@ def recipe_detail_view(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     comments = recipe.comments.all()
     comment_form = CommentForm()
+    friend_request_sent = FriendRequest.objects.filter(from_user=request.user, to_user=recipe.author).exists()
+    friend_request_received = FriendRequest.objects.filter(from_user=recipe.author, to_user=request.user).exists()
     instructions_with_index = [
         (index + 1, instruction)
         for index, instruction in enumerate(recipe.instructions.splitlines())
@@ -83,6 +87,8 @@ def recipe_detail_view(request, id):
         'instructions_with_index': instructions_with_index,
         'comments' : comments,
         'comment_form' : comment_form,
+        'friend_request_sent': friend_request_sent,
+        'friend_request_received': friend_request_received,
     }
     return render(request, 'recipe/recipe_detail.html', context)
 
@@ -142,6 +148,7 @@ def recipe_delete_view(request, id):  # 변경
         return redirect('recipe_user:recipe_detail', id=recipe.id)  # 변경
 
 @login_required
+@require_POST
 def like_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     if recipe.likes.filter(username=request.user.username).exists():
@@ -150,16 +157,18 @@ def like_recipe(request, id):
         recipe.likes.add(request.user)
         recipe.author.participation_score += 1
         recipe.author.save()
-    return redirect('recipe_user:recipe_detail', id=recipe.id)
+    return JsonResponse({'liked': recipe.likes.filter(username=request.user.username).exists(), 'likes_count': recipe.likes.count()})
 
 @login_required
+@require_POST
 def bookmark_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
-    if request.user in recipe.bookmarks.all():
+    if recipe.bookmarks.filter(username=request.user.username).exists():
         recipe.bookmarks.remove(request.user)
     else:
         recipe.bookmarks.add(request.user)
-    return redirect('recipe_user:recipe_detail', id=recipe.id)
+    return JsonResponse({'bookmarked': recipe.bookmarks.filter(username=request.user.username).exists(), 'bookmarks_count': recipe.bookmarks.count()})
+
 
 @login_required
 def liked_recipes(request):
