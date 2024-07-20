@@ -51,8 +51,48 @@
     </div>
     <p class="interior-detail-date">{{ post.created_at }}</p>
 </div>
+
 <img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-detail-img">
 <p class="interior-detail-content">{{ post.content }}</p>
+{% if comments %}
+  <p class="interior-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
+  <ul>
+    {% for comment in comments %}
+      <li class="interior-detail-comment-container">
+        <div class="interior-detail-comment-user">
+          {{ comment.user }}
+          {% if user == comment.user %}
+          <form action="{% url 'interior_user:comments_delete' post.pk comment.id %}" method="POST" class="d-inline">
+              {% csrf_token %}
+              <input type="submit" value="삭제" class="interior-detail-comment-delete">
+          </form>
+          {% endif %}
+      </div>
+      <div>
+        {{ comment.content }}
+      </div>
+    </li>
+  {% empty %}
+    <p class="interior-detail-comment-title">작성된 댓글이 없습니다.</p>
+  {% endfor %}
+</ul>
+{% endif %}
+{% if request.user.is_authenticated %}
+<h3 class="interior-detail-comment-title">댓글을 작성해주세요!</h3>
+<form method="post" action="{% url 'interior_user:comments_create' post.pk %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" class="interior-detail-comment-btn" value="댓글 작성">
+  </form>
+{% else %}
+  <p class="interior-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
+  
+{% endif %}
+
+<div class="btn-div">
+    <a href="{% url 'interior_user:interior_list' %}" class="interior-detail-btn">목록</a>
+</div>
+
 {% endblock %}
 
 {% block script %}

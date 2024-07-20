@@ -33,7 +33,7 @@ class InteriorPost(models.Model):
         return self.bookmarks.count()
 
 
-class Comment(models.Model):
+class InteriorComment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='interior_comments')
     post = models.ForeignKey(InteriorPost, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()

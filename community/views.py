@@ -195,7 +195,7 @@ def bookmark_post(request, pk):
         post.bookmarks.add(request.user)
         bookmarked = True
         
-    return JsonResponse({'bookmarked': bookmarked})
+    return JsonResponse({'bookmarked': bookmarked, 'bookmarks_count':post.total_likes()})
 
 @login_required
 def bookmarked_posts(request):
@@ -211,12 +211,16 @@ def post_detail(request, pk):
     friend_request_sent = FriendRequest.objects.filter(from_user=request.user, to_user=post.author).exists()
     friend_request_received = FriendRequest.objects.filter(from_user=post.author, to_user=request.user).exists()
     friends = request.user.friends.filter(username=post.author.username).exists()
-    
+    comments = post.comments.all()
+    comment_form = CommentForm()
+
     context = {
         'post': post,
         'friend_request_sent': friend_request_sent,
         'friend_request_received': friend_request_received,
-        'friends': friends
+        'friends': friends,
+        'comments' : comments,
+        'comment_form' : comment_form,
     }
     
     return render(request, 'community/post_detail.html', context)
