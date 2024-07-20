@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Search Results for "{{ query }}"</h1>
+
+{% if community_results or recipe_results or interior_results %}
+    <h2>Community Posts</h2>
+    <ul>
+    {% for post in community_results %}
+        <li><a href="{% url 'community_user:post_detail' post.id %}">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
+
+    <h2>Recipes</h2>
+    <ul>
+    {% for post in recipe_results %}
+        <li><a href="{% url 'recipe_user:recipe_detail_view' post.id %}">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
+
+    <h2>Interior Posts</h2>
+    <ul>
+    {% for post in interior_results %}
+        <li><a href="{% url 'interior_user:interior_detail' post.id %}">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+
+{% endblock %}

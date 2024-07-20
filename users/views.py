@@ -16,7 +16,27 @@ import datetime
 from django.contrib.auth.hashers import check_password
 
 def home(request):
-    return render(request, 'users/home.html')
+    all_users = User.objects.all()
+    sorted_users = sorted(all_users, key=lambda u: (u.attendance_score + u.participation_score), reverse=True)
+    # first=sorted_users[0]
+    # second=sorted_users[1]
+    # third=sorted_users[2]
+
+    # context = {
+    #     'first': first,
+    #     'second': second,
+    #     'third': third,
+    
+    # }
+    top_users = []
+    for user in sorted_users[:3]:
+        score = user.attendance_score + user.participation_score
+        top_users.append({'username': user.username, 'score': score})
+    
+    context = {
+        'top_users': top_users,
+    }
+    return render(request, 'users/home.html', context)
 
 def signup_view(request):
     if request.method == "POST":
@@ -173,3 +193,17 @@ def change_pw(request):
         context.update({'error':"현재 비밀번호가 일치하지 않습니다."})
 
     return render(request, "users/change_pw.html",context)
+
+def search(request):
+    query = request.GET.get('q', '')
+    community_results = CommunityPost.objects.filter(title__icontains=query) | CommunityPost.objects.filter(content__icontains=query)
+    recipe_results = Recipe.objects.filter(recipe_name__icontains=query) | Recipe.objects.filter(recipe_name__icontains=query)
+    interior_results = InteriorPost.objects.filter(title__icontains=query) | InteriorPost.objects.filter(content__icontains=query)
+
+    context = {
+        'query': query,
+        'community_results': community_results,
+        'recipe_results': recipe_results,
+        'interior_results': interior_results,
+    }
+    return render(request, 'users/searched_list.html', context)
