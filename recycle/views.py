@@ -1,10 +1,23 @@
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import View, DetailView, CreateView, UpdateView, DeleteView
 from .models import Recycle
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
 from .models import Recycle
+from .forms import RecycleForm
+
+
+class CategoryDetail(View):
+    template_name = 'recycle/recycle_category.html'
+
+    def get(self, request, category_name):
+        context = {
+            'category_name': category_name,
+            'recycles': Recycle.objects.filter(category=category_name)
+        }
+        return render(request, self.template_name, context)
+
 
 def recycle_main(request):
     if request.method == 'POST':
@@ -31,7 +44,7 @@ class StaffRequiredMixin(UserPassesTestMixin):
       
 class RecycleCreate(StaffRequiredMixin, CreateView):
     model = Recycle
-    fields = ['category', 'name', 'description', 'image']
+    form_class = RecycleForm
     success_url = reverse_lazy('recycle_user:recycle_main')
 
     def form_valid(self, form):
@@ -43,7 +56,7 @@ class RecycleDetail(DetailView):
 
 class RecycleUpdate(AuthorRequiredMixin, UpdateView):
     model = Recycle
-    fields = ['category', 'name', 'description', 'image']
+    form_class = RecycleForm
     success_url = reverse_lazy('recycle_user:recycle_main')
 
     def get_queryset(self):
@@ -57,5 +70,30 @@ class RecycleDelete(AuthorRequiredMixin, DeleteView):
     model = Recycle
     success_url = reverse_lazy('recycle_user:recycle_main')
 
-def recycle_category(request):
-    return render(request, 'recycle/recycle_category.html')
+class CategoryDetail(View):
+    template_name = 'recycle/recycle_category.html'
+
+    def get(self, request, category_name):
+        context = {
+            'category_name': category_name,
+            'recycles': Recycle.objects.filter(category=category_name, is_in_category=True)
+        }
+        return render(request, self.template_name, context)
+    
+def trash(request):
+    return render(request, 'recycle/trash.html')
+    
+def vinyl(request):
+    return render(request, 'recycle/vinyl.html')
+    
+def can(request):
+    return render(request, 'recycle/can.html')
+    
+def plastic(request):
+    return render(request, 'recycle/plastic.html')
+
+def food(request):
+    return render(request, 'recycle/food.html')
+    
+def paper(request):
+    return render(request, 'recycle/paper.html')

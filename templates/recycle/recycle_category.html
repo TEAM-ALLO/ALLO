@@ -5,46 +5,28 @@
 {% block content %}
 <div class="recycle-nav">
     <a href="" id="recycle-nav-trash">분리수거</a>
-    <a href="">의료수거함</a>
+    <a href="">의류수거함</a>
 </div>
 <div id="recycle-sub-nav">
-    <div id="nav1">일반쓰레기</div>
-    <div id="nav2">비닐류</div>
-    <div id="nav3">플라스틱</div>
-    <div id="nav4">병*캔류</div>
-    <div id="nav5">종이류</div>
-    <div id="nav6">음식물쓰레기</div>
+    <div id="nav1"><a href="{% url 'recycle_user:category_detail' '일반쓰레기' %}">일반쓰레기</a></div>
+    <div id="nav2"><a href="{% url 'recycle_user:category_detail' '비닐류' %}">비닐류</a></div>
+    <div id="nav3"><a href="{% url 'recycle_user:category_detail' '플라스틱' %}">플라스틱</a></div>
+    <div id="nav4"><a href="{% url 'recycle_user:category_detail' '병*캔류' %}">병*캔류</a></div>
+    <div id="nav5"><a href="{% url 'recycle_user:category_detail' '종이류' %}">종이류</a></div>
+    <div id="nav6"><a href="{% url 'recycle_user:category_detail' '음식물쓰레기' %}">음식물쓰레기</a></div>
 </div>
 
-<!-- 일반쓰레기 -->
-<div id="recycle-main1" class="recycle-main">
-    <h2>일반쓰레기</h2>
+{% for category in categories %}
+<div id="recycle-main{{ forloop.counter }}" class="recycle-main">
+    <h2>{{ category.name }}</h2>
+    <ul>
+        {% for item in category.recycles %}
+            <li><a href="{% url 'recycle_user:recycle_detail' item.pk %}">{{ item.name }}</a></li>
+        {% endfor %}
+    </ul>
 </div>
-
-<!-- 비닐류 -->
-<div id="recycle-main2" class="recycle-main">
-    <h2>비닐류</h2>
-</div>
-
-<!-- 플라스틱 -->
-<div id="recycle-main3" class="recycle-main">
-    <h2>플라스틱</h2>
-</div>
-
-<!-- 병*캔류 -->
-<div id="recycle-main4" class="recycle-main">
-    <h2>병*캔류</h2>
-</div>
-
-<!-- 종이류 -->
-<div id="recycle-main5" class="recycle-main">
-    <h2>종이류</h2>
-</div>
-
-<!-- 음식물쓰레기 -->
-<div id="recycle-main6" class="recycle-main">
-    <h2>음식물쓰레기</h2>
-</div>
+{% endfor %}
+<a href="{% url 'recycle_user:recycle_main' %}">메인으로 돌아가기</a>
 {% endblock %}
 {% block script %}
     <script src="/static/js/recycle/recycle_category.js"></script>

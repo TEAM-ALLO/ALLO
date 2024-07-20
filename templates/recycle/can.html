@@ -20,29 +20,10 @@
     <a href="{% url 'recycle_user:paper' %}">종이류</a>
     <a href="{% url 'recycle_user:food'  %}">음식물쓰레기</a>
 </div>
+<h1>우땨땨 병*캔류</h1>
 
 
-<div class="recycle-header">
-    <div class="recycle-header-ment">
-        <h1>매번 헷갈리는 분리수거 방법,</h1>
-        <h1>ALLO와 함께 알아보아요!</h1>
-    </div>
-    <form method="post" class="recyle-search-container">
-        {% csrf_token %}
-        <input type="text" name="query" placeholder="예)우유, 형광등, 프링글스통" class="recyle-main-search">
-        <button type="submit"><img src="/static/img/search.png" alt="검색 아이콘" class="search-icon"></button>
-    </form>
-    {% if items %}
-        <ul>
-        {% for item in items %}
-            <a href="{% url 'recycle_user:recycle_detail' item.pk %}" class="recyle-post-container">
-                <p>{{ item.name }}</p>
-                <p>{{ item.category }}</p>
-            </a>
-        {% endfor %}
-        </ul>
-    {% endif %}
-</div>
+<a href="{% url 'recycle_user:recycle_main' %}" class="btn btn-primary">메인으로 돌아가기</a>
 {% endblock %}
 {% block script %}
     <script src="/static/js/recycle/recycle_category.js"></script>
