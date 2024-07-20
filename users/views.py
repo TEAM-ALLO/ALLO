@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import logout
 from .models import User
 from community.models import FriendRequest
 from django.contrib.auth.decorators import login_required
@@ -12,6 +13,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib import messages
 import datetime
+from django.contrib.auth.hashers import check_password
 
 def home(request):
     return render(request, 'users/home.html')
@@ -60,7 +62,7 @@ def login_view(request):
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
         if user is not None:
-            login(request, user)
+            auth_login(request, user)
             today = timezone.now(). date()
             if not user.last_login or user.last_login.date() < today:
                 user.attendance_score += 1
@@ -150,3 +152,24 @@ def delete_friend(request, username):
     else:
         messages.warning(request, '유효하지 않은 요청입니다.')
     return redirect('users_user:friend_list', username=request.user.username)
+
+@login_required
+def change_pw(request):
+    context= {}
+    if request.method == "POST":
+        current_password = request.POST.get("origin_password")
+        user = request.user
+        if check_password(current_password,user.password):
+            new_password = request.POST.get("password1")
+            password_confirm = request.POST.get("password2")
+            if new_password == password_confirm:
+                user.set_password(new_password)
+                user.save()
+                auth_login(request,user)
+                return redirect("users_user:home")
+            else:
+                context.update({'error':"새로운 비밀번호를 다시 확인해주세요."})
+    else:
+        context.update({'error':"현재 비밀번호가 일치하지 않습니다."})
+
+    return render(request, "users/change_pw.html",context)
