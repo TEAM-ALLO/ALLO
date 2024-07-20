@@ -11,7 +11,11 @@
 </div>
 <div class="interior-detail-info">
     <div class="author-info">
+        {% if user.profile_image %}
         <img src="{{ post.author.profile_image.url }}" alt="작성자의 프로필 사진" class="author-img">
+        {% else %}
+        <img src="/static/img/user.svg" alt="기본 프로필 사진" class="author-img">
+        {% endif %}
         <p>{{ post.author }}</p>
     </div>
     <p class="interior-detail-user-btns">
