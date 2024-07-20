@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import InteriorPost
+from .models import InteriorPost, InteriorComment
 from community.models import FriendRequest
 from .forms import InteriorPostForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.http import JsonResponse
+from .forms import CommentForm
+from django.views.decorators.http import require_POST
 
 
 def interior_list(request):
@@ -21,12 +23,16 @@ def interior_detail(request, pk):
     friend_request_sent = FriendRequest.objects.filter(from_user=request.user, to_user=post.author).exists()
     friend_request_received = FriendRequest.objects.filter(from_user=post.author, to_user=request.user).exists()
     friends = request.user.friends.filter(username=post.author.username).exists()
-    
+    comments = post.comments.all()
+    comment_form = CommentForm()
+
     context = {
         'post': post,
         'friend_request_sent': friend_request_sent,
         'friend_request_received': friend_request_received,
-        'friends': friends
+        'friends': friends,
+        'comments' : comments,
+        'comment_form' : comment_form,
     }
     return render(request, 'interior/interior_detail.html', context)
 
@@ -99,7 +105,7 @@ def bookmark_interior(request, pk):
     else:
         post.bookmarks.add(request.user)
         bookmarked = True
-    return JsonResponse({'bookmarked': bookmarked})
+    return JsonResponse({'bookmarked': bookmarked , 'bookmarks_count':post.total_likes()})
 
 
 @login_required
@@ -107,4 +113,29 @@ def bookmarked_interiors(request):
     user = request.user
     posts = InteriorPost.objects.filter(bookmarks=user).order_by('-date_posted')
     return render(request, 'interior/bookmarked_interiors.html', {'posts': posts})
+
+@require_POST
+@login_required
+def comments_create(request, pk):
+    post = get_object_or_404(InteriorPost, pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+            return redirect('interior_user:interior_detail', pk=post.pk)
+    else:
+        form = CommentForm()
+    return render(request, 'interior/interior_detail.html', {'form': form, 'post': post})
+
+
+@require_POST
+@login_required
+def comments_delete(request, pk, id):
+    comment = get_object_or_404(InteriorComment, id=id)
+    if request.user == comment.user:
+        comment.delete()
+    return redirect('interior_user:interior_detail', pk=pk)
 
