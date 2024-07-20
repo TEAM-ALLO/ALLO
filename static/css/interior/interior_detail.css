@@ -1,0 +1,85 @@
+.interior-detail-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin: 10px auto;
+    width: 70%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.interior-detail-category {
+    border-radius: 10px;
+    background-color: var(--main--red--color);
+    color: #fff;
+    padding: 10px;
+}
+.interior-detail-img {
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    max-height: 450px;
+    object-fit: cover;
+}
+.interior-detail-info {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    margin: 10px auto;
+    align-items: center;
+}
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.author-info p {
+    font-size: 20px;
+}
+.author-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+/* .interior-detail-user-btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+ .btn-success,
+ .btn-warning,
+ .btn-info {
+    cursor: default;
+ }
+
+.btn {
+    font-size: 16px;
+}
+.interior-detail-info2 {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    align-items: center;
+    margin: 10px auto;
+}
+.interior-detail-btns {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.interior-detail-btns button {
+    display: flex;
+}
+.interior-detail-btns > a {
+    text-decoration: underline;
+}
+.interior-detail-btns img {
+    width: 20px;
+}
+.interior-detail-date {
+
+}
+.interior-detail-content {
+    width: 70%;
+    margin: 10px auto;
+}

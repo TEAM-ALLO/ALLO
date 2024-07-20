@@ -49,25 +49,26 @@
     font-weight: bold;
 }
 
-/*  */
+
 .mypage-user-info {
-    width: 70%;
     margin: 30px auto;
     display: flex;
-    gap: 10px;
     min-height: 300px;
     align-items: center;
+    justify-content: center;
 }
 .mypage-user-info-l {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 40%;
+    /* width: 40%; */
 }
 .mypage-img {
     width: 200px;
-    max-height: 200px;
+    aspect-ratio: 1;
+    margin: 20px;
     object-fit: cover;
+    border-radius: 20px;
 }
 .mypage-update-btn {
     display: flex;
@@ -80,10 +81,11 @@
     justify-content: space-around;
 }
 .mypage-user-info-r {
-    width: 60%;    
+    /* width: 60%;     */
     padding: 50px;
+    margin: 20px;
     background-color: rgba(255, 215, 50, 0.45);
-    
+    /* max-width: 500px; */
 }
 .mypage-user-info-r > h2 {
     text-align: center;
@@ -125,6 +127,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 200px;
 }
 .mypage-my-ranking {
     font-size: 40px;
