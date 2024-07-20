@@ -40,7 +40,6 @@ class CommunityPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     date_posted = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 기본값 제거
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='post_likes', blank=True)
     bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='post_bookmarks', blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
