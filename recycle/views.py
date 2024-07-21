@@ -45,8 +45,9 @@ class StaffRequiredMixin(UserPassesTestMixin):
 class RecycleCreate(StaffRequiredMixin, CreateView):
     model = Recycle
     form_class = RecycleForm
+    template_name = 'recycle/recycle_form.html'
     success_url = reverse_lazy('recycle_user:recycle_main')
-
+#self=name(아마 쓰레기 이름ㅇ ㅇ)
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
