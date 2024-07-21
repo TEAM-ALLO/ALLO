@@ -1,11 +1,4 @@
-.home-hof-container {
-    width: 100vw;
-    background-color: var(--light--gray--color);
-    padding: 30px;
-    font-weight: bold;
-    font-size: 20px;
-}
-
+/* 상단 이미지 슬라이더 */
 .slider {
     position: relative;
     overflow: hidden;
@@ -21,48 +14,40 @@
     height: 100%;
     background-size: cover;
     background-position: center;
-    animation: slider 7.5s infinite linear;
+    animation: slider 15s infinite linear;
 }
 
 .slide:nth-child(1) {
     animation-delay: 0;
 }
 .slide:nth-child(2) {
-    animation-delay: -2.5s;
+    animation-delay: -10s;
+    background-color: var(--main--red--color);
 }
 .slide:nth-child(3) {
-    animation-delay: -5s;
+    animation-delay: -20s;
+    background-color: var(--main--blue--color);
 }
 
 @keyframes slider {
-0% {
-    transform: translateX(0);
-}
+    0% {
+        transform: translateX(0);
+    }
 
-26% {
-    transform: translateX(0);
-}
-33% {
-    transform: translateX(-100%);
-    animation-timing-function: step-end;
-}
-93% {
-    transform: translateX(100%);
-}
+    26% {
+        transform: translateX(0);
+    }
+    33% {
+        transform: translateX(-100%);
+        animation-timing-function: step-end;
+    }
+    93% {
+        transform: translateX(100%);
+    }
 
-100% {
-    transform: translateX(0);
-}
-}.slide{
-    animation: slider 7.5s infinite linear;
-}.slide:nth-child(1) {
-    animation-delay: 0;
-}
-.slide:nth-child(2) {
-    animation-delay: -2.5s;
-}
-.slide:nth-child(3) {
-    animation-delay: -5s;
+    100% {
+        transform: translateX(0);
+    }
 }
 .slide1 {
     display: flex;
@@ -73,7 +58,8 @@
     gap: 50px;
 }
 .slide-logo-img {
-    height: 80%;
+    max-height: 80%;
+    max-width: 50%;
     border-radius: 50%;
     aspect-ratio: auto;
 }
@@ -97,4 +83,40 @@
     font-size: 20px;
     font-weight: bold;
     line-height: 1.2;
+}
+
+/* 명예의 전당 */
+.home-hof-container {
+    width: 100%;
+    background-color: var(--light--gray--color);
+    padding: 30px;
+    font-weight: bold;
+    font-size: 20px;
+}
+.hof-img {
+    margin: 30px auto;
+    width: 50%;
+    display: flex;
+}
+.hof-big-container {
+    display: flex;
+    justify-content: center;
+}
+.hof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    margin: -4px;
+}
+.hof p {
+    margin: 3px;
+}
+.mypage-img {
+    border-radius: 50%;
+    width: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
 }

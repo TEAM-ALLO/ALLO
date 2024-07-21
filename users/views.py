@@ -31,7 +31,7 @@ def home(request):
     top_users = []
     for user in sorted_users[:3]:
         score = user.attendance_score + user.participation_score
-        top_users.append({'username': user.username, 'score': score})
+        top_users.append({'username': user.username, 'score': score, 'name':user.name, 'profile_image':user.profile_image})
     
     context = {
         'top_users': top_users,

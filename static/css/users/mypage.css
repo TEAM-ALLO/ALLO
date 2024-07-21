@@ -48,8 +48,6 @@
 .content-section article h4 {
     font-weight: bold;
 }
-
-
 .mypage-user-info {
     margin: 30px auto;
     display: flex;
@@ -68,7 +66,8 @@
     aspect-ratio: 1;
     margin: 20px;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 50%;
+    border: 3px solid var(--main--gray--color);
 }
 .mypage-update-btn {
     display: flex;
@@ -81,11 +80,10 @@
     justify-content: space-around;
 }
 .mypage-user-info-r {
-    /* width: 60%;     */
     padding: 50px;
     margin: 20px;
-    background-color: rgba(255, 215, 50, 0.45);
-    /* max-width: 500px; */
+    border: 5px solid rgba(255, 215, 50, 0.45);
+    border-radius: 50px;
 }
 .mypage-user-info-r > h2 {
     text-align: center;

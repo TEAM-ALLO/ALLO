@@ -21,15 +21,50 @@
 </div>
 <div class="home-hof-container">
     <h2>명예의 전당</h2>
+    <div class="hof-big-container">
+        <!-- 2등 -->
+        {% if top_users|length >= 2 %}
+        <div class="hof2 hof">
+            {% if top_users.1.profile_image %}
+                <img src="{{ top_users.1.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
+            <p>{{ top_users.1.name }}</p>
+            <p>{{ top_users.1.score }}pt</p>
+            <img src="/static/img/hof2.svg" alt="명예의 전당 2등 이미지">
+        </div>
+        {% endif %}
+
+        <!-- 1등 -->
+        {% if top_users|length >= 1 %}
+        <div class="hof1 hof">
+            {% if top_users.0.profile_image %}
+                <img src="{{ top_users.0.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
+            <p>{{ top_users.0.name }}</p>
+            <p>{{ top_users.0.score }}pt</p>
+            <img src="/static/img/hof1.svg" alt="명예의 전당 1등 이미지">
+        </div>
+        {% endif %}
+
+        <!-- 3등 -->
+        {% if top_users|length >= 3 %}
+        <div class="hof3 hof">
+            {% if top_users.2.profile_image %}
+            <img src="{{ top_users.2.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
+            <p>{{ top_users.2.name }}</p>
+            <p>{{ top_users.2.score }}pt</p>
+            <img src="/static/img/hof3.svg" alt="명예의 전당 3등 이미지">
+        </div>
+        {% endif %}        
+    </div>
+
 </div>
-{% if top_users|length >= 1 %}
-    <div>1등 {{ top_users.0.username }}, {{ top_users.0.score }}</div>
-{% endif %}
-{% if top_users|length >= 2 %}
-    <div>2등 {{ top_users.1.username }}, {{ top_users.1.score }}</div>
-{% endif %}
-{% if top_users|length >= 3 %}
-    <div>3등 {{ top_users.2.username }}, {{ top_users.2.score }}</div>
-{% endif %}
 
 {% endblock %}
