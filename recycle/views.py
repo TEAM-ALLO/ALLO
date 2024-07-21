@@ -6,7 +6,7 @@ from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
 from .models import Recycle
 from .forms import RecycleForm
-
+import os
 
 class CategoryDetail(View):
     template_name = 'recycle/recycle_category.html'
@@ -97,3 +97,12 @@ def food(request):
     
 def paper(request):
     return render(request, 'recycle/paper.html')
+
+def clothing(request):
+    return render(request, 'recycle/clothing.html')
+
+def map(request):
+    context = {
+        'kakao_api_key': os.getenv('KAKAO_API_KEY')
+    }
+    return render(request, 'recycle/map.html', context)

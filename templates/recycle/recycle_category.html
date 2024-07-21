@@ -5,7 +5,7 @@
 {% block content %}
 <div class="recycle-nav">
     <a href="" id="recycle-nav-trash">분리수거</a>
-    <a href="">의류수거함</a>
+    <a href="{% url 'recycle_user:clothing' %}">의류수거함</a>
 </div>
 <div id="recycle-sub-nav">
     <div id="nav1"><a href="{% url 'recycle_user:category_detail' '일반쓰레기' %}">일반쓰레기</a></div>
