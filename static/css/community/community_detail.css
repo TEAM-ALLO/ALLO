@@ -38,6 +38,16 @@
     font-size: 18px;
     margin: 10px 0;
 }
+.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.actions button img {
+    width: 30px;
+    height: 30px;
+    display: flex;
+}
 .post-detail-content-box {
     background-color: var(--light--gray--color);
     max-width: 80%;

@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.liked) {
-                this.textContent = '좋아요 취소';
+                this.querySelector('img').src = '/static/img/full-heart.svg';
             } else {
-                this.textContent = '좋아요';
+                this.querySelector('img').src = '/static/img/heart.svg';
             }
             document.getElementById('likes-count').textContent = data.likes_count;
         })
@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.bookmarked) {
-                this.textContent = '북마크 취소';
+                this.querySelector('img').src = '/static/img/full-bookmark.svg';
             } else {
-                this.textContent = '북마크';
+                this.querySelector('img').src = '/static/img/bookmark.svg';
             }
         })
         .catch(error => console.error('Error:', error));
