@@ -159,8 +159,11 @@ def post_update(request, pk):
 def post_delete(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
     if request.user == post.author:
+        request.user.participation_score -= 2  # 참여 점수 감소
+        request.user.save()
         post.delete()
     return redirect('community_user:post_list')
+
 
 @login_required
 def like_post(request, pk):
@@ -252,6 +255,8 @@ def comments_create(request, id):
         comment.post = post
         comment.user = request.user
         comment.save()
+        request.user.participation_score += 1
+        request.user.save()
     return redirect('community_user:post_detail', post.id)
 
 @require_POST
@@ -259,5 +264,7 @@ def comments_create(request, id):
 def comments_delete(request, post_id, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user == comment.user:
+        request.user.participation_score -= 1  # 참여 점수 감소
+        request.user.save()
         comment.delete()
     return redirect('community_user:post_detail', post_id)

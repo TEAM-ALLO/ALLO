@@ -66,6 +66,54 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error:', error));
     });
+
+    const commentForm = document.getElementById('comment-form');
+
+    commentForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(commentForm);
+
+        fetch(commentForm.action, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('comment-section').innerHTML = data.html;
+                commentForm.reset();
+            } else {
+                alert('댓글 작성에 실패했습니다.');
+            }
+        });
+    });
+
+    document.getElementById('comment-section').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        if (form.classList.contains('comment-delete-form')) {
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: new FormData(form)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('comment-section').innerHTML = data.html;
+                } else {
+                    alert('댓글 삭제에 실패했습니다.');
+                }
+            });
+        }
+    });
+    
 });
 
 function getCsrfToken() {
