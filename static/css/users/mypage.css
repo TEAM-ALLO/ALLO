@@ -67,7 +67,7 @@
     margin: 20px;
     object-fit: cover;
     border-radius: 50%;
-    border: 3px solid var(--main--gray--color);
+    /* border: 3px solid var(--main--gray--color); */
 }
 .mypage-update-btn {
     display: flex;

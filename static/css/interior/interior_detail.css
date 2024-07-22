@@ -41,11 +41,13 @@
     object-fit: cover;
     border-radius: 50%;
 }
-/* .interior-detail-user-btns {
+.interior-detail-user-btns {
+    text-decoration: underline;
+    text-underline-offset: 2px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-} */
+    /* color: var(--dark--gray--color); */
+    gap: 10px;
+}
  .btn-success,
  .btn-warning,
  .btn-info {
@@ -74,9 +76,100 @@
     text-decoration: underline;
 }
 .interior-detail-btns img {
-    width: 20px;
+    width: 30px;
 }
 .interior-detail-content {
     width: 70%;
     margin: 10px auto;
+}
+
+/* 댓글 */
+.comment-line {
+    border-top: 7px solid var(--light--gray--color);
+    padding-top: 20px;
+}
+.interior-detail-comment-title {
+    width: 70%;
+    margin: 10px auto;
+}
+.interior-container form>p {
+    display: flex;
+    justify-content: center;
+}
+.interior-detail-comment-btn {
+    background-color: var(--main--red--color);
+    color: #fff;
+    font-size: 16px;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: "Noto Sans KR", sans-serif;
+    position: absolute;
+    right: calc(((100vw - 70%) / 2) + 10px);
+    bottom: 10px;
+}
+.main-container>form {
+    position: relative;
+}
+.interior-detail-comment-container {
+    width: 70%;
+    background-color: var(--light--gray--color);
+    margin: 10px auto;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.interior-detail-comment-user {
+    display: flex;
+    justify-content: space-between;
+}
+.interior-detail-comment-delete {
+    border: 0;
+    color: var(--dark--gray--color);
+    text-decoration: underline;
+    background-color: var(--light--gray--color);
+}
+.interior-detail-before-login {
+    width: 70%;
+    margin: 0 auto;
+}
+.interior-detail-before-login a{
+    text-decoration: underline;
+}
+.main-container p>label {
+    display: none;
+}
+.main-container form > p > textarea {
+    width: 70%;
+    border: 0;
+    background-color: var(--light--gray--color);
+    padding: 20px 103px 20px 20px;
+    border-radius: 10px;
+    resize: none;
+}
+.main-container form > p > textarea:focus {
+    outline: none;
+}
+.main-container form>p {
+    display: flex;
+    justify-content: center;
+}
+.btn-div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} 
+.interior-detail-btn {
+    background-color: var(--main--red--color);
+    border-radius: 10px;
+    color: #fff;
+    padding: 10px;
+    margin: 10px auto;
+    color: #fff !important;
+    height: 41.6px;
+    display: flex;
+    align-items: center;
 }

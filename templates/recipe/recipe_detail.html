@@ -13,12 +13,11 @@
     {% endif %}
     <div class="recipe-detail-menu">
         <div class="recipe-title-container">
-            <h1>{{ recipe.recipe_name }}</h1>
-            
+            <h1>{{ recipe.recipe_name }}</h1>            
             {% if request.user == recipe.author %}
-            <div class="recipe-detail-btns">
-              <a href="{% url 'recipe_user:recipe_edit' id=recipe.id %}">수정</a>
-              <a href="{% url 'recipe_user:recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+            <div class="recipe-detail-user-btns">
+                <a href="{% url 'recipe_user:recipe_edit' id=recipe.id %}">수정</a>
+                <a href="{% url 'recipe_user:recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
             </div>
             {% else %}
                 {% if friends %}
@@ -40,26 +39,23 @@
         </div>
     </div>
 </div>
-<div class="recipe-detail-info2">
-  <div class="recipe-detail-btns">
-      <button id="like-button" data-recipe-id="{{ recipe.id }}">
-              {% if request.user in recipe.likes.all %}
-              <img src="{% static 'img/full-heart.svg' %}" alt="좋아요 눌렀을 때 아이콘">
-          {% else %}
-          <img src="{% static 'img/heart.svg' %}" alt="좋아요 안 눌렀을 때 아이콘">
-          {% endif %}
-      </button>
-      <span id="likes-count">{{ recipe.total_likes }}</span>
-      <button id="bookmark-button" data-recipe-id="{{ recipe.id }}" >
-      
-          {% if request.user in recipe.bookmarks.all %}
-              <img src="{% static 'img/full-bookmark.svg' %}" alt="북마크 눌렀을 때 아이콘">
-          {% else %}
-              <img src="{% static 'img/bookmark.svg' %}" alt="북마크 안 눌렀을 때 아이콘">
-          {% endif %}
-      </button>
-      <span id="bookmarks-count">{{ recipe.total_bookmarks }}</span>
-  </div>
+<div class="recipe-detail-btns">
+    <button id="like-button" data-recipe-id="{{ recipe.id }}">
+    {% if request.user in recipe.likes.all %}
+        <img src="{% static 'img/full-heart.svg' %}" alt="좋아요 눌렀을 때 아이콘">
+    {% else %}
+        <img src="{% static 'img/heart.svg' %}" alt="좋아요 안 눌렀을 때 아이콘">
+    {% endif %}
+    </button>
+    <span id="likes-count">{{ recipe.total_likes }}</span>
+    <button id="bookmark-button" data-recipe-id="{{ recipe.id }}" >
+        {% if request.user in recipe.bookmarks.all %}
+            <img src="{% static 'img/full-bookmark.svg' %}" alt="북마크 눌렀을 때 아이콘">
+        {% else %}
+            <img src="{% static 'img/bookmark.svg' %}" alt="북마크 안 눌렀을 때 아이콘">
+        {% endif %}
+    </button>
+    <span id="bookmarks-count">{{ recipe.total_bookmarks }}</span>
 </div>
 
 <h2 class="recipe-detila-ingredient-title">재료</h2>
@@ -78,39 +74,41 @@
     {% endfor %}
 </div>
 
-<!-- 수정된 댓글 부분 -->
+<!-- 댓글 부분 -->
 {% if comments %}
-  <p class="recipe-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
+  <p class="recipe-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
   <ul>
     {% for comment in comments %}
-      <li class="recipe-detail-comment-container">
+    <li class="recipe-detail-comment-container">
         <div class="recipe-detail-comment-user">
-          {{ comment.user }}
-          {% if user == comment.user %}
-          <form action="{% url 'recipe_user:comments_delete' recipe.id comment.id %}" method="POST" class="d-inline">
-            {% csrf_token %}
-            <input type="submit" value="삭제" class="recipe-detail-comment-delete">
-          </form>
-        {% endif %}
-      </div>
-      <div>
-        {{ comment.content }}
-      </div>
+            {{ comment.user }}
+            {% if user == comment.user %}
+            <form action="{% url 'recipe_user:comments_delete' recipe.id comment.id %}" method="POST" class="d-inline">
+                {% csrf_token %}
+                <input type="submit" value="삭제" class="recipe-detail-comment-delete">
+            </form>
+            {% endif %}
+        </div>
+        <div>
+            {{ comment.content }}
+        </div>
     </li>
   {% empty %}
     <p class="recipe-detail-comment-title">작성된 댓글이 없습니다.</p>
   {% endfor %}
 </ul>
 {% endif %}
+
+<!-- 댓글 작성 -->
 {% if request.user.is_authenticated %}
 <h3 class="recipe-detail-comment-title">댓글을 작성해주세요!</h3>
-  <form action="{% url 'recipe_user:comments_create' recipe.id %}" method="POST">
-    {% csrf_token %}
-    {{ comment_form.as_p }}
-    <input type="submit" class="recipe-detail-comment-btn" value="댓글 작성">
-  </form>
+    <form action="{% url 'recipe_user:comments_create' recipe.id %}" method="POST">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <input type="submit" class="recipe-detail-comment-btn" value="댓글 작성">
+    </form>
 {% else %}
-  <p class="recipe-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
+    <p class="recipe-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
   
 {% endif %}
 

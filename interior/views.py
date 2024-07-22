@@ -44,7 +44,7 @@ def interior_new(request):
             post.save()
             request.user.participation_score += 2
             request.user.save()
-            return redirect('interior_user:interior_list')
+            return redirect('interior_user:interior_detail', pk=post.pk)
     else:
         form = InteriorPostForm()
     
@@ -57,7 +57,7 @@ def interior_update(request, pk):
         form = InteriorPostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('interior_user:interior_list')
+            return redirect('interior_user:interior_detail',pk=post.pk)
     else:
         form = InteriorPostForm(instance=post)
     return render(request, 'interior/interior_form.html', {'form': form})

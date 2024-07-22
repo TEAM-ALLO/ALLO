@@ -26,19 +26,20 @@
         <div class="actions">
             <button id="like-button" data-post-id="{{ post.pk }}">
                 {% if request.user in post.likes.all %}
-                좋아요 취소
+                <img src="{% static 'img/full-heart.svg' %}" alt="좋아요 눌렀을 때 아이콘">
                 {% else %}
-                좋아요
+                <img src="{% static 'img/heart.svg' %}" alt="좋아요 안 눌렀을 때 아이콘">
                 {% endif %}
             </button>
             <span id="likes-count">{{ post.total_likes }}</span>
             <button id="bookmark-button" data-post-id="{{ post.pk }}" class="btn btn-info">
                 {% if request.user in post.bookmarks.all %}
-                    북마크 취소
+                    <img src="{% static 'img/full-bookmark.svg' %}" alt="북마크 눌렀을 때 아이콘">
                 {% else %}
-                    북마크
+                    <img src="{% static 'img/bookmark.svg' %}" alt="북마크 안 눌렀을 때 아이콘">
                 {% endif %}
             </button>
+            <span id="bookmarks-count">{{ post.total_bookmarks }}</span>
             {% if request.user != post.author %}
                 {% if friends %}
                     <button class="btn btn-success">친구 중</button>
