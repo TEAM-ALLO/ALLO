@@ -21,6 +21,11 @@
     </div>
     <div class="post-detail-bottom">
         <p class="post-detail-info">
+            {% if post.author.profile_image %}
+                <img src="{{ post.author.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
             {{ post.author.username }} | {{ post.date_posted|date:"Y-m-d H:i" }}
         </p>
         <div class="actions">
@@ -55,10 +60,6 @@
     </div>
     <div class="post-detail-content-box">
         {{ post.content }}
-        <img src="{% static 'img/bubble-writer.svg' %}" alt="말풍선 꼬리 이미지" class="bubble-writer">
-    </div>
-    <div class="post-detail-btn-div">
-        <a href="{% url 'community_user:post_list' %}" class="post-detail-btn">목록</a>
     </div>
 </div>
 {% if comments %}
@@ -86,10 +87,10 @@
 {% endif %}
 {% if request.user.is_authenticated %}
 <h3 class="community-detail-comment-title">댓글을 작성해주세요!</h3>
-<form method="post" action="{% url 'interior_user:comments_create' post.pk %}">
+<form method="post" action="{% url 'community_user:comments_create' post.pk %}">
     {% csrf_token %}
     {{ comment_form.as_p }}
-    <input type="submit" class="interior-detail-comment-btn" value="댓글 작성">
+    <input type="submit" class="community-detail-comment-btn" value="댓글 작성">
   </form>
 {% else %}
   <p class="community-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>

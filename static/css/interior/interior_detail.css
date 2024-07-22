@@ -121,6 +121,9 @@
     flex-direction: column;
     gap: 10px;
 }
+.interior-detail-comment-container {
+    overflow-wrap: anywhere;
+}
 .interior-detail-comment-user {
     display: flex;
     justify-content: space-between;
