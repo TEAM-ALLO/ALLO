@@ -14,7 +14,7 @@
     <h2>Recipes</h2>
     <ul>
     {% for post in recipe_results %}
-        <li><a href="{% url 'recipe_user:recipe_detail_view' post.id %}">{{ post.title }}</a></li>
+        <li><a href="{% url 'recipe_user:recipe_detail' post.id %}">{{ post.title }}</a></li>
     {% endfor %}
     </ul>
 
