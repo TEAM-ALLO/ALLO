@@ -142,6 +142,8 @@ def recipe_edit_view(request, id):
 def recipe_delete_view(request, id):  # 변경
     recipe = get_object_or_404(Recipe, id=id)  # 변경
     if request.user == recipe.author:
+        request.user.participation_score -= 2  # 참여 점수 감소
+        request.user.save()
         recipe.delete()
         return redirect('recipe_user:recipe_list')
     else:
@@ -192,6 +194,8 @@ def comments_create(request, id):
             comment.recipe = recipe
             comment.user = request.user
             comment.save()
+            request.user.participation_score += 1
+            request.user.save()
         return redirect('recipe_user:recipe_detail', recipe.id)
     return redirect('users_user:login')
 
@@ -200,5 +204,7 @@ def comments_delete(request, recipe_id, comment_id):
     if request.user.is_authenticated:
         comment = get_object_or_404(Comment, id=comment_id)
         if request.user == comment.user:
+            request.user.participation_score -= 1  # 참여 점수 감소
+            request.user.save()
             comment.delete()
     return redirect('recipe_user:recipe_detail', recipe_id)

@@ -38,6 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     profile_image = models.ImageField(blank=True, null=True)
     attendance_score = models.IntegerField(default=0)
     participation_score = models.IntegerField(default=0)
+    last_attendance_date = models.DateField(null=True, blank=True)  # 새로운 필드 추가
     friends = models.ManyToManyField('self', symmetrical=False, related_name='friend_set', blank=True)  # 친구 목록
 
     is_active = models.BooleanField(default=True)

@@ -82,17 +82,23 @@ def login_view(request):
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
         if user is not None:
-            auth_login(request, user)
-            today = timezone.now(). date()
-            if not user.last_login or user.last_login.date() < today:
+            today = timezone.now().date()
+            print(f"User last attendance date: {user.last_attendance_date}")
+            if user.last_attendance_date != today:
                 user.attendance_score += 1
+                user.last_attendance_date = today
                 user.save()
+                print(f"Attendance score updated to: {user.attendance_score}")
+            else:
+                print("Attendance score not updated.")
+            auth_login(request, user)
             print('인증성공')
             return redirect("users_user:home")
         else:
             print('인증실패')
             return render(request, "users/login.html", {'error':'아이디 또는 비밀번호가 잘못되었습니다.'})
     return render(request, "users/login.html")
+
 
 def logout_view(request):
     logout(request)

@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="/static/css/interior/interior_detail.css">
-{% endblock%}
+    <link rel="stylesheet" href="{% static 'css/interior/interior_detail.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="interior-detail-title">
@@ -11,10 +11,10 @@
 </div>
 <div class="interior-detail-info">
     <div class="author-info">
-        {% if user.profile_image %}
+        {% if post.author.profile_image %}
         <img src="{{ post.author.profile_image.url }}" alt="작성자의 프로필 사진" class="author-img">
         {% else %}
-        <img src="/static/img/user.svg" alt="기본 프로필 사진" class="author-img">
+        <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진" class="author-img">
         {% endif %}
         <p>{{ post.author }}</p>
     </div>
@@ -38,18 +38,18 @@
 <div class="interior-detail-info2">
     <div class="interior-detail-btns">
         <button id="like-button" data-post-id="{{ post.pk }}">
-                {% if request.user in post.likes.all %}
-                <img src="/static/img/full-heart.svg" alt="좋아요 눌렀을 때 아이콘">
+            {% if request.user in post.likes.all %}
+            <img src="{% static 'img/full-heart.svg' %}" alt="좋아요 눌렀을 때 아이콘">
             {% else %}
-            <img src="/static/img/heart.svg" alt="좋아요 안 눌렀을 때 아이콘">
+            <img src="{% static 'img/heart.svg' %}" alt="좋아요 안 눌렀을 때 아이콘">
             {% endif %}
         </button>
         <span id="likes-count">{{ post.total_likes }}</span>
         <button id="bookmark-button" data-post-id="{{ post.pk }}">
             {% if request.user in post.bookmarks.all %}
-                <img src="/static/img/full-bookmark.svg" alt="북마크 눌렀을 때 아이콘">
+            <img src="{% static 'img/full-bookmark.svg' %}" alt="북마크 눌렀을 때 아이콘">
             {% else %}
-                <img src="/static/img/bookmark.svg" alt="북마크 안 눌렀을 때 아이콘">
+            <img src="{% static 'img/bookmark.svg' %}" alt="북마크 안 눌렀을 때 아이콘">
             {% endif %}
         </button>
     </div>
@@ -58,15 +58,16 @@
 
 <img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-detail-img">
 <p class="interior-detail-content">{{ post.content }}</p>
+
 {% if comments %}
   <p class="interior-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
-  <ul>
+  <ul id="comment-list">
     {% for comment in comments %}
       <li class="interior-detail-comment-container">
         <div class="interior-detail-comment-user">
-          {{ comment.user }}
-          {% if user == comment.user %}
-          <form action="{% url 'interior_user:comments_delete' post.pk comment.id %}" method="POST" class="d-inline">
+          {{ comment.user.username }}
+          {% if request.user.username == comment.user.username %}
+          <form class="comment-delete-form" data-comment-id="{{ comment.id }}" action="{% url 'interior_user:comments_delete' post.pk comment.id %}" method="POST" class="d-inline">
               {% csrf_token %}
               <input type="submit" value="삭제" class="interior-detail-comment-delete">
           </form>
@@ -76,26 +77,25 @@
         {{ comment.content }}
       </div>
     </li>
-  {% empty %}
-    <p class="interior-detail-comment-title">작성된 댓글이 없습니다.</p>
-  {% endfor %}
-</ul>
+    {% endfor %}
+  </ul>
 {% endif %}
 {% if request.user.is_authenticated %}
 <h3 class="interior-detail-comment-title">댓글을 작성해주세요!</h3>
-<form method="post" action="{% url 'interior_user:comments_create' post.pk %}">
+<form id="comment-form" method="post" action="{% url 'interior_user:comments_create' post.pk %}">
     {% csrf_token %}
     {{ comment_form.as_p }}
     <input type="submit" class="interior-detail-comment-btn" value="댓글 작성">
-  </form>
+</form>
 {% else %}
   <p class="interior-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
-  
 {% endif %}
 
 <div class="btn-div">
     <a href="{% url 'interior_user:interior_list' %}" class="interior-detail-btn">목록</a>
 </div>
+
+<input type="hidden" id="post-id" value="{{ post.pk }}">
 
 {% endblock %}
 
