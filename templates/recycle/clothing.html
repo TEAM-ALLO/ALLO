@@ -20,9 +20,8 @@
     <a href="{% url 'recycle_user:paper' %}">종이류</a>
     <a href="{% url 'recycle_user:food'  %}">음식물쓰레기</a>
 </div>
-<h1>우땨땨 비닐</h1>
-
-
+<h1>우땨땨 일반쓰레기</h1>
+<a href="{% url 'recycle_user:map' %}" class="btn btn-primary">내 주변 의류수거함 찾기</a>
 <a href="{% url 'recycle_user:recycle_main' %}" class="btn btn-primary">메인으로 돌아가기</a>
 {% endblock %}
 {% block script %}

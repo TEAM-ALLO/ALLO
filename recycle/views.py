@@ -6,7 +6,7 @@ from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
 from .models import Recycle
 from .forms import RecycleForm
-
+import os
 
 class CategoryDetail(View):
     template_name = 'recycle/recycle_category.html'
@@ -45,8 +45,9 @@ class StaffRequiredMixin(UserPassesTestMixin):
 class RecycleCreate(StaffRequiredMixin, CreateView):
     model = Recycle
     form_class = RecycleForm
+    template_name = 'recycle/recycle_form.html'
     success_url = reverse_lazy('recycle_user:recycle_main')
-
+#self=name(아마 쓰레기 이름ㅇ ㅇ)
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
@@ -97,3 +98,12 @@ def food(request):
     
 def paper(request):
     return render(request, 'recycle/paper.html')
+
+def clothing(request):
+    return render(request, 'recycle/clothing.html')
+
+def map(request):
+    context = {
+        'kakao_api_key': os.getenv('KAKAO_API_KEY')
+    }
+    return render(request, 'recycle/map.html', context)
