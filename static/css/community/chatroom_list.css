@@ -37,6 +37,7 @@
     width: 160px;
     height: 160px;
     object-fit: cover;
+    border-radius: 50%;
 }
 .community-friend-name {
     font-size: 18px;
