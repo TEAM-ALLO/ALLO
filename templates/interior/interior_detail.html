@@ -62,22 +62,18 @@
 {% if comments %}
   <p class="interior-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
   <ul id="comment-list">
-
     {% for comment in comments %}
       <li class="interior-detail-comment-container">
         <div class="interior-detail-comment-user">
           {{ comment.user.username }}
           {% if request.user.username == comment.user.username %}
-          <form class="comment-delete-form" data-comment-id="{{ comment.id }}" action="{% url 'interior_user:comments_delete' post.pk comment.id %}" method="POST" class="d-inline">
-              {% csrf_token %}
-              <input type="submit" value="삭제" class="interior-detail-comment-delete">
-          </form>
+          <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
           {% endif %}
-      </div>
-      <div>
-        {{ comment.content }}
-      </div>
-    </li>
+        </div>
+        <div>
+          {{ comment.content }}
+        </div>
+      </li>
     {% endfor %}
   </ul>
 {% endif %}
@@ -98,6 +94,7 @@
     <a href="{% url 'interior_user:interior_list' %}" class="interior-detail-btn">목록</a>
 </div>
 
+<input type="hidden" id="current-username" value="{{ request.user.username }}">
 <input type="hidden" id="post-id" value="{{ post.pk }}">
 
 {% endblock %}
