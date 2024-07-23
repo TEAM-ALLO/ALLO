@@ -1,65 +1,3 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block head %}
-    <link rel="stylesheet" href="{% static 'css/community/community_list.css' %}">
-    <link rel="stylesheet" href="{% static 'css/community/chatroom_detail.css' %}">
-{% endblock %}
-{% block content %}
-<div class="community-header">
-    <div class="community-categoty"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
-    <div class="community-categoty"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
-    <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
-</div>
-<h2 class="receiver-username">{{ receiver.username }}님과의 채팅</h2>
-<div id="chatroom-detail-big-container">
-    <div class="chatroom-detail-big-container" id="chat-messages" style="overflow-y: auto; height: 400px;">
-        {% for message in messages %}
-            {% if message.sender == request.user %}
-            <!-- 내가 보낸 메시지 -->
-            <div class="bubble-container-right">
-                {{ message.content }}
-                {% if message.image %}
-                <div class="message-image-container">
-                    <img src="{{ message.image.url }}" alt="채팅 이미지" class="chat-image">
-                </div>
-                {% endif %}
-                <img src="{% static 'img/my-bubble.svg' %}" alt="말풍선 꼬리 이미지" class="my-bubble">
-            </div>
-            {% else %}
-            <!-- 내가 받은 메시지 -->
-            <div class="bubble-big-container-left">
-                <div class="bubble-big-container-top">
-                    {% if receiver.profile_image %}
-                        <img src="{{ receiver.profile_image.url }}" alt="프로필 사진" class="mypage-img">
-                    {% else %}
-                        <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진" class="mypage-img">
-                    {% endif %}
-                    <div class="bubble-container-left">
-                        {{ message.content }}
-                        {% if message.image %}
-                        <div class="message-image-container">
-                            <img src="{{ message.image.url }}" alt="채팅 이미지" class="chat-image">
-                        </div>
-                        {% endif %}
-                        <img src="{% static 'img/bubble-writer.svg' %}" alt="말풍선 꼬리 이미지" class="bubble-writer">
-                    </div>
-                </div>
-                <p>{{ receiver.username }}</p>
-            </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-</div>
-<form method="post" class="comment-container" id="message-form" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="send-icon-button"><img src="{% static 'img/send.svg' %}" alt="채팅 전송 아이콘" class="send-icon"></button>
-</form>
-{% endblock %}
-
-{% block script %}
-<script src="{% static 'js/community/chat.js' %}"></script>
-<script>
 // 채팅 컨테이너를 맨 아래로 스크롤하는 함수
 function scrollToBottom() {
     var chatContainer = document.getElementById("chat-messages");
@@ -108,7 +46,11 @@ document.getElementById("message-form").addEventListener("submit", function(even
                 topContainer.classList.add("bubble-big-container-top");
 
                 var profileImg = document.createElement("img");
-                profileImg.src = response.receiver_profile_image ? response.receiver_profile_image : "{% static 'img/user.svg' %}";
+                if (receiver.profile_image) {
+                    profileImg.src = "{{ receiver.profile_image.url }}";
+                } else {
+                    profileImg.src = "{% static 'img/user.svg' %}";
+                }
                 profileImg.alt = "프로필 사진";
                 profileImg.classList.add("mypage-img");
                 topContainer.appendChild(profileImg);
@@ -147,5 +89,3 @@ document.getElementById("message-form").addEventListener("submit", function(even
     };
     xhr.send(formData);
 });
-</script>
-{% endblock %}

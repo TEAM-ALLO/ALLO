@@ -1,0 +1,34 @@
+{% load static %}
+{% if message.sender == request.user %}
+<!-- 내가 보낸 메시지 -->
+<div class="bubble-container-right">
+    {{ message.content }}
+    {% if message.image %}
+    <div class="message-image-container">
+        <img src="{{ message.image.url }}" alt="채팅 이미지" class="chat-image">
+    </div>
+    {% endif %}
+    <img src="{% static 'img/my-bubble.svg' %}" alt="말풍선 꼬리 이미지" class="my-bubble">
+</div>
+{% else %}
+<!-- 내가 받은 메시지 -->
+<div class="bubble-big-container-left">
+    <div class="bubble-big-container-top">
+        {% if receiver.profile_image %}
+            <img src="{{ receiver.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+        {% else %}
+            <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진" class="mypage-img">
+        {% endif %}
+        <div class="bubble-container-left">
+            {{ message.content }}
+            {% if message.image %}
+            <div class="message-image-container">
+                <img src="{{ message.image.url }}" alt="채팅 이미지" class="chat-image">
+            </div>
+            {% endif %}
+            <img src="{% static 'img/bubble-writer.svg' %}" alt="말풍선 꼬리 이미지" class="bubble-writer">
+        </div>
+    </div>
+    <p>{{ receiver.username }}</p>
+</div>
+{% endif %}
