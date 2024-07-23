@@ -198,8 +198,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-
-
     setupLikeButton();
     setupBookmarkButton();
     setupFriendRequestButton();

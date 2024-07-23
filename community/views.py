@@ -257,14 +257,35 @@ def comments_create(request, pk):
         comment.save()
         request.user.participation_score += 1
         request.user.save()
-    return redirect('community_user:post_detail', post.id)
+
+        comments = post.comments.all().values('id', 'user__username', 'content', 'created_at')
+        comments_list = list(comments)
+    
+        return JsonResponse({
+            'success': True,
+            'comments': comments_list,
+            'total_comments': post.comments.count()  # 댓글 총 개수를 반환
+        })
+    else:
+        return JsonResponse({'success': False, 'errors': comment_form.errors})
 
 @require_POST
 @login_required
 def comments_delete(request, post_id, comment_id):
+    post = get_object_or_404(CommunityPost, pk=post_id)
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user == comment.user:
         request.user.participation_score -= 1  # 참여 점수 감소
         request.user.save()
         comment.delete()
-    return redirect('community_user:post_detail', post_id)
+
+        comments = post.comments.all().values('id', 'user__username', 'content', 'created_at')
+        comments_list = list(comments)
+
+        return JsonResponse({
+            'success': True,
+            'comments': comments_list,
+            'total_comments': post.comments.count()  # 댓글 총 개수를 반환
+        })
+    else:
+        return JsonResponse({'success': False, 'message': 'Unauthorized'})

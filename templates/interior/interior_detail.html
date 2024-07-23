@@ -52,31 +52,29 @@
             <img src="{% static 'img/bookmark.svg' %}" alt="북마크 안 눌렀을 때 아이콘">
             {% endif %}
         </button>
-        <span id="likes-count">{{ post.total_bookmarks }}</span>
+        <span id="bookmarks-count">{{ post.total_bookmarks }}</span>
     </div>
     <p class="interior-detail-date">{{ post.created_at }}</p>
 </div>
 <img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-detail-img">
 <p class="interior-detail-content">{{ post.content }}</p>
 
-{% if comments %}
-  <p class="interior-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
-  <ul id="comment-list">
+<p class="interior-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
+<ul id="comment-list">
     {% for comment in comments %}
-      <li class="interior-detail-comment-container">
+    <li class="interior-detail-comment-container">
         <div class="interior-detail-comment-user">
-          {{ comment.user.username }}
-          {% if request.user.username == comment.user.username %}
-          <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
-          {% endif %}
+            {{ comment.user.username }}
+            {% if request.user.username == comment.user.username %}
+            <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
+            {% endif %}
         </div>
         <div>
-          {{ comment.content }}
+            {{ comment.content }}
         </div>
-      </li>
+    </li>
     {% endfor %}
-  </ul>
-{% endif %}
+</ul>
 
 <!-- 댓글 작성 -->
 {% if request.user.is_authenticated %}
@@ -87,7 +85,7 @@
     <input type="submit" class="interior-detail-comment-btn" value="댓글 작성">
 </form>
 {% else %}
-  <p class="interior-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
+<p class="interior-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
 {% endif %}
 
 <div class="btn-div">
