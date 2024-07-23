@@ -11,9 +11,12 @@
     display: flex;
     justify-content: center;
 }
-.categories button {
-    display: flex;
-    align-items: center;
+.categories > div {
+    cursor: pointer;
+}
+.categories img {
+    width: 20px;
+    height: 20px;
 }
 /* #my_posts {
     display: flex;
@@ -25,16 +28,30 @@
     justify-content: center;
     gap: 30px;
 } */
-#my_posts button,
-#bookmarked button {
+#mypage-all-post {
+    display: none
+ }
+#sub-category-post div,
+#sub-category-bookmark div {
     margin: 10px 20px;
     font-size: 20px;
+    color: var(--dark--gray--color);
+}
+#sub-category-post > div,
+#sub-category-bookmark > div {
+    cursor: pointer;
 }
 .sub-categories {
     text-align: center;
 }
 .hidden {
     display: none;
+    justify-content: center;
+}
+.content-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 .content-section a {
     border: 6px solid var(--light--gray--color);
@@ -42,7 +59,6 @@
     margin: 10px auto;
     padding: 20px;
     display: flex;
-    flex-direction: column;
     gap: 10px;
 }
 .content-section article h4 {
@@ -135,7 +151,7 @@
     display: flex;
     justify-content: center;
 }
-.categories button {
+.categories > div {
     display: flex;
     align-items: center;
     font-size: 20px;
