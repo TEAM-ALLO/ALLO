@@ -11,15 +11,19 @@
     margin: 10px 0;
 }
 #chatroom-detail-big-container {
-    height: calc(100vh - 347px);
-    overflow-y: scroll;
+    height: calc(100vh - 347px); /* 채팅방 높이 조정 */
+    overflow-y: hidden; /* 스크롤바 숨기기 */
 }
 .chatroom-detail-big-contaienr {
     display: flex;
     flex-direction: column;
     width: 80%;
     margin: 0 auto;
+    height: 100%; /* 부모 컨테이너의 높이를 채우기 */
+    overflow-y: auto; /* 채팅 메시지에 대한 스크롤 설정 */
 }
+
+
 /* 내가 받은 메시지 */
 .bubble-big-container-left {
     display: flex;

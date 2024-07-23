@@ -7,9 +7,24 @@ class PostForm(forms.ModelForm):
         fields = ['title', 'content','image']
 
 class MessageForm(forms.ModelForm):
+    content = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'placeholder': '메시지를 입력하세요...'}),
+    )
+
     class Meta:
         model = Message
-        fields = ['content','image']
+        fields = ['content', 'image']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        content = cleaned_data.get('content')
+        image = cleaned_data.get('image')
+
+        if not content and not image:
+            raise forms.ValidationError("내용이나 이미지를 입력해야 합니다.")
+
+        return cleaned_data
 
 class CommentForm(forms.ModelForm):
     class Meta:
