@@ -59,6 +59,17 @@
 <img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-detail-img">
 <p class="interior-detail-content">{{ post.content }}</p>
 
+{% if furniture_list %}
+<div class="furniture-list">
+    <h3>가구 목록:</h3>
+    <ul>
+        {% for item in furniture_list %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
 <p class="interior-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
 <ul id="comment-list">
     {% for comment in comments %}

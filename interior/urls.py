@@ -20,7 +20,7 @@ urlpatterns = [
     path('send_friend_request/<str:username>/', community_views.send_friend_request, name='send_friend_request'),
     path('accept_friend_request/<int:request_id>/', community_views.accept_friend_request, name='accept_friend_request'),
     path('decline_friend_request/<int:request_id>/', community_views.decline_friend_request, name='decline_friend_request'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
