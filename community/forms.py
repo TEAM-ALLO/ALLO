@@ -9,7 +9,7 @@ class PostForm(forms.ModelForm):
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['content']
+        fields = ['content','image']
 
 class CommentForm(forms.ModelForm):
     class Meta:
