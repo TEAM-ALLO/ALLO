@@ -92,6 +92,10 @@
     width: 70%;
     margin: 10px auto;
 }
+.comment-line {
+    border-top: 7px solid var(--light--gray--color);
+    padding-top: 20px;
+}
 .interior-container form>p {
     display: flex;
     justify-content: center;

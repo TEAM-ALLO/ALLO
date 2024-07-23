@@ -60,7 +60,7 @@
 <p class="interior-detail-content">{{ post.content }}</p>
 
 {% if comments %}
-  <p class="interior-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
+  <p class="interior-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
   <ul id="comment-list">
 
     {% for comment in comments %}
