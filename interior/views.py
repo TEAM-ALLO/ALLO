@@ -5,6 +5,9 @@ from .forms import InteriorPostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 
 def interior_list(request):
     category = request.GET.get('category', 'all')
@@ -32,6 +35,7 @@ def interior_detail(request, pk):
         'comment_form': comment_form,
     }
     return render(request, 'interior/interior_detail.html', context)
+
 
 @login_required
 def interior_new(request):
@@ -111,6 +115,7 @@ def bookmarked_interiors(request):
     posts = InteriorPost.objects.filter(bookmarks=user).order_by('-date_posted')
     return render(request, 'interior/bookmarked_interiors.html', {'posts': posts})
 
+
 @require_POST
 @login_required
 def comments_create(request, pk):
@@ -134,7 +139,7 @@ def comments_create(request, pk):
         })
     else:
         return JsonResponse({'success': False, 'errors': comment_form.errors})
-    
+
 @require_POST
 @login_required
 def comments_delete(request, pk, id):
@@ -147,7 +152,7 @@ def comments_delete(request, pk, id):
 
         comments = post.comments.all().values('id', 'user__username', 'content', 'created_at')
         comments_list = list(comments)
-    
+
         return JsonResponse({
             'success': True,
             'comments': comments_list,
@@ -155,4 +160,3 @@ def comments_delete(request, pk, id):
         })
     else:
         return JsonResponse({'success': False, 'message': 'Unauthorized'})
-
