@@ -131,23 +131,21 @@ def bookmarked_interiors(request):
 @require_POST
 @login_required
 def comments_create(request, pk):
-    post = get_object_or_404(InteriorPost, pk=pk)
     comment_form = CommentForm(request.POST)
     if comment_form.is_valid():
         comment = comment_form.save(commit=False)
-        comment.post = post
+        comment.post_id = pk
         comment.user = request.user
         comment.save()
         request.user.participation_score += 1
         request.user.save()
-
-        comments = post.comments.all().values('id', 'user__username', 'content', 'created_at')
-        comments_list = list(comments)
+        comments = InteriorComment.objects.filter(post_id=pk).values('id', 'user__username', 'content')
+        comments_list = comments.count()
     
         return JsonResponse({
             'success': True,
-            'comments': comments_list,
-            'total_comments': post.comments.count()  # 댓글 총 개수를 반환
+            'comments': list(comments),
+            'total_comments': comments_list  # 댓글 총 개수를 반환
         })
     else:
         return JsonResponse({'success': False, 'errors': comment_form.errors})

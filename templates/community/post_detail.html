@@ -81,6 +81,14 @@
 
 <!-- 댓글 작성 -->
 {% if request.user.is_authenticated %}
+<!--
+<h3 class="community-detail-comment-title">댓글을 작성해주세요!</h3>
+<form method="post" action="{% url 'community_user:comments_create' post.pk %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" class="community-detail-comment-btn" value="댓글 작성">
+  </form>
+-->
 <h3 class="post-detail-comment-title">댓글을 작성해주세요!</h3>
 <form id="comment-form" method="post" action="{% url 'community_user:comments_create' post.pk %}">
     {% csrf_token %}

@@ -169,12 +169,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     function setupFriendRequestButton() {
         const friendRequestButton = document.getElementById('friend-request-button');
         if (friendRequestButton) {
             friendRequestButton.addEventListener('click', function() {
                 const username = this.dataset.username;
                 const url = `/interior/send_friend_request/${username}/`;
+
 
                 fetch(url, {
                     method: 'POST',
