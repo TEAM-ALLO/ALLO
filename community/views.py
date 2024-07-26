@@ -247,8 +247,8 @@ def liked_posts(request):
 
 @require_POST
 @login_required
-def comments_create(request, id):
-    post = get_object_or_404(CommunityPost, id=id)
+def comments_create(request, pk):
+    post = get_object_or_404(CommunityPost, pk=pk)
     comment_form = CommentForm(request.POST)
     if comment_form.is_valid():
         comment = comment_form.save(commit=False)

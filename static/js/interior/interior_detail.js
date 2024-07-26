@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 const commentId = form.getAttribute('data-comment-id');
                 const url = form.action;
+                const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
                 fetch(url, {
                     method: 'POST',
