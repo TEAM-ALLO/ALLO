@@ -54,7 +54,4 @@ document.querySelector('form').addEventListener('submit', function(e) {
         alert('가구 목록은 최소 하나 이상이어야 합니다.');
         return;
     }
-
-    var hiddenInput = document.querySelector('input[name="furniture_list"]');
-    hiddenInput.value = furnitureList.join('\n');
 });

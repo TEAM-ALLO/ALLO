@@ -26,13 +26,22 @@
     <div class="interior-furniture-list-container">
         <h4 class="interior-furniture-list">가구 목록:</h4>
         <div class="furniture-fields-container" id="furniture_fields">
-            <div class="furniture-item">
-                <input type="text" name="furniture_list[]" class="form-control">
-                <button type="button" onclick="removeFurnitureField(this)" class="interior-furniture-remove-btn">삭제</button>
-            </div>
+            {% for item in furniture_list %}
+                <div class="furniture-item">
+                    <input type="text" name="furniture_list[]" class="form-control" value="{{ item }}">
+                    <button type="button" onclick="removeFurnitureField(this)" class="interior-furniture-remove-btn">삭제</button>
+                </div>
+            {% endfor %}
+            {% if not furniture_list %}
+                <div class="furniture-item">
+                    <input type="text" name="furniture_list[]" class="form-control">
+                    <button type="button" onclick="removeFurnitureField(this)" class="interior-furniture-remove-btn">삭제</button>
+                </div>
+            {% endif %}
         </div>
         <button type="button" onclick="addFurnitureField()" class="interior-furniture-add-btn">+가구 추가</button>
-    </div>
+    </div>  
+    
     <button type="submit" class="interior-create-btn">작성하기</button>
     {{ form.furniture_list }}
 </form>

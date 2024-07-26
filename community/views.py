@@ -64,23 +64,39 @@ def chatroom_list(request):
     return render(request, 'community/chatroom_list.html', {'friends': friends})
 
 
+
 @login_required
 def chatroom_detail(request, pk, username):
     chatroom = get_object_or_404(ChatRoom, pk=pk)
     receiver = get_object_or_404(User, username=username)
     messages = chatroom.messages.all().order_by('timestamp')
+
     if request.method == 'POST':
-        form = MessageForm(request.POST)
+        form = MessageForm(request.POST, request.FILES)
         if form.is_valid():
             message = form.save(commit=False)
             message.chatroom = chatroom
             message.sender = request.user
             message.receiver = receiver
             message.save()
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'sender': message.sender.username,
+                    'content': message.content,
+                    'image': message.image.url if message.image else None,
+                    'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+                    'receiver_profile_image': message.receiver.profile_image.url if message.receiver.profile_image else None,
+                })
             return redirect('community_user:chatroom_detail', pk=pk, username=username)
     else:
         form = MessageForm()
-    return render(request, 'community/chatroom_detail.html', {'chatroom': chatroom, 'messages': messages, 'form': form, 'receiver':receiver})
+
+    return render(request, 'community/chatroom_detail.html', {
+        'chatroom': chatroom,
+        'messages': messages,
+        'form': form,
+        'receiver': receiver
+    })
 
 
 @login_required
@@ -257,14 +273,35 @@ def comments_create(request, pk):
         comment.save()
         request.user.participation_score += 1
         request.user.save()
-    return redirect('community_user:post_detail', post.id)
+
+        comments = post.comments.all().values('id', 'user__username', 'content', 'created_at')
+        comments_list = list(comments)
+    
+        return JsonResponse({
+            'success': True,
+            'comments': comments_list,
+            'total_comments': post.comments.count()  # 댓글 총 개수를 반환
+        })
+    else:
+        return JsonResponse({'success': False, 'errors': comment_form.errors})
 
 @require_POST
 @login_required
 def comments_delete(request, post_id, comment_id):
+    post = get_object_or_404(CommunityPost, pk=post_id)
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user == comment.user:
         request.user.participation_score -= 1  # 참여 점수 감소
         request.user.save()
         comment.delete()
-    return redirect('community_user:post_detail', post_id)
+
+        comments = post.comments.all().values('id', 'user__username', 'content', 'created_at')
+        comments_list = list(comments)
+
+        return JsonResponse({
+            'success': True,
+            'comments': comments_list,
+            'total_comments': post.comments.count()  # 댓글 총 개수를 반환
+        })
+    else:
+        return JsonResponse({'success': False, 'message': 'Unauthorized'})

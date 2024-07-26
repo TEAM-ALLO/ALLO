@@ -5,9 +5,9 @@
 {% endblock %}
 {% block content %}
 <div class="community-header">
-    <div class="community-categoty"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
-    <div class="community-categoty"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
-    <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
+    <div class="community-category"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
 </div>
 <div class="post-detail-big-container">
     <div class="post-detail-top">
@@ -21,6 +21,11 @@
     </div>
     <div class="post-detail-bottom">
         <p class="post-detail-info">
+            {% if post.author.profile_image %}
+                <img src="{{ post.author.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
             {{ post.author.username }} | {{ post.date_posted|date:"Y-m-d H:i" }}
         </p>
         <div class="actions">
@@ -55,50 +60,52 @@
     </div>
     <div class="post-detail-content-box">
         {{ post.content }}
-        <img src="{% static 'img/bubble-writer.svg' %}" alt="말풍선 꼬리 이미지" class="bubble-writer">
-    </div>
-    <div class="post-detail-btn-div">
-        <a href="{% url 'community_user:post_list' %}" class="post-detail-btn">목록</a>
     </div>
 </div>
-{% if comments %}
-  <p class="community-detail-comment-title">{{ comments|length }}개의 댓글이 있습니다.</p>
-  <ul>
+<p class="post-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
+<ul id="comment-list">
     {% for comment in comments %}
-      <li class="community-detail-comment-container">
-        <div class="community-detail-comment-user">
-          {{ comment.user }}
-          {% if user == comment.user %}
-          <form action="{% url 'community_user:comments_delete' post.pk comment.id %}" method="POST" class="d-inline">
-              {% csrf_token %}
-              <input type="submit" value="삭제" class="community-detail-comment-delete">
-          </form>
-          {% endif %}
-      </div>
-      <div>
-        {{ comment.content }}
-      </div>
+    <li class="post-detail-comment-container">
+        <div class="post-detail-comment-user">
+            {{ comment.user.username }}
+            {% if request.user.username == comment.user.username %}
+            <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
+            {% endif %}
+        </div>
+        <div>
+            {{ comment.content }}
+        </div>
     </li>
-  {% empty %}
-    <p class="community-detail-comment-title">작성된 댓글이 없습니다.</p>
-  {% endfor %}
+    {% endfor %}
 </ul>
-{% endif %}
+
+<!-- 댓글 작성 -->
 {% if request.user.is_authenticated %}
+<!--
 <h3 class="community-detail-comment-title">댓글을 작성해주세요!</h3>
 <form method="post" action="{% url 'community_user:comments_create' post.pk %}">
     {% csrf_token %}
     {{ comment_form.as_p }}
     <input type="submit" class="community-detail-comment-btn" value="댓글 작성">
   </form>
+-->
+<h3 class="post-detail-comment-title">댓글을 작성해주세요!</h3>
+<form id="comment-form" method="post" action="{% url 'community_user:comments_create' post.pk %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" class="post-detail-comment-btn" value="댓글 작성">
+</form>
 {% else %}
-  <p class="community-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
-  
+<p class="post-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
 {% endif %}
 
 <div class="btn-div">
-    <a href="{% url 'community_user:post_list' %}" class="community-detail-btn">목록</a>
+    <a href="{% url 'community_user:post_list' %}" class="post-detail-btn">목록</a>
 </div>
+
+<input type="hidden" id="current-username" value="{{ request.user.username }}">
+<input type="hidden" id="post-id" value="{{ post.pk }}">
+
 {% endblock %}
 
 {% block script %}

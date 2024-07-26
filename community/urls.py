@@ -26,5 +26,5 @@ urlpatterns = [
     path('post/bookmarked/', views.bookmarked_posts, name='bookmarked_posts'),
     path('friend/<str:username>/', views.friend, name='friend'),
     path('<int:pk>/', views.comments_create, name='comments_create'),
-    path('<int:post_id>/comments/<int:comment_id>/delete/', views.comments_delete, name='comments_delete')
-]
+    path('post/<int:post_id>/comments/<int:comment_id>/delete/', views.comments_delete, name='comments_delete'),
+    

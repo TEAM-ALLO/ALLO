@@ -5,6 +5,9 @@ from .forms import InteriorPostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 
 def interior_list(request):
     category = request.GET.get('category', 'all')
@@ -13,6 +16,7 @@ def interior_list(request):
     else:
         posts = InteriorPost.objects.filter(category=category).order_by('-created_at')
     return render(request, 'interior/interior_list.html', {'posts': posts, 'category': category})
+
 
 @login_required
 def interior_detail(request, pk):
@@ -30,8 +34,11 @@ def interior_detail(request, pk):
         'friends': friends,
         'comments': comments,
         'comment_form': comment_form,
+        'furniture_list': post.furniture_list.split(',') if post.furniture_list else [],  # split the list for display
     }
     return render(request, 'interior/interior_detail.html', context)
+
+
 
 @login_required
 def interior_new(request):
@@ -39,7 +46,7 @@ def interior_new(request):
         form = InteriorPostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.furniture_list = request.POST.get('furniture_list', '')
+            post.furniture_list = request.POST.getlist('furniture_list[]')  # getlist to handle multiple inputs
             post.author = request.user  
             post.save()
             request.user.participation_score += 2
@@ -50,17 +57,26 @@ def interior_new(request):
     
     return render(request, 'interior/interior_form.html', {'form': form})
 
+
 @login_required
 def interior_update(request, pk):
     post = get_object_or_404(InteriorPost, pk=pk)
     if request.method == 'POST':
-        form = InteriorPostForm(request.POST, instance=post)
+        form = InteriorPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
-            form.save()
-            return redirect('interior_user:interior_detail',pk=post.pk)
+            post = form.save(commit=False)
+            furniture_list = request.POST.getlist('furniture_list[]')
+            # 빈 값 제거
+            furniture_list = [item for item in furniture_list if item.strip()]
+            post.furniture_list = ','.join(furniture_list)
+            post.save()
+            return redirect('interior_user:interior_detail', pk=post.pk)
     else:
         form = InteriorPostForm(instance=post)
-    return render(request, 'interior/interior_form.html', {'form': form})
+        furniture_list = post.furniture_list.split(',') if post.furniture_list else []
+
+    return render(request, 'interior/interior_form.html', {'form': form, 'furniture_list': furniture_list})
+
 
 @login_required
 def interior_delete(request, pk):
@@ -111,6 +127,7 @@ def bookmarked_interiors(request):
     posts = InteriorPost.objects.filter(bookmarks=user).order_by('-date_posted')
     return render(request, 'interior/bookmarked_interiors.html', {'posts': posts})
 
+
 @require_POST
 @login_required
 def comments_create(request, pk):
@@ -132,7 +149,7 @@ def comments_create(request, pk):
         })
     else:
         return JsonResponse({'success': False, 'errors': comment_form.errors})
-    
+
 @require_POST
 @login_required
 def comments_delete(request, pk, id):
@@ -145,7 +162,7 @@ def comments_delete(request, pk, id):
 
         comments = post.comments.all().values('id', 'user__username', 'content', 'created_at')
         comments_list = list(comments)
-    
+
         return JsonResponse({
             'success': True,
             'comments': comments_list,
@@ -153,4 +170,3 @@ def comments_delete(request, pk, id):
         })
     else:
         return JsonResponse({'success': False, 'message': 'Unauthorized'})
-

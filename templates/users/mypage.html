@@ -39,31 +39,43 @@
     </div>
 </div> 
 <section class="categories">
-    <button onclick="showSubCategory('my_posts')">
-        <img src="/static/img/grid.svg" alt="격자 아이콘">
+    <div id="my_posts">
+        <!-- 검정 아이콘인 상태 -->
+        <img src="/static/img/grid.svg" alt="격자 아이콘" id="grid-icon">
         <p>내 글</p>
-    </button>
-    <button onclick="showSubCategory('bookmarked')">
-        <img src="/static/img/bookmark.svg" alt="북마크 아이콘">
+    </div>
+    <div id="bookmarked">
+        <!-- 검정 아이콘인 상태 -->
+        <img src="/static/img/bookmark-black.svg" alt="북마크 아이콘" id="bookmark-icon">
         <p>북마크 한 글</p>
-    </button>
+    </div>
 </section>
 
 <section class="sub-categories">
-    <div id="my_posts" class="hidden">
-        <button onclick="showContent('posts', 'all')">전체</button>
+    <div class="hidden" id="sub-category-post">
+        <div id="mypost1">전체</div>
+        <div id="mypost2">인테리어</div>
+        <div id="mypost3">요리</div>
+        <div id="mypost4">자유게시판</div>
+        <!-- <button onclick="showContent('posts', 'all')">전체</button>
         <button onclick="showContent('posts', 'interior')">인테리어</button>
         <button onclick="showContent('posts', 'recipe')">요리</button>
-        <button onclick="showContent('posts', 'community')">자유게시판</button>
+        <button onclick="showContent('posts', 'community')">자유게시판</button> -->
     </div>
-    <div id="bookmarked" class="hidden">
-        <button onclick="showContent('bookmarks', 'all')">전체</button>
+    <div class="hidden" id="sub-category-bookmark">
+        <div id="mybookmarked1">전체</div>
+        <div id="mybookmarked2">인테리어</div>
+        <div id="mybookmarked3">요리</div>
+        <div id="mybookmarked4">자유게시판</div>
+        <!-- <button onclick="showContent('bookmarks', 'all')">전체</button>
         <button onclick="showContent('bookmarks', 'interior')">인테리어</button>
         <button onclick="showContent('bookmarks', 'recipe')">요리</button>
-        <button onclick="showContent('bookmarks', 'community')">자유게시판</button>
+        <button onclick="showContent('bookmarks', 'community')">자유게시판</button> -->
     </div>
 </section>
 <!-- 내 글 -->
+ <div id="mypage-all-post">
+
 <section id="posts-community" class="content-section hidden">
     {% for post in community_posts %}
         <a href="{% url 'community_user:post_detail' pk=post.id %}">
@@ -188,7 +200,7 @@
     </a>
     {% endfor %}
 </section>
-
+</div>
 {% endblock %}
 
 {% block script %}
