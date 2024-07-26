@@ -13,7 +13,7 @@
     {% endif %}
     <div class="recipe-detail-menu">
         <div class="recipe-title-container">
-            <h1>{{ recipe.recipe_name }}</h1>            
+            <h1 class="recipe-title">{{ recipe.recipe_name }}</h1>            
             {% if request.user == recipe.author %}
             <div class="recipe-detail-user-btns">
                 <a href="{% url 'recipe_user:recipe_edit' id=recipe.id %}">수정</a>

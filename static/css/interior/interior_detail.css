@@ -6,6 +6,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    word-break: break-all;
 }
 .interior-detail-category {
     border-radius: 10px;
