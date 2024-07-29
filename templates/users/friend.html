@@ -84,7 +84,7 @@
         const friendList = document.getElementById('friend-list');
         const newFriend = document.createElement('li');
         const friendLink = document.createElement('a');
-        friendLink.href = `/users_user/friend_profile/${username}/`;
+        friendLink.href = `{% url 'users_user:friend_profile' 'USERNAME_PLACEHOLDER' %}`.replace('USERNAME_PLACEHOLDER', username);
         friendLink.textContent = username;
         newFriend.appendChild(friendLink);
         friendList.appendChild(newFriend);
