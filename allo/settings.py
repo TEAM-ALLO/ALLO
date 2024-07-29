@@ -83,6 +83,7 @@ WSGI_APPLICATION = 'allo.wsgi.application'
 
 # import my_settings
 # DATABASES = my_settings.DATABASES
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

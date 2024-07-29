@@ -18,16 +18,6 @@
     width: 20px;
     height: 20px;
 }
-/* #my_posts {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-}
-#bookmarked {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-} */
 #mypage-all-post {
     display: none;
 }
@@ -156,6 +146,7 @@
     font-size: 20px;
     margin: 10px 20px;
 }
+
 
 /* 팝업 창을 중앙에 배치하기 위한 스타일 추가 */
 .popup {

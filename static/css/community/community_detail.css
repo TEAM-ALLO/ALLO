@@ -20,6 +20,7 @@
     display: flex;
     gap: 10px;
     text-decoration: underline;
+    color: var(--dark--gray--color);
 }
 .post-detail-bottom {
     display: flex;
@@ -87,7 +88,7 @@
     border-top: 7px solid var(--light--gray--color);
     padding-top: 20px;
 }
-.community-detail-comment-title {
+.post-detail-comment-title {
     width: 70%;
     margin: 10px auto;
 }
@@ -95,7 +96,7 @@
     display: flex;
     justify-content: center;
 }
-.community-detail-comment-btn {
+.post-detail-comment-btn {
     background-color: var(--main--red--color);
     color: #fff;
     font-size: 16px;
@@ -110,7 +111,7 @@
 .main-container>form {
     position: relative;
 }
-.community-detail-comment-container {
+.post-detail-comment-container {
     width: 70%;
     background-color: var(--light--gray--color);
     margin: 10px auto;
@@ -120,11 +121,11 @@
     flex-direction: column;
     gap: 10px;
 }
-.community-detail-comment-user {
+.post-detail-comment-user {
     display: flex;
     justify-content: space-between;
 }
-.community-detail-comment-delete {
+.comment-delete-button {
     border: 0;
     color: var(--dark--gray--color);
     text-decoration: underline;
@@ -161,7 +162,7 @@
     align-items: center;
     justify-content: center;
 } 
-.community-detail-btn {
+.post-detail-btn {
     background-color: var(--main--red--color);
     border-radius: 10px;
     color: #fff;

@@ -44,9 +44,9 @@
 }
 .interior-detail-user-btns {
     text-decoration: underline;
-    text-underline-offset: 2px;
+    /* text-underline-offset: 2px; */
     display: flex;
-    /* color: var(--dark--gray--color); */
+    color: var(--dark--gray--color);
     gap: 10px;
 }
  .btn-success,
@@ -83,28 +83,6 @@
     width: 70%;
     margin: 10px auto;
 }
-
-.furniture-list {
-    margin-top: 20px;
-    padding: 10px;
-    border-top: 1px solid #ccc;
-}
-
-.furniture-list h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-}
-
-.furniture-list ul {
-    list-style-type: disc;
-    padding-left: 20px;
-}
-
-.furniture-list li {
-    font-size: 1.2em;
-    margin-bottom: 5px;
-}
-
 
 /* 댓글 */
 .comment-line {
