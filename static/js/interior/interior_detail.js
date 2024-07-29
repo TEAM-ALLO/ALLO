@@ -141,6 +141,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function updateBookmarkCount(bookmarked, count) {
+        const bookmarkButton = document.getElementById('bookmark-button');
+        const bookmarksCountElement = document.getElementById('bookmarks-count');
+        if (bookmarkButton) {
+            if (bookmarked) {
+                bookmarkButton.querySelector('img').src = '/static/img/full-bookmark.svg';
+            } else {
+                bookmarkButton.querySelector('img').src = '/static/img/bookmark.svg';
+            }
+        }
+        if (bookmarksCountElement) {
+            bookmarksCountElement.textContent = count;
+        }
+    }
+
     function setupBookmarkButton() {
         const bookmarkButton = document.getElementById('bookmark-button');
         if (bookmarkButton) {
@@ -157,12 +172,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.bookmarked) {
-                        this.querySelector('img').src = '/static/img/full-bookmark.svg';
+                    if (data.success) {
+                        updateBookmarkCount(data.bookmarked, data.bookmarks_count);
                     } else {
-                        this.querySelector('img').src = '/static/img/bookmark.svg';
+                        console.error('Failed to bookmark:', data.message);
                     }
-                    document.getElementById('bookmarks-count').textContent = data.bookmarks_count;
                 })
                 .catch(error => console.error('Error:', error));
             });
