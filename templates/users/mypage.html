@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="/static/css/users/mypage.css">
+    <link rel="stylesheet" href="{% static 'css/users/mypage.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -13,40 +13,38 @@
     {% if user.profile_image %}
         <img src="{{ user.profile_image.url }}" alt="프로필 사진" class="mypage-img">
     {% else %}
-        <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+        <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진" class="mypage-img">
     {% endif %}
-        <a href="{% url 'users_user:profile_edit' %}" class="mypage-update-btn">
-            <img src="/static/img/setting.svg" alt="프로필 편집 아이콘" class="mypage-update-icon">
+        <a href="#" class="mypage-update-btn" id="profile-edit-btn">
+            <img src="{% static 'img/setting.svg' %}" alt="프로필 편집 아이콘" class="mypage-update-icon">
             <p>프로필 편집</p>
         </a>
     </div>
-    <div class="mypage-user-info-r"> <!-- 왼쪽 노란 부분 -->
-        <h2>{{ user.name }}님</h2> <!-- 상단 -->
-        <div class="mypage-postit"> <!--하단-->
-            <div class="mypage-ranking-divs"> <!-- 단상 -->
+    <div class="mypage-user-info-r">
+        <h2>{{ user.name }}님</h2>
+        <div class="mypage-postit">
+            <div class="mypage-ranking-divs">
                 <div></div>
                 <div></div>
                 <div></div>
                 <div class="mypage-ranking-divs-title">My ranking</div>
             </div>
-            <div >
+            <div>
                 <p>{{ today }}</p>
                 <div class="mypage-my-ranking">
                     {{ ranking }}위
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 </div> 
 <section class="categories">
     <div id="my_posts">
-        <!-- 검정 아이콘인 상태 -->
-        <img src="/static/img/grid.svg" alt="격자 아이콘" id="grid-icon">
+        <img src="{% static 'img/grid.svg' %}" alt="격자 아이콘" id="grid-icon">
         <p>내 글</p>
     </div>
     <div id="bookmarked">
-        <!-- 검정 아이콘인 상태 -->
-        <img src="/static/img/bookmark-black.svg" alt="북마크 아이콘" id="bookmark-icon">
+        <img src="{% static 'img/bookmark-black.svg' %}" alt="북마크 아이콘" id="bookmark-icon">
         <p>북마크 한 글</p>
     </div>
 </section>
@@ -57,25 +55,17 @@
         <div id="mypost2">인테리어</div>
         <div id="mypost3">요리</div>
         <div id="mypost4">자유게시판</div>
-        <!-- <button onclick="showContent('posts', 'all')">전체</button>
-        <button onclick="showContent('posts', 'interior')">인테리어</button>
-        <button onclick="showContent('posts', 'recipe')">요리</button>
-        <button onclick="showContent('posts', 'community')">자유게시판</button> -->
     </div>
     <div class="hidden" id="sub-category-bookmark">
         <div id="mybookmarked1">전체</div>
         <div id="mybookmarked2">인테리어</div>
         <div id="mybookmarked3">요리</div>
         <div id="mybookmarked4">자유게시판</div>
-        <!-- <button onclick="showContent('bookmarks', 'all')">전체</button>
-        <button onclick="showContent('bookmarks', 'interior')">인테리어</button>
-        <button onclick="showContent('bookmarks', 'recipe')">요리</button>
-        <button onclick="showContent('bookmarks', 'community')">자유게시판</button> -->
     </div>
 </section>
-<!-- 내 글 -->
- <div id="mypage-all-post">
 
+<!-- 내 글 -->
+<div id="mypage-all-post">
 <section id="posts-community" class="content-section hidden">
     {% for post in community_posts %}
         <a href="{% url 'community_user:post_detail' pk=post.id %}">
@@ -201,8 +191,75 @@
     {% endfor %}
 </section>
 </div>
+
+<!-- 프로필 편집 팝업창 -->
+<div id="profile-edit-popup" class="popup" style="display: none;">
+    <h2>프로필 편집</h2>
+    <form method="post" enctype="multipart/form-data" id="profile-edit-form">
+        {% csrf_token %}
+        <div>
+            <label for="id_username">아이디:</label>
+            <input type="text" id="id_username" name="username" value="{{ user.username }}" readonly>
+        </div>
+        <div>
+            <label for="id_email">이메일:</label>
+            <input type="email" id="id_email" name="email" value="{{ user.email }}">
+        </div>
+        <div>
+            <label for="id_name">이름:</label>
+            <input type="text" id="id_name" name="name" value="{{ user.name }}">
+        </div>
+        <div>
+            <label for="id_profile_image">프로필 이미지:</label>
+            <input type="file" id="id_profile_image" name="profile_image">
+        </div>
+        <a href="#" id="password-change-btn" class="pw-change-btn">비밀번호 변경</a>
+        <button type="submit">저장</button>
+    </form>
+</div>
+
+<!-- 비밀번호 변경 팝업창 -->
+<div id="password-change-popup" class="popup" style="display: none;">
+    <h2>비밀번호 변경</h2>
+    <form method="post" id="password-change-form">
+        {% csrf_token %}
+        <div>
+            <label for="origin_password">현재 비밀번호:</label>
+            <input type="password" name="origin_password" id="origin_password">
+        </div>
+        <div>
+            <label for="password1">새 비밀번호:</label>
+            <input type="password" name="password1" id="password1">
+        </div>
+        <div>
+            <label for="password2">새 비밀번호 확인:</label>
+            <input type="password" name="password2" id="password2">
+        </div>
+        <button type="submit">변경</button>
+    </form>
+</div>
+
 {% endblock %}
 
 {% block script %}
-    <script src="/static/js/user/mypage.js"></script>
+<script>
+    document.getElementById('profile-edit-btn').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('profile-edit-popup').style.display = 'block';
+    });
+
+    document.getElementById('profile-edit-form').addEventListener('submit', function() {
+        document.getElementById('profile-edit-popup').style.display = 'none';
+    });
+
+    document.getElementById('password-change-btn').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('profile-edit-popup').style.display = 'none';
+        document.getElementById('password-change-popup').style.display = 'block';
+    });
+
+    document.getElementById('password-change-form').addEventListener('submit', function() {
+        document.getElementById('password-change-popup').style.display = 'none';
+    });
+</script>
 {% endblock %}

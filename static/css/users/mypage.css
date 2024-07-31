@@ -29,8 +29,8 @@
     gap: 30px;
 } */
 #mypage-all-post {
-    display: none
- }
+    display: none;
+}
 #sub-category-post div,
 #sub-category-bookmark div {
     margin: 10px 20px;
@@ -122,8 +122,7 @@
     font-weight: bold;
 }
 .mypage-ranking-divs > div {
-    width: 70%
-    
+    width: 70%;
 }
 .mypage-ranking-divs > div:nth-child(1) {
     background-color: var(--main--red--color);
@@ -156,4 +155,42 @@
     align-items: center;
     font-size: 20px;
     margin: 10px 20px;
+}
+
+/* 팝업 창을 중앙에 배치하기 위한 스타일 추가 */
+.popup {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 300px;
+    border-radius: 10px;
+}
+
+.pw-change-btn {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: blue;
+    cursor: pointer;
+}
+
+button[type="submit"] {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
 }

@@ -46,7 +46,10 @@ def interior_new(request):
         form = InteriorPostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.furniture_list = request.POST.getlist('furniture_list[]')  # getlist to handle multiple inputs
+            furniture_list = request.POST.getlist('furniture_list[]')
+            # 빈 값 제거
+            furniture_list = [item for item in furniture_list if item.strip()]
+            post.furniture_list = ','.join(furniture_list)
             post.author = request.user  
             post.save()
             request.user.participation_score += 2
@@ -56,7 +59,6 @@ def interior_new(request):
         form = InteriorPostForm()
     
     return render(request, 'interior/interior_form.html', {'form': form})
-
 
 @login_required
 def interior_update(request, pk):
@@ -113,13 +115,14 @@ def bookmark_interior(request, pk):
     if request.method != 'POST':
         return JsonResponse({'success': False, 'message': 'Invalid request type'})
 
-    if post.bookmarks.filter(username=request.user.username).exists():
+    if post.bookmarks.filter(pk=request.user.pk).exists():
         post.bookmarks.remove(request.user)
         bookmarked = False
     else:
         post.bookmarks.add(request.user)
         bookmarked = True
-    return JsonResponse({'bookmarked': bookmarked , 'bookmarks_count':post.total_likes()})
+        
+    return JsonResponse({'success': True, 'bookmarked': bookmarked, 'bookmarks_count': post.total_bookmarks()})
 
 @login_required
 def bookmarked_interiors(request):
