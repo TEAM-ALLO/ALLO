@@ -20,11 +20,41 @@
     <a href="{% url 'recycle_user:paper' %}">종이류</a>
     <a href="{% url 'recycle_user:food'  %}">음식물쓰레기</a>
 </div>
-<h1>우땨땨 일반쓰레기</h1>
 
+<h1>일반쓰레기 배출 방법</h1>
+<div class="recycle-content">
+    <div class="recycle-instructions">
+        <h2>일반쓰레기는 두 가지 방법으로 배출합니다.</h2>
+        <p>-</p>
+        <div class="recycle-method">
+            <h3># 종량제봉투 (비닐)</h3>
+            <p>태울 수 있는 쓰레기를 담아 배출해 주세요!</p>
+            <p>-</p>
+            <ul>
+                <li>(예시... 변경가능)은박지</li>
+                <li>티백</li>
+                <li>박스에 붙인 테이프</li>
+                <li>뼈·껍데기</li>
+                <li>나무젓가락</li>
+                <li>이쑤시개</li>
+                <li>카드영수증</li>
+                <li>분리배출 표시없는 의약품 포장대 등</li>
+            </ul>
+        </div>
+        <p>-</p>
+        <div class="recycle-method">
+            <h3># 특수규격봉투 (PP마대)</h3>
+            <p>태우면 안 되는 쓰레기를 담아 배출해 주세요! </p>
+            <ul>
+                <li>파손된 형광등</li>
+                <li>깨진 유리·병·사기·도자기·화분·변기 등</li>
+            </ul>
+        </div>
+    </div>
+</div>
 
 <a href="{% url 'recycle_user:recycle_main' %}" class="btn btn-primary">메인으로 돌아가기</a>
 {% endblock %}
 {% block script %}
-    <script src="/static/js/recycle/recycle_category.js"></script>
+<script src="/static/js/recycle/recycle_category.js"></script>
 {% endblock %}
