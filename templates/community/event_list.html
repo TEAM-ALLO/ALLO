@@ -17,7 +17,11 @@
         <ul>
             {% for event in events %}
                 <li>
-                    <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width: 100px;">
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width: 100px;">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
                     <a href="{% url 'community_user:event_detail' event.pk %}">{{ event.title }}</a> - 
                     {{ event.start_date }} ~ {{ event.end_date }}
                 </li>

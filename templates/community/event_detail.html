@@ -5,7 +5,11 @@
 </head>
 <body>
     <h1>{{ event.title }}</h1>
+    {% if event.image %}
     <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width: 300px;">
+    {% else %}
+        <p>No image available</p>
+    {% endif %}
     <p>{{ event.description }}</p>
     <p><strong>Start Date:</strong> {{ event.start_date }}</p>
     <p><strong>End Date:</strong> {{ event.end_date }}</p>
