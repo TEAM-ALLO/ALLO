@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block head %}
 <link rel="stylesheet" href="/static/css/recycle/recycle_category.css">
 <link rel="stylesheet" href="/static/css/recycle/recycle_main.css">
@@ -45,6 +46,7 @@
   
 
     추가
+    플라스틱 이외의 재질이 부착된 완구·문구류, 낚싯대, 보행기 등은 대형폐기물로 배출합니다.
     //여기ㅔㅇ도 질의응답 한두개 넣음ㄴ 좋을듯
 
 <a href="{% url 'recycle_user:recycle_main' %}" class="btn btn-primary">메인으로 돌아가기</a>
