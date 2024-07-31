@@ -237,6 +237,12 @@
         </div>
         <button type="submit">변경</button>
     </form>
+</form>
+{% if error %}
+    <p>{{ error }}</p>
+{% elif password_change_success %}
+    <p>{{ password_change_success }}</p>
+{% endif %}
 </div>
 
 {% endblock %}

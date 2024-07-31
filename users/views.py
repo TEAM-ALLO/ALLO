@@ -107,10 +107,29 @@ def logout_view(request):
 @login_required
 def mypage_view(request):
     user = request.user
+    context = {}
+
+    if request.method == "POST":
+        # 비밀번호 변경 처리
+        current_password = request.POST.get("origin_password")
+        if check_password(current_password, user.password):
+            new_password = request.POST.get("password1")
+            password_confirm = request.POST.get("password2")
+            if new_password == password_confirm:
+                user.set_password(new_password)
+                user.save()
+                auth_login(request, user)
+                context.update({'password_change_success': "비밀번호가 성공적으로 변경되었습니다."})
+                return redirect("users_user:home")
+            else:
+                context.update({'error': "새로운 비밀번호를 다시 확인해주세요."})
+        else:
+            context.update({'error': "현재 비밀번호가 일치하지 않습니다."})
+
+    # 마이페이지 조회 처리
     community_posts = CommunityPost.objects.filter(author=user)
     recipe_posts = Recipe.objects.filter(author=user)
     interior_posts = InteriorPost.objects.filter(author=user)
-
 
     community_bookmarks = CommunityPost.objects.filter(bookmarks=user)
     recipe_bookmarks = Recipe.objects.filter(bookmarks=user)
@@ -120,10 +139,10 @@ def mypage_view(request):
     all_users = User.objects.all()
     sorted_users = sorted(all_users, key=lambda u: (u.attendance_score + u.participation_score), reverse=True)
     ranking = {user: rank+1 for rank, user in enumerate(sorted_users)}
-    
+
     today = datetime.date.today()
 
-    context = {
+    context.update({
         'user': user,
         'ranking': ranking[user],
         'community_posts': community_posts,
@@ -133,7 +152,8 @@ def mypage_view(request):
         'recipe_bookmarks': recipe_bookmarks,
         'interior_bookmarks': interior_bookmarks,
         'today': today,
-    }
+    })
+
     return render(request, 'users/mypage.html', context)
 
 @login_required
@@ -178,27 +198,6 @@ def delete_friend(request, username):
     else:
         messages.warning(request, '유효하지 않은 요청입니다.')
     return redirect('users_user:friend_list', username=request.user.username)
-
-@login_required
-def change_pw(request):
-    context= {}
-    if request.method == "POST":
-        current_password = request.POST.get("origin_password")
-        user = request.user
-        if check_password(current_password,user.password):
-            new_password = request.POST.get("password1")
-            password_confirm = request.POST.get("password2")
-            if new_password == password_confirm:
-                user.set_password(new_password)
-                user.save()
-                auth_login(request,user)
-                return redirect("users_user:home")
-            else:
-                context.update({'error':"새로운 비밀번호를 다시 확인해주세요."})
-    else:
-        context.update({'error':"현재 비밀번호가 일치하지 않습니다."})
-
-    return render(request, "users/change_pw.html",context)
 
 def search(request):
     query = request.GET.get('q', '')
