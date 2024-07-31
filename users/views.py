@@ -213,7 +213,3 @@ def search(request):
         'interior_results': interior_results,
     }
     return render(request, 'users/searched_list.html', context)
-
-
-
-

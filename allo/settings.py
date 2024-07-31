@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-%zl@ooj^!yyy6vyw6xs)=-&qa$1gx1#zjq=$)xso3@qln%!&e7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.50.101.170', 'localhost']
 
 
 # Application definition
@@ -83,10 +83,20 @@ WSGI_APPLICATION = 'allo.wsgi.application'
 
 # import my_settings
 # DATABASES = my_settings.DATABASES
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ALLO_DB',
+        'USER': 'test_db_connect',
+        'PASSWORD': '1234',
+        'HOST': '10.50.101.170',
+        'PORT': '3306',
     }
 }
 
