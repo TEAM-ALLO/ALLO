@@ -11,8 +11,7 @@
     <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
 </div>
 <h2 class="receiver-username">{{ receiver.username }}님과의 채팅</h2>
-<div id="chatroom-detail-big-container">
-    <div class="chatroom-detail-big-container" id="chat-messages" style="overflow-y: auto; height: 400px;">
+    <div class="chatroom-detail-big-container" id="chat-messages">
         {% for message in messages %}
             {% if message.sender == request.user %}
             <!-- 내가 보낸 메시지 -->
@@ -49,16 +48,18 @@
             {% endif %}
         {% endfor %}
     </div>
-</div>
 <form method="post" class="comment-container" id="message-form" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div>
+    {{form.content}}
+    {{form.image}}
+
+    </div>
     <button type="submit" class="send-icon-button"><img src="{% static 'img/send.svg' %}" alt="채팅 전송 아이콘" class="send-icon"></button>
 </form>
 {% endblock %}
 
 {% block script %}
-<script src="{% static 'js/community/chat.js' %}"></script>
 <script>
 // 채팅 컨테이너를 맨 아래로 스크롤하는 함수
 function scrollToBottom() {
