@@ -30,7 +30,13 @@
 <ul id="friend-list">
     {% for friend in friends %}
         <li>
-            <a href="{% url 'users_user:friend_profile' friend.username %}">{{ friend.username }}</a>
+            {% if friend.profile_image %}
+                <img src="{{ friend.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
+            <p class="community-friend-name">{{ friend.username }}</p>
+        </a>
         </li>
     {% endfor %}
 </ul>
@@ -78,7 +84,7 @@
         const friendList = document.getElementById('friend-list');
         const newFriend = document.createElement('li');
         const friendLink = document.createElement('a');
-        friendLink.href = `/users_user/friend_profile/${username}/`;
+        friendLink.href = `{% url 'users_user:friend_profile' 'USERNAME_PLACEHOLDER' %}`.replace('USERNAME_PLACEHOLDER', username);
         friendLink.textContent = username;
         newFriend.appendChild(friendLink);
         friendList.appendChild(newFriend);

@@ -214,7 +214,7 @@ def bookmark_post(request, pk):
         post.bookmarks.add(request.user)
         bookmarked = True
         
-    return JsonResponse({'bookmarked': bookmarked, 'bookmarks_count':post.total_likes()})
+    return JsonResponse({'bookmarked': bookmarked, 'bookmarks_count':post.total_bookmarks()})
 
 @login_required
 def bookmarked_posts(request):
