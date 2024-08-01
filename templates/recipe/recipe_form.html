@@ -5,7 +5,15 @@
     <link rel="stylesheet" href="/static/css/recipe/recipe_form.css">
 {% endblock %}
 {% block content %}
-
+<div class="recipe-nav">
+    <a href="{% url 'recipe_user:recipe_list' %}?category=korean">한식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese">일식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese">중식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=western">양식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=snack">분식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=others">기타</a>
+</div>
+<h2 id="recipe-title">새 레시피</h2>
 <form method="post" enctype="multipart/form-data" id="recipe-form">
     {% csrf_token %}
     <div class="recipe-input-container">
