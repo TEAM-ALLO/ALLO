@@ -154,21 +154,105 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
-    border: 5px solid black;
-    z-index: 100;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    z-index: 1;
 }
 
 #profile-edit-popup {
-    padding: 10px;
+    padding: 30px;
 }
 
 #profile-edit-popup h2 {
-    font-size: 18px;
+    font-size: 20px;
     text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 #profile-edit-form {
     display: flex;
     flex-direction: column;
+    gap: 20px;
+}
+#profile-edit-form div {
+    display: flex;
+}
+#profile-edit-form label {
+    background-color: var(--main--yellow--color);
+    padding: 10px;
+    width: 140px;
+    display: inline-block;
+    text-align: center;
+}
+#profile-edit-form input {
+    border: 2px solid var(--main--yellow--color);
+    width: 250px;
+}
+#profile-edit-form > div:nth-child(5) input {
+    padding: 5px 3px;
+}
+.mypage-btns {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 10px 0;
+}
+.profile-save-btn {
+    background-color: var(--main--yellow--color);
+    width: 60px;
+    height: 36px;
+    font-size: 16px;
+}
+.pw-change-btn {
+    background-color: var(--main--yellow--color);
+    width: 120px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 비밀번호 변경 팝업창 */
+#password-change-popup {
+    padding: 30px;
+}
+#password-change-popup h2 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+#password-change-popup p {
+    color: red;
+    margin-top: 30px;
+    text-align: center;
+}
+
+#password-change-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+#password-change-form > div {
+    display: flex;
+}
+#password-change-form label {
+    background-color: var(--main--yellow--color);
+    padding: 10px;
+    width: 140px;
+    display: inline-block;
+    text-align: center;
+}
+#password-change-form input {
+    border: 2px solid var(--main--yellow--color);
+    width: 250px;
+}
+.password-change-popup-btn {
+    background-color: var(--main--yellow--color);
+    margin: 0 auto;
+    width: 60px;
+    height: 36px;
+    font-size: 16px;
 }
