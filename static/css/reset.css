@@ -23,7 +23,8 @@
     font-family: "Noto Sans KR", sans-serif;
   }
   ol,
-  ul {
+  ul,
+  li {
     list-style: none;
   }
   blockquote,

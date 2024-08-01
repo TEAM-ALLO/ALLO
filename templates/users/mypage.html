@@ -198,19 +198,19 @@
     <form method="post" enctype="multipart/form-data" id="profile-edit-form">
         {% csrf_token %}
         <div>
-            <label for="id_username">아이디:</label>
+            <label for="id_username">아이디</label>
             <input type="text" id="id_username" name="username" value="{{ user.username }}" readonly>
         </div>
         <div>
-            <label for="id_email">이메일:</label>
+            <label for="id_email">이메일</label>
             <input type="email" id="id_email" name="email" value="{{ user.email }}">
         </div>
         <div>
-            <label for="id_name">이름:</label>
+            <label for="id_name">이름</label>
             <input type="text" id="id_name" name="name" value="{{ user.name }}">
         </div>
         <div>
-            <label for="id_profile_image">프로필 이미지:</label>
+            <label for="id_profile_image">프로필 이미지</label>
             <input type="file" id="id_profile_image" name="profile_image">
         </div>
         <a href="#" id="password-change-btn" class="pw-change-btn">비밀번호 변경</a>
@@ -242,24 +242,5 @@
 {% endblock %}
 
 {% block script %}
-<script>
-    document.getElementById('profile-edit-btn').addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('profile-edit-popup').style.display = 'block';
-    });
-
-    document.getElementById('profile-edit-form').addEventListener('submit', function() {
-        document.getElementById('profile-edit-popup').style.display = 'none';
-    });
-
-    document.getElementById('password-change-btn').addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('profile-edit-popup').style.display = 'none';
-        document.getElementById('password-change-popup').style.display = 'block';
-    });
-
-    document.getElementById('password-change-form').addEventListener('submit', function() {
-        document.getElementById('password-change-popup').style.display = 'none';
-    });
-</script>
+    <script src="/static/js/user/mypage.js"></script>
 {% endblock %}
