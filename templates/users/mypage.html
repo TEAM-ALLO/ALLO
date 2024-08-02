@@ -213,8 +213,10 @@
             <label for="id_profile_image">프로필 이미지</label>
             <input type="file" id="id_profile_image" name="profile_image">
         </div>
-        <a href="#" id="password-change-btn" class="pw-change-btn">비밀번호 변경</a>
-        <button type="submit">저장</button>
+        <div class="mypage-btns">
+            <a href="#" id="password-change-btn" class="pw-change-btn">비밀번호 변경</a>
+            <button type="submit" class="profile-save-btn">저장</button>
+        </div>
     </form>
 </div>
 
@@ -224,18 +226,18 @@
     <form method="post" id="password-change-form">
         {% csrf_token %}
         <div>
-            <label for="origin_password">현재 비밀번호:</label>
+            <label for="origin_password">현재 비밀번호</label>
             <input type="password" name="origin_password" id="origin_password">
         </div>
         <div>
-            <label for="password1">새 비밀번호:</label>
+            <label for="password1">새 비밀번호</label>
             <input type="password" name="password1" id="password1">
         </div>
         <div>
-            <label for="password2">새 비밀번호 확인:</label>
+            <label for="password2">새 비밀번호 확인</label>
             <input type="password" name="password2" id="password2">
         </div>
-        <button type="submit">변경</button>
+        <button type="submit" class="password-change-popup-btn">변경</button>
     </form>
 </form>
 {% if error %}
