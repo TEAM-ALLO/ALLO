@@ -156,16 +156,25 @@ def mypage_view(request):
 
     return render(request, 'users/mypage.html', context)
 
+from django.http import JsonResponse
+
 @login_required
 def profile_edit_view(request):
     if request.method == 'POST':
+        print('POST data:', request.POST)  # 디버깅을 위해 POST 데이터 출력
+        print('FILES data:', request.FILES)  # 디버깅을 위해 FILES 데이터 출력
         form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('users_user:mypage')
-    else:
-        form = CustomUserChangeForm(instance=request.user)
-    return render(request, 'users/profile_edit.html', {'form': form})
+            messages.success(request, '프로필이 성공적으로 업데이트되었습니다.')
+            return JsonResponse({'status': 'success'})
+        else:
+            print('Form is not valid')
+            print(form.errors)  # 폼 에러 출력
+            return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
+    return JsonResponse({'status': 'invalid request'}, status=400)
+
+
 
 @login_required
 def friend_list(request, username):
