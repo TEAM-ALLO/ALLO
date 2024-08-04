@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
+    <link rel="stylesheet" href="{% static 'css/recipe/recipe_list.css' %}">
     <link rel="stylesheet" href="{% static 'css/recipe/recipe_detail.css' %}">
 {% endblock %}
 {% block content %}
-
+<div class="recipe-nav">
+    <a href="{% url 'recipe_user:recipe_list' %}?category=korean">한식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese">일식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese">중식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=western">양식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=snack">분식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=others">기타</a>
+</div>
 <div class="recipe-detail-info">
     {% if recipe.image %}
     <img src="{{ recipe.image.url }}" alt="{{ recipe.recipe_name }}" class="recipe-detail-img">

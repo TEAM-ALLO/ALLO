@@ -27,6 +27,10 @@
     padding: 10px;
     width: 300px;
 }
+.recipe-input-container:nth-child(7) >div >label {
+    display: none;
+} 
+
 .recipe-input > input,
 .ingredient-item input {
     border: 0;

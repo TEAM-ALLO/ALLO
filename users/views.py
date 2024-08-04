@@ -107,10 +107,29 @@ def logout_view(request):
 @login_required
 def mypage_view(request):
     user = request.user
+    context = {}
+
+    if request.method == "POST":
+        # 비밀번호 변경 처리
+        current_password = request.POST.get("origin_password")
+        if check_password(current_password, user.password):
+            new_password = request.POST.get("password1")
+            password_confirm = request.POST.get("password2")
+            if new_password == password_confirm:
+                user.set_password(new_password)
+                user.save()
+                auth_login(request, user)
+                context.update({'password_change_success': "비밀번호가 성공적으로 변경되었습니다."})
+                return redirect("users_user:home")
+            else:
+                context.update({'error': "새로운 비밀번호를 다시 확인해주세요."})
+        else:
+            context.update({'error': "현재 비밀번호가 일치하지 않습니다."})
+
+    # 마이페이지 조회 처리
     community_posts = CommunityPost.objects.filter(author=user)
     recipe_posts = Recipe.objects.filter(author=user)
     interior_posts = InteriorPost.objects.filter(author=user)
-
 
     community_bookmarks = CommunityPost.objects.filter(bookmarks=user)
     recipe_bookmarks = Recipe.objects.filter(bookmarks=user)
@@ -120,10 +139,10 @@ def mypage_view(request):
     all_users = User.objects.all()
     sorted_users = sorted(all_users, key=lambda u: (u.attendance_score + u.participation_score), reverse=True)
     ranking = {user: rank+1 for rank, user in enumerate(sorted_users)}
-    
+
     today = datetime.date.today()
 
-    context = {
+    context.update({
         'user': user,
         'ranking': ranking[user],
         'community_posts': community_posts,
@@ -133,19 +152,29 @@ def mypage_view(request):
         'recipe_bookmarks': recipe_bookmarks,
         'interior_bookmarks': interior_bookmarks,
         'today': today,
-    }
+    })
+
     return render(request, 'users/mypage.html', context)
+
+from django.http import JsonResponse
 
 @login_required
 def profile_edit_view(request):
     if request.method == 'POST':
+        print('POST data:', request.POST)  # 디버깅을 위해 POST 데이터 출력
+        print('FILES data:', request.FILES)  # 디버깅을 위해 FILES 데이터 출력
         form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('users_user:mypage')
-    else:
-        form = CustomUserChangeForm(instance=request.user)
-    return render(request, 'users/profile_edit.html', {'form': form})
+            messages.success(request, '프로필이 성공적으로 업데이트되었습니다.')
+            return JsonResponse({'status': 'success'})
+        else:
+            print('Form is not valid')
+            print(form.errors)  # 폼 에러 출력
+            return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
+    return JsonResponse({'status': 'invalid request'}, status=400)
+
+
 
 @login_required
 def friend_list(request, username):
@@ -178,27 +207,6 @@ def delete_friend(request, username):
     else:
         messages.warning(request, '유효하지 않은 요청입니다.')
     return redirect('users_user:friend_list', username=request.user.username)
-
-@login_required
-def change_pw(request):
-    context= {}
-    if request.method == "POST":
-        current_password = request.POST.get("origin_password")
-        user = request.user
-        if check_password(current_password,user.password):
-            new_password = request.POST.get("password1")
-            password_confirm = request.POST.get("password2")
-            if new_password == password_confirm:
-                user.set_password(new_password)
-                user.save()
-                auth_login(request,user)
-                return redirect("users_user:home")
-            else:
-                context.update({'error':"새로운 비밀번호를 다시 확인해주세요."})
-    else:
-        context.update({'error':"현재 비밀번호가 일치하지 않습니다."})
-
-    return render(request, "users/change_pw.html",context)
 
 def search(request):
     query = request.GET.get('q', '')

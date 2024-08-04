@@ -189,24 +189,61 @@ document.addEventListener("DOMContentLoaded",function() {
     });
 
     //팝업창
+    // document.getElementById('profile-edit-btn').addEventListener('click', function(event) {
+    //     event.preventDefault();
+    //     document.getElementById('profile-edit-popup').style.display = 'block';
+    // });
+
+    // document.getElementById('profile-edit-form').addEventListener('submit', function() {
+    //     document.getElementById('profile-edit-popup').style.display = 'none';
+    // });
+
+    // document.getElementById('password-change-btn').addEventListener('click', function(event) {
+    //     event.preventDefault();
+    //     document.getElementById('profile-edit-popup').style.display = 'none';
+    //     document.getElementById('password-change-popup').style.display = 'block';
+    // });
+
+    // document.getElementById('password-change-form').addEventListener('submit', function() {
+    //     document.getElementById('password-change-popup').style.display = 'none';
+
+    // });
+
+    // 프로필 편집 팝업 열기
     document.getElementById('profile-edit-btn').addEventListener('click', function(event) {
         event.preventDefault();
         document.getElementById('profile-edit-popup').style.display = 'block';
     });
 
-    document.getElementById('profile-edit-form').addEventListener('submit', function() {
-        document.getElementById('profile-edit-popup').style.display = 'none';
+    // 프로필 편집 폼 제출
+    document.getElementById('profile-edit-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        fetch(this.action, {
+            method: 'POST',
+            body: new FormData(this),
+        }).then(response => response.json()).then(data => {
+            if (data.status === 'success') {
+                location.reload(); // 페이지를 새로고침하여 변경사항을 반영합니다.
+            } else {
+                console.error('Form submission error:', data.errors);
+                document.getElementById('profile-edit-popup').style.display = 'block'; // 오류가 있을 경우 팝업을 다시 엽니다.
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
     });
 
+    // 비밀번호 변경 팝업 열기
     document.getElementById('password-change-btn').addEventListener('click', function(event) {
         event.preventDefault();
         document.getElementById('profile-edit-popup').style.display = 'none';
         document.getElementById('password-change-popup').style.display = 'block';
     });
 
+    // 비밀번호 변경 팝업 폼 제출
     document.getElementById('password-change-form').addEventListener('submit', function() {
+        // 폼 제출 후 팝업 닫기
         document.getElementById('password-change-popup').style.display = 'none';
-
     });
 
 })
