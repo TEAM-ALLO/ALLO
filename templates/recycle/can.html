@@ -2,6 +2,7 @@
 {% block head %}
 <link rel="stylesheet" href="/static/css/recycle/recycle_category.css">
 <link rel="stylesheet" href="/static/css/recycle/recycle_main.css">
+<link rel="stylesheet" href="/static/css/recycle/trash.css">
 {% endblock %}
 {% block content %}
 <div class="recycle-nav">
@@ -20,23 +21,26 @@
     <a href="{% url 'recycle_user:paper' %}">종이류</a>
     <a href="{% url 'recycle_user:food'  %}">음식물쓰레기</a>
 </div>
-<h1>병*캔류 분리배출 방법</h1>
+<h1 class="trash-title">병*캔류 분리배출 방법</h1>
+<div class="title-underline"></div>
+<div class="recycle-instructions">
+    <h2># 유리</h2>
+    <p>내용물을 비우고 라벨 제거 후 배출합니다. </p>
+    <p>* 보증금 환불문구가 있는 소주·맥주병 등은 소매점 등에 반납</p>
 
-# 유리
-내용물을 비우고 라벨 제거 후 배출합니다. 
-* 보증금 환불문구가 있는 소주·맥주병 등은 소매점 등에 반납
+    <h2># 깨진 유리</h2>
+    <p>수거작업 시 안전사고 방지를 위하여 신문지 등으로 감싼 후 '종량제 봉투'에 담아 일반쓰레기로 배출합니다. </p>
+    <p>* 깨진병, 판유리, 조명기구용 유리류는 신문지에 싸서 '종량제 봉투'로 배출</p>
 
-# 깨진 유리
-수거작업 시 안전사고 방지를 위하여 신문지 등으로 감싼 후 '종량제 봉투'에 담아 일반쓰레기로 배출합니다. 
-* 깨진병, 판유리, 조명기구용 유리류는 신문지에 싸서 '종량제 봉투'로 배출
-
-# 알루미늄 캔
-1. 내용물 비우고 물로 세척하기
-2. 라벨을 제거하고 재질이 다른 뚜껑 등은 따로 분리해 배출하기
-3. 압착하여 부피를 줄여 '캔류'로 분리배출하기.
-* 지정된 장소가 없을 경우 다른 고철과 함께 '캔류'로 분리 배출
-
-<a href="{% url 'recycle_user:recycle_main' %}" class="btn btn-primary">메인으로 돌아가기</a>
+    <h2># 알루미늄 캔</h2>
+    <p>1. 내용물 비우고 물로 세척하기</p>
+    <p>2. 라벨을 제거하고 재질이 다른 뚜껑 등은 따로 분리해 배출하기</p>
+    <p>3. 압착하여 부피를 줄여 '캔류'로 분리배출하기.</p>
+    <p>* 지정된 장소가 없을 경우 다른 고철과 함께 '캔류'로 분리 배출</p>
+</div>
+<div class="btn-container">
+    <a href="{% url 'recycle_user:recycle_main' %}" class="trash-main-btn">메인으로 돌아가기</a>
+</div>
 {% endblock %}
 {% block script %}
     <script src="/static/js/recycle/recycle_category.js"></script>
