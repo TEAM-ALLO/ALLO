@@ -24,6 +24,7 @@
     width: 70%;
     justify-content: center;
     margin: 20px 0;
+    position: relative;
 }
 .signup-section > p {
     display: flex;
@@ -52,4 +53,9 @@
 }
 .main-container{
     height: calc(100vh - 125px);
+}
+.error {
+    position: absolute;
+    bottom: -20px;
+    color: red;
 }
