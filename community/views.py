@@ -8,6 +8,10 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.contrib.auth.models import AnonymousUser
+import time
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from users.models import Notification
 
 User = get_user_model()
 
@@ -71,6 +75,37 @@ def chatroom_detail(request, pk, username):
     receiver = get_object_or_404(User, username=username)
     messages = chatroom.messages.all().order_by('timestamp')
 
+    # Long Polling 처리
+    if request.GET.get('ajax'):
+        last_message_id = request.GET.get('last_message_id')
+        if last_message_id == "null" or last_message_id is None:
+            last_message_id = 0  # 모든 메시지를 가져오도록 설정
+        else:
+            last_message_id = int(last_message_id)
+
+        timeout = 30  # 30초 타임아웃
+        start_time = time.time()
+
+        while True:
+            new_messages = messages.filter(id__gt=last_message_id)
+            if new_messages.exists():
+                return JsonResponse({
+                    'new_messages': [
+                        {
+                            'id': msg.id,
+                            'sender': msg.sender.username,
+                            'content': msg.content,
+                            'image': msg.image.url if msg.image else None,
+                            'timestamp': msg.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+                        } for msg in new_messages
+                    ]
+                })
+
+            if time.time() - start_time > timeout:
+                return JsonResponse({'new_messages': []})
+
+            time.sleep(1)
+
     if request.method == 'POST':
         form = MessageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -79,14 +114,17 @@ def chatroom_detail(request, pk, username):
             message.sender = request.user
             message.receiver = receiver
             message.save()
+
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({
+                    'id': message.id,
                     'sender': message.sender.username,
                     'content': message.content,
                     'image': message.image.url if message.image else None,
                     'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
                     'receiver_profile_image': message.receiver.profile_image.url if message.receiver.profile_image else None,
                 })
+
             return redirect('community_user:chatroom_detail', pk=pk, username=username)
     else:
         form = MessageForm()
@@ -181,6 +219,8 @@ def post_delete(request, pk):
     return redirect('community_user:post_list')
 
 
+from django.contrib.contenttypes.models import ContentType
+
 @login_required
 def like_post(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
@@ -198,7 +238,17 @@ def like_post(request, pk):
             post.author.participation_score += 1
             post.author.save()
 
+            # 알림 생성
+            Notification.objects.create(
+                user=post.author,
+                sender=request.user,
+                notification_type='like',
+                content_type=ContentType.objects.get_for_model(post),
+                object_id=post.pk
+            )
+
     return JsonResponse({'liked': liked, 'likes_count': post.total_likes()})
+
 
 @login_required
 def bookmark_post(request, pk):
@@ -305,3 +355,38 @@ def comments_delete(request, post_id, comment_id):
         })
     else:
         return JsonResponse({'success': False, 'message': 'Unauthorized'})
+    
+
+@receiver(post_save, sender=Comment)
+def create_comment_notification(sender, instance, created, **kwargs):
+    if created:
+        Notification.objects.create(
+            user=instance.post.author,  # 댓글이 달린 게시글의 작성자에게 알림
+            sender=instance.user,  # 댓글을 단 사용자
+            notification_type='comment',
+            content_type=ContentType.objects.get_for_model(instance.post),
+            object_id=instance.post.pk
+        )
+
+@receiver(post_save, sender=CommunityPost)
+def create_like_notification(sender, instance, created, **kwargs):
+    if not created and instance.likes.exists():
+        last_like_user = instance.likes.order_by('-id').first()
+        Notification.objects.create(
+            user=instance.author,
+            sender=last_like_user,
+            notification_type='like',
+            post=instance
+        )
+
+
+@receiver(post_save, sender=Message)
+def create_message_notification(sender, instance, created, **kwargs):
+    if created:
+        Notification.objects.create(
+            user=instance.receiver,
+            sender=instance.sender,
+            notification_type='message',
+            content_type=ContentType.objects.get_for_model(instance),
+            object_id=instance.pk
+        )

@@ -7,6 +7,11 @@ from django.views.generic import ListView
 from django.db.models import Q
 from community.models import FriendRequest
 from django.http import JsonResponse
+from django.contrib.contenttypes.models import ContentType
+from users.models import Notification
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 class RecipeListView(ListView):
     model = Recipe  # 사용할 모델 지정
@@ -155,11 +160,23 @@ def like_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     if recipe.likes.filter(username=request.user.username).exists():
         recipe.likes.remove(request.user)
+        liked = False
     else:
         recipe.likes.add(request.user)
+        liked = True
         recipe.author.participation_score += 1
         recipe.author.save()
-    return JsonResponse({'liked': recipe.likes.filter(username=request.user.username).exists(), 'likes_count': recipe.likes.count()})
+
+        # 알림 생성
+        Notification.objects.create(
+            user=recipe.author,
+            sender=request.user,
+            notification_type='like',
+            content_type=ContentType.objects.get_for_model(recipe),
+            object_id=recipe.pk
+        )
+
+    return JsonResponse({'liked': liked, 'likes_count': recipe.likes.count()})
 
 @login_required
 @require_POST
@@ -183,6 +200,17 @@ def bookmarked_recipes(request):
     user = request.user
     recipes = Recipe.objects.filter(bookmarks=user).order_by('-date_posted')
     return render(request, 'recipe/recipe_bookmarked.html', {'recipes': recipes})
+
+@receiver(post_save, sender=Comment)
+def create_comment_notification(sender, instance, created, **kwargs):
+    if created:
+        Notification.objects.create(
+            user=instance.post.author,  # 댓글이 달린 게시글의 작성자에게 알림
+            sender=instance.user,  # 댓글을 단 사용자
+            notification_type='comment',
+            content_type=ContentType.objects.get_for_model(instance.post),
+            object_id=instance.post.pk
+        )
 
 @require_POST
 def comments_create(request, id):
