@@ -25,10 +25,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%zl@ooj^!yyy6vyw6xs)=-&qa$1gx1#zjq=$)xso3@qln%!&e7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+import os
+import sys
+from pathlib import Path
 
+
+# 프로젝트 루트 디렉토리를 Python path에 추가
+sys.path.append(str(BASE_DIR))
+
+ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['13.124.228.36', 'localhost']
 
 # Application definition
 

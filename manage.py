@@ -2,7 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+from django.conf import settings
 
 def main():
     """Run administrative tasks."""
@@ -15,6 +15,7 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    print(settings.ALLOWED_HOSTS)
     execute_from_command_line(sys.argv)
 
 
