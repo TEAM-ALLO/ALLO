@@ -15,6 +15,8 @@ urlpatterns = [
     path('friend/delete/<str:username>/', views.delete_friend, name='delete_friend'), 
     # path('change_pw/', views.change_pw, name='change_pw'),
     path('search/', views.search, name='search'),
-    
+    path('notifications/', views.notification, name='notification'),  # 알람 리스트
+    path('notifications/read/', views.mark_notifications_as_read, name='mark_notifications_as_read'),  # 알람 읽음 처리
+
     
 ]

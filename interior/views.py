@@ -5,8 +5,11 @@ from .forms import InteriorPostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.contrib.contenttypes.models import ContentType
+from users.models import Notification
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 
 def interior_list(request):
@@ -102,9 +105,18 @@ def like_interior(request, pk):
     else:
         post.likes.add(request.user)
         liked = True
-        if post.author is not None:  # post.author가 None이 아닌 경우에만 점수 추가
+        if post.author is not None:
             post.author.participation_score += 1
             post.author.save()
+
+            # 알림 생성
+            Notification.objects.create(
+                user=post.author,
+                sender=request.user,
+                notification_type='like',
+                content_type=ContentType.objects.get_for_model(post),
+                object_id=post.pk
+            )
 
     return JsonResponse({'liked': liked, 'likes_count': post.total_likes()})
 
@@ -130,6 +142,16 @@ def bookmarked_interiors(request):
     posts = InteriorPost.objects.filter(bookmarks=user).order_by('-date_posted')
     return render(request, 'interior/bookmarked_interiors.html', {'posts': posts})
 
+@receiver(post_save, sender=InteriorComment)
+def create_comment_notification(sender, instance, created, **kwargs):
+    if created:
+        Notification.objects.create(
+            user=instance.post.author,  # 댓글이 달린 게시글의 작성자에게 알림
+            sender=instance.user,  # 댓글을 단 사용자
+            notification_type='comment',
+            content_type=ContentType.objects.get_for_model(instance.post),
+            object_id=instance.post.pk
+        )
 
 @require_POST
 @login_required
