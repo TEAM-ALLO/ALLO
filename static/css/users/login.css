@@ -63,3 +63,7 @@
 .main-container{
     height: calc(100vh - 125px);
 }
+.error {
+    color: red;
+    text-align: center;
+}

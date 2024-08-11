@@ -32,6 +32,7 @@ import os
 import sys
 from pathlib import Path
 
+
 # 프로젝트 루트 디렉토리를 Python path에 추가
 sys.path.append(str(BASE_DIR))
 
@@ -89,15 +90,15 @@ WSGI_APPLICATION = 'allo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-import my_settings
-DATABASES = my_settings.DATABASES
+# import my_settings
+# DATABASES = my_settings.DATABASES
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation

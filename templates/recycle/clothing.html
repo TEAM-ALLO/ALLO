@@ -2,6 +2,7 @@
 {% block head %}
 <link rel="stylesheet" href="/static/css/recycle/recycle_category.css">
 <link rel="stylesheet" href="/static/css/recycle/recycle_main.css">
+<link rel="stylesheet" href="/static/css/recycle/clothing.css">
 {% endblock %}
 {% block content %}
 <div class="recycle-nav">
@@ -20,18 +21,18 @@
     <a href="{% url 'recycle_user:paper' %}">종이류</a>
     <a href="{% url 'recycle_user:food'  %}">음식물쓰레기</a>
 </div>
-
-<h1>의류 수거함 이용방법</h1>
-<div class="recycle-content">
-    <div class="recycle-instructions">
-        <h2># 의류 수거함은 언제 사용하나요?</h2>
-        <p>깨끗하고 다른 사람이 재사용할 수 있는 옷이나 신발, 가방 등은 “의류 수거함”에 버려주세요.</p>
-        <h2># 그럼 더러운 옷은 어디에 분리배출 하나요?</h2>
-        <p>찢어지거나 오염이 심해 다른 사람이 재사용하지 못 하는 상태라면 “일반 쓰레기(종량제 봉투)”에 버려주세요.</p>
-    </div>
+<h1 class="clothing-title">의류 수거함 이용방법</h1>
+<div class="title-underline"></div>
+<div class="recycle-instructions">
+    <h2># 의류 수거함은 언제 사용하나요?</h2>
+    <p>깨끗하고 다른 사람이 재사용할 수 있는 옷이나 신발, 가방 등은 “의류 수거함”에 버려주세요.</p>
+    <h2># 그럼 더러운 옷은 어디에 분리배출 하나요?</h2>
+    <p>찢어지거나 오염이 심해 다른 사람이 재사용하지 못 하는 상태라면 '종량제 봉투'에 담아 '일반 쓰레기'로 버려주세요.</p>
 </div>
 <a href="{% url 'recycle_user:map' %}" class="btn btn-primary">내 주변 의류수거함 찾기</a>
-<a href="{% url 'recycle_user:recycle_main' %}" class="btn btn-primary">메인으로 돌아가기</a>
+<div class="btn-container">
+    <a href="{% url 'recycle_user:recycle_main' %}" class="trash-main-btn">메인으로 돌아가기</a>
+</div>
 {% endblock %}
 {% block script %}
 <script src="/static/js/recycle/recycle_category.js"></script>

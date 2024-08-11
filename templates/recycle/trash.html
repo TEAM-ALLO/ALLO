@@ -2,6 +2,7 @@
 {% block head %}
 <link rel="stylesheet" href="/static/css/recycle/recycle_category.css">
 <link rel="stylesheet" href="/static/css/recycle/recycle_main.css">
+<link rel="stylesheet" href="/static/css/recycle/trash.css">
 {% endblock %}
 {% block content %}
 <div class="recycle-nav">
@@ -20,40 +21,64 @@
     <a href="{% url 'recycle_user:paper' %}">종이류</a>
     <a href="{% url 'recycle_user:food'  %}">음식물쓰레기</a>
 </div>
-
-<h1>일반쓰레기 배출 방법</h1>
-<div class="recycle-content">
-    <div class="recycle-instructions">
-        <h2>일반쓰레기는 두 가지 방법으로 배출합니다.</h2>
-        <p>-</p>
-        <div class="recycle-method">
-            <h3># 종량제봉투 (비닐)</h3>
-            <p>태울 수 있는 쓰레기를 담아 배출해 주세요!</p>
-            <p>-</p>
-            <ul>
-                <li>(예시... 변경가능)은박지</li>
-                <li>티백</li>
-                <li>박스에 붙인 테이프</li>
-                <li>뼈·껍데기</li>
-                <li>나무젓가락</li>
-                <li>이쑤시개</li>
-                <li>카드영수증</li>
-                <li>분리배출 표시없는 의약품 포장대 등</li>
-            </ul>
-        </div>
-        <p>-</p>
-        <div class="recycle-method">
-            <h3># 특수규격봉투 (PP마대)</h3>
-            <p>태우면 안 되는 쓰레기를 담아 배출해 주세요! </p>
-            <ul>
-                <li>파손된 형광등</li>
-                <li>깨진 유리·병·사기·도자기·화분·변기 등</li>
-            </ul>
-        </div>
+<h1 class="trash-title">일반쓰레기 배출 방법</h1>
+<div class="title-underline"></div>
+<div class="recycle-instructions">
+  
+  
+분리배출 기본 순서
+1. 비운다: 내용물을 모두 비운다.
+2. 헹군다: 이물질을 물로 깨끗이 헹군다.
+3. 분리한다: 라벨, 뚜껑 등 재질이 다른 것은 분리한다.
+4. 섞지 않는다: 배출하려는 쓰레기를 재질과 종류 별로 구분하여 배출한다.
+    <h2>가연성, 불연성에 따라 구분되는 일반 쓰레기 처리 방법!</h2>
+    <div class="recycle-method">
+        <h3># 가연성</h3>
+        <p>태울 수 있는 쓰레기를 '종량제 봉투'에 담아 배출해 주세요!</p>
+        <ul>
+            <li>(예시)</li>
+            <li>은박지</li>
+            <li>티백</li>
+            <li>박스에 붙인 테이프</li>
+            <li>뼈·껍데기</li>
+            <li>이쑤시개</li>
+            <li>영수증</li>
+            <li>분리배출 표시없는 의약품 포장대 등</li>
+        </ul>
     </div>
-</div>
+    <div class="recycle-method">
+        <h3># 불연성</h3>
+        <p>태우면 안 되는 쓰레기를 '특수규격봉투(PP마대)'에 담아 배출해 주세요!</p>
+        <ul>
+            <li>파손된 형광등</li>
+            <li>깨진 유리·병·사기·도자기·화분·변기 등</li>
+        </ul>
+    </div>
+  Q1. 그 외 '종량제봉투'에 들어가지 않는 큰 폐기물은 어떻게 하나요?
+A1. '대형폐기물'로 따로 구분하여 배출합니다.
+냉장고, 세탁기, 텔레비전 등의 가전제품
+침대, 장롱, 책상 등의 가구
+이불, 거울, 자전거, 시계등의 기타 생활용품
++ 낚싯대, 보행기, 장판, 돗자리, 현수막 등
 
-<a href="{% url 'recycle_user:recycle_main' %}" class="btn btn-primary">메인으로 돌아가기</a>
+Q2. 은색 보냉팩은 일반쓰레기인가요?
+A2. 네. 은색 보냉팩은 여러 물질이 혼합되어 있어 재활용이 불가능합니다. '종량제 봉투'에 넣어 배출해 주세요.
+
+Q3. 재활용품이랑 헷갈릴 수 있는 쓰레기에는 무엇이 있나요?
+A3. 응애 멘트 뭐라하징 우땨땨
+1. 색이 있는 스티로폼
+2. 흰색 과일 포장재
+3. 컵밥, 컵라면 용기
+4. 도자기류, 사기그릇 / 불연성 쓰레기로 배출
+5. 아이스팩
+6. 문구류(볼펜, 샤프 등)
+7. 노끈
+  
+✔︎ 내집 또는 내상가 건물앞에 배출하며, 아파트 등 공동주택은 공동배출 장소에 배출하시기 바랍니다. 
+</div>
+<div class="btn-container">
+    <a href="{% url 'recycle_user:recycle_main' %}" class="trash-main-btn">메인으로 돌아가기</a>
+</div>
 {% endblock %}
 {% block script %}
 <script src="/static/js/recycle/recycle_category.js"></script>

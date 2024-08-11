@@ -104,6 +104,6 @@ def clothing(request):
 
 def map(request):
     context = {
-        'kakao_api_key': os.getenv('KAKAO_API_KEY')
+        'kakao_api_key': os.getenv('KAKAO_API_KEY'),
     }
     return render(request, 'recycle/map.html', context)
