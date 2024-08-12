@@ -80,3 +80,24 @@ class Comment(models.Model):
     def __str__(self):
         return self.content
 
+
+
+
+# class Notification(models.Model):
+#     NOTIFICATION_TYPES = (
+#         ('like', 'Like'),
+#         ('comment', 'Comment'),
+#         ('message', 'Message'),
+#     )
+
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+#     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+#     notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+#     post = models.ForeignKey(CommunityPost, on_delete=models.CASCADE, null=True, blank=True)
+#     message = models.ForeignKey(Message, on_delete=models.CASCADE, null=True, blank=True)
+#     timestamp = models.DateTimeField(auto_now_add=True)
+#     is_read = models.BooleanField(default=False)
+
+#     def __str__(self):
+#         return f"{self.user} - {self.notification_type} - {self.timestamp}"
+    

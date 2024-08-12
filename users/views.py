@@ -14,6 +14,8 @@ from django.core.validators import validate_email
 from django.contrib import messages
 import datetime
 from django.contrib.auth.hashers import check_password
+from django.views.decorators.http import require_POST
+
 
 def home(request):
     all_users = User.objects.all()
@@ -223,5 +225,36 @@ def search(request):
     return render(request, 'users/searched_list.html', context)
 
 
+@login_required
+def notification(request):
+    print("Notification view called")
+    notifications = request.user.notifications.filter(is_read=False)
+    print(f"Notifications: {notifications.count()}")
+
+    # 각 알림에 대해 객체 타입을 계산하여 추가
+    notification_list = []
+    for notification in notifications:
+        content_type = None
+        if hasattr(notification.content_object, 'recipe_name'):
+            content_type = 'Recipe'
+        elif hasattr(notification.content_object, 'title'):
+            content_type = 'Post'
+        notification_list.append({
+            'notification': notification,
+            'content_type': content_type,
+        })
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        print("AJAX request detected")
+        return render(request, 'users/notifications_list.html', {'notifications': notification_list})
+    return render(request, 'users/notification.html', {'notifications': notification_list})
+
+
+@login_required
+@require_POST
+def mark_notifications_as_read(request):
+    notifications = request.user.notifications.filter(is_read=False)
+    notifications.update(is_read=True)
+    return JsonResponse({'success': True})
 
 

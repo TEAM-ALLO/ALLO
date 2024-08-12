@@ -77,7 +77,7 @@
     {% for index, instruction in instructions_with_index %}
     <div class="recipe-detail-steps">
         <div class="recipe-detail-step">{{ index }}단계</div>
-        <div class="receipe-detail-content">{{ instruction }}</div>
+        <div class="recipe-detail-content">{{ instruction }}</div>
     </div>
     {% endfor %}
 </div>
@@ -85,44 +85,45 @@
 <!-- 댓글 부분 -->
 {% if comments %}
   <p class="recipe-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
-  <ul>
+  <ul id="comment-list">
     {% for comment in comments %}
     <li class="recipe-detail-comment-container">
         <div class="recipe-detail-comment-user">
-            {{ comment.user }}
-            {% if user == comment.user %}
-            <form action="{% url 'recipe_user:comments_delete' recipe.id comment.id %}" method="POST" class="d-inline">
-                {% csrf_token %}
-                <input type="submit" value="삭제" class="recipe-detail-comment-delete">
-            </form>
+            {{ comment.user.username }}
+            {% if request.user.username == comment.user.username %}
+            <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
             {% endif %}
         </div>
         <div>
             {{ comment.content }}
         </div>
     </li>
-  {% empty %}
-    <p class="recipe-detail-comment-title">작성된 댓글이 없습니다.</p>
-  {% endfor %}
-</ul>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="recipe-detail-comment-title">작성된 댓글이 없습니다.</p>
 {% endif %}
+
 
 <!-- 댓글 작성 -->
 {% if request.user.is_authenticated %}
 <h3 class="recipe-detail-comment-title">댓글을 작성해주세요!</h3>
-    <form action="{% url 'recipe_user:comments_create' recipe.id %}" method="POST">
-        {% csrf_token %}
-        {{ comment_form.as_p }}
-        <input type="submit" class="recipe-detail-comment-btn" value="댓글 작성">
-    </form>
+<form id="comment-form" method="post" action="{% url 'recipe_user:comments_create' recipe.id %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" class="recipe-detail-comment-btn" value="댓글 작성">
+</form>
 {% else %}
-    <p class="recipe-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
-  
+<p class="recipe-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
 {% endif %}
 
 <div class="btn-div">
     <a href="{% url 'recipe_user:recipe_list' %}" class="recipe-detail-btn">목록</a>
 </div>
+
+<input type="hidden" id="current-username" value="{{ request.user.username }}">
+<input type="hidden" id="recipe-id" value="{{ recipe.id }}">
+
 {% endblock %}
 
 {% block script %}

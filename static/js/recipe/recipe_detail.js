@@ -1,3 +1,81 @@
+// document.addEventListener('DOMContentLoaded', function() {
+//     document.getElementById('like-button').addEventListener('click', function() {
+//         const recipeId = this.dataset.recipeId;
+//         const url = `/recipe/${recipeId}/like/`;
+
+//         fetch(url, {
+//             method: 'POST',
+//             headers: {
+//                 'X-CSRFToken': getCsrfToken(),
+//                 'Content-Type': 'application/json'
+//             }
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.liked) {
+//                 this.querySelector('img').src = '/static/img/full-heart.svg';
+//             } else {
+//                 this.querySelector('img').src = '/static/img/heart.svg';
+//             }
+//             document.getElementById('likes-count').textContent = data.likes_count;
+//         })
+//         .catch(error => console.error('Error:', error));
+//     });
+
+//     document.getElementById('bookmark-button').addEventListener('click', function() {
+//         const recipeId = this.dataset.recipeId;
+//         const url = `/recipe/${recipeId}/bookmark/`;
+
+//         fetch(url, {
+//             method: 'POST',
+//             headers: {
+//                 'X-CSRFToken': getCsrfToken(),
+//                 'Content-Type': 'application/json'
+//             }
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.bookmarked) {
+//                 this.querySelector('img').src = '/static/img/full-bookmark.svg';
+//             } else {
+//                 this.querySelector('img').src = '/static/img/bookmark.svg';
+//             }
+//             document.getElementById('bookmarks-count').textContent = data.bookmarks_count;
+//         })
+//         .catch(error => console.error('Error:', error));
+//     });
+
+//     document.getElementById('friend-request-button').addEventListener('click', function() {
+//         const username = this.dataset.username;
+//         const url = `/recipe/send_friend_request/${username}/`;
+
+//         fetch(url, {
+//             method: 'POST',
+//             headers: {
+//                 'X-CSRFToken': getCsrfToken(),
+//                 'Content-Type': 'application/json'
+//             }
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.status === 'success') {
+//                 this.textContent = '신청함';
+//                 this.disabled = true;
+//             } else {
+//                 alert(data.message);
+//             }
+//         })
+//         .catch(error => console.error('Error:', error));
+//     });
+// });
+
+// function getCsrfToken() {
+//     const cookieValue = document.cookie.split('; ')
+//         .find(row => row.startsWith('csrftoken='))
+//         .split('=')[1];
+//     return cookieValue;
+// }
+
 document.addEventListener('DOMContentLoaded', function() {
     const recipeIdElement = document.getElementById('recipe-id');
     const currentUsernameElement = document.getElementById('current-username');
@@ -39,11 +117,10 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             commentList.appendChild(commentItem);
         });
-
+    
         commentCount.textContent = `${totalComments}개의 댓글이 있습니다.`;
-        setupCommentDeleteEventListeners()
+        setupCommentDeleteEventListeners(); // 댓글 삭제 버튼에 이벤트 리스너 추가
     }
-
 
     function setupCommentForm() {
         const commentForm = document.getElementById('comment-form');
@@ -61,16 +138,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+
+                .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         updateCommentList(data.comments, data.total_comments);
-                        commentForm.reset();
+                        commentForm.reset(); // 폼 리셋
                     } else {
                         console.error('Failed to submit comment:', data.errors);
                     }
@@ -82,6 +155,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function setupCommentDeleteEventListeners() {
         const deleteButtons = document.querySelectorAll('.comment-delete-button');
+
+        console.log(deleteButtons); // 버튼이 올바르게 선택되었는지 확인
+
         deleteButtons.forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault(); // 버튼 클릭 기본 동작 막기
@@ -96,13 +172,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+
+                .then(response => response.json())
                 .then(data => {
+                    console.log(data);  // 서버로부터의 응답을 확인
                     if (data.success) {
                         updateCommentList(data.comments, data.total_comments);
                     } else {
@@ -113,7 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-
     function setupLikeButton() {
         const likeButton = document.getElementById('like-button');
         if (likeButton) {
@@ -221,3 +293,4 @@ document.addEventListener('DOMContentLoaded', function() {
     setupCommentForm();
     setupCommentDeleteEventListeners(); // 초기 이벤트 리스너 설정
 });
+

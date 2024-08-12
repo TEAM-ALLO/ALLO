@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>알람</h1>
+<ul id="notification_list">
+    {% for item in notifications %}
+    <li>
+        {% if item.notification.notification_type == 'like' %}
+            {% if item.content_type == 'Recipe' %}
+                {{ item.notification.sender.username }} liked your recipe: "{{ item.notification.content_object.recipe_name }}"
+            {% else %}
+                {{ item.notification.sender.username }} liked your post: "{{ item.notification.content_object.title }}"
+            {% endif %}
+        {% elif item.notification.notification_type == 'comment' %}
+            {% if item.content_type == 'Recipe' %}
+                {{ item.notification.sender.username }} commented on your recipe: "{{ item.notification.content_object.recipe_name }}"
+            {% else %}
+                {{ item.notification.sender.username }} commented on your post: "{{ item.notification.content_object.title }}"
+            {% endif %}
+        {% elif item.notification.notification_type == 'message' %}
+            {{ item.notification.sender.username }} sent you a message.
+        {% endif %}
+        <small>{{ item.notification.timestamp }}</small>
+    </li>
+    {% empty %}
+    <li>No notifications.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function fetchNotifications() {
+        $.get("{% url 'notification' %}", function(data) {
+            $('#notification_list').html(data);
+        });
+    }
+
+    setInterval(fetchNotifications, 30000);  // 30초마다 알람을 확인합니다.
+</script>
+{% endblock %}

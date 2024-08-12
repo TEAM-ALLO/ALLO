@@ -73,21 +73,34 @@ window.onload = function() {
 };
 
 // 폼 제출 시 AJAX를 사용하여 페이지를 다시 로드하지 않고 메시지 전송
+let isSending = false;  // 메시지 전송 중인지 확인하기 위한 변수
+
 document.getElementById("message-form").addEventListener("submit", function(event) {
     event.preventDefault();
+
+    if (isSending) return;  // 전송 중이면 중복 요청 방지
+    isSending = true;
+
     var formData = new FormData(this);
     var xhr = new XMLHttpRequest();
+
     xhr.open("POST", this.action, true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+    // Long Polling 중단
+    clearTimeout(longPollingTimeout);
+
     xhr.onload = function() {
         if (xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
             var chatMessages = document.getElementById("chat-messages");
-            var newMessage = document.createElement("div");
 
-            if (response.sender === "{{ request.user.username }}") {
+            if (!document.querySelector(`[data-message-id='${response.id}']`)) {
+                var newMessage = document.createElement("div");
+                newMessage.setAttribute("data-message-id", response.id);
                 newMessage.classList.add("bubble-container-right");
                 newMessage.innerHTML = response.content;
+
                 if (response.image) {
                     var imgContainer = document.createElement("div");
                     imgContainer.classList.add("message-image-container");
@@ -98,55 +111,132 @@ document.getElementById("message-form").addEventListener("submit", function(even
                     imgContainer.appendChild(img);
                     newMessage.appendChild(imgContainer);
                 }
+
                 var bubbleTail = document.createElement("img");
                 bubbleTail.src = "{% static 'img/my-bubble.svg' %}";
                 bubbleTail.alt = "말풍선 꼬리 이미지";
                 bubbleTail.classList.add("my-bubble");
                 newMessage.appendChild(bubbleTail);
-            } else {
-                newMessage.classList.add("bubble-big-container-left");
-                var topContainer = document.createElement("div");
-                topContainer.classList.add("bubble-big-container-top");
 
-                var profileImg = document.createElement("img");
-                profileImg.src = response.receiver_profile_image ? response.receiver_profile_image : "{% static 'img/user.svg' %}";
-                profileImg.alt = "프로필 사진";
-                profileImg.classList.add("mypage-img");
-                topContainer.appendChild(profileImg);
-
-                var contentContainer = document.createElement("div");
-                contentContainer.classList.add("bubble-container-left");
-                contentContainer.innerHTML = response.content;
-                if (response.image) {
-                    var imgContainerLeft = document.createElement("div");
-                    imgContainerLeft.classList.add("message-image-container");
-                    var imgLeft = document.createElement("img");
-                    imgLeft.src = response.image;
-                    imgLeft.alt = "채팅 이미지";
-                    imgLeft.classList.add("chat-image");
-                    imgContainerLeft.appendChild(imgLeft);
-                    contentContainer.appendChild(imgContainerLeft);
-                }
-                var bubbleTailLeft = document.createElement("img");
-                bubbleTailLeft.src = "{% static 'img/bubble-writer.svg' %}";
-                bubbleTailLeft.alt = "말풍선 꼬리 이미지";
-                bubbleTailLeft.classList.add("bubble-writer");
-                contentContainer.appendChild(bubbleTailLeft);
-
-                topContainer.appendChild(contentContainer);
-                newMessage.appendChild(topContainer);
-
-                var username = document.createElement("p");
-                username.textContent = response.sender;
-                newMessage.appendChild(username);
+                chatMessages.appendChild(newMessage);
+                scrollToBottom();
             }
 
-            chatMessages.appendChild(newMessage);
-            scrollToBottom();
-            document.getElementById("message-form").reset(); // 폼 초기화
+            // 메시지 전송 완료 후 일정 시간 후에 Long Polling 재시작
+            setTimeout(function() {
+                isSending = false;
+                fetchNewMessages();
+            }, 1000);  // 1초 대기 후 Long Polling 재시작
         }
     };
+
     xhr.send(formData);
+    this.reset();  // 폼 리셋
 });
+
+
+
+let longPollingTimeout;
+
+function fetchNewMessages() {
+    var lastMessage = document.querySelector("#chat-messages > div:last-child");
+    var lastMessageId = lastMessage ? lastMessage.getAttribute("data-message-id") : 0;
+
+    var xhr = new XMLHttpRequest();
+    var url = "{% url 'community_user:chatroom_detail' pk=chatroom.pk username=receiver.username %}?ajax=true";
+    if (lastMessageId) {
+        url += "&last_message_id=" + lastMessageId;
+    }
+    xhr.open("GET", url, true);
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            var chatMessages = document.getElementById("chat-messages");
+
+            if (response.new_messages && response.new_messages.length > 0) {
+                response.new_messages.forEach(function(message) {
+                    if (!document.querySelector(`[data-message-id='${message.id}']`)) {
+                        var newMessage = document.createElement("div");
+                        newMessage.setAttribute("data-message-id", message.id);
+
+                        if (message.sender === "{{ request.user.username }}") {
+                            newMessage.classList.add("bubble-container-right");
+                            newMessage.innerHTML = message.content;
+                            if (message.image) {
+                                var imgContainer = document.createElement("div");
+                                imgContainer.classList.add("message-image-container");
+                                var img = document.createElement("img");
+                                img.src = message.image;
+                                img.alt = "채팅 이미지";
+                                img.classList.add("chat-image");
+                                imgContainer.appendChild(img);
+                                newMessage.appendChild(imgContainer);
+                            }
+                            var bubbleTail = document.createElement("img");
+                            bubbleTail.src = "{% static 'img/my-bubble.svg' %}";
+                            bubbleTail.alt = "말풍선 꼬리 이미지";
+                            bubbleTail.classList.add("my-bubble");
+                            newMessage.appendChild(bubbleTail);
+                        } else {
+                            newMessage.classList.add("bubble-big-container-left");
+                            var topContainer = document.createElement("div");
+                            topContainer.classList.add("bubble-big-container-top");
+
+                            var profileImg = document.createElement("img");
+                            profileImg.src = message.receiver_profile_image ? message.receiver_profile_image : "{% static 'img/user.svg' %}";
+                            profileImg.alt = "프로필 사진";
+                            profileImg.classList.add("mypage-img");
+                            topContainer.appendChild(profileImg);
+
+                            var contentContainer = document.createElement("div");
+                            contentContainer.classList.add("bubble-container-left");
+                            contentContainer.innerHTML = message.content;
+                            if (message.image) {
+                                var imgContainerLeft = document.createElement("div");
+                                imgContainerLeft.classList.add("message-image-container");
+                                var imgLeft = document.createElement("img");
+                                imgLeft.src = message.image;
+                                imgLeft.alt = "채팅 이미지";
+                                imgLeft.classList.add("chat-image");
+                                imgContainerLeft.appendChild(imgLeft);
+                                contentContainer.appendChild(imgContainerLeft);
+                            }
+                            var bubbleTailLeft = document.createElement("img");
+                            bubbleTailLeft.src = "{% static 'img/bubble-writer.svg' %}";
+                            bubbleTailLeft.alt = "말풍선 꼬리 이미지";
+                            bubbleTailLeft.classList.add("bubble-writer");
+                            contentContainer.appendChild(bubbleTailLeft);
+
+                            topContainer.appendChild(contentContainer);
+                            newMessage.appendChild(topContainer);
+
+                            var username = document.createElement("p");
+                            username.textContent = message.sender;
+                            newMessage.appendChild(username);
+                        }
+
+                        chatMessages.appendChild(newMessage);
+                    }
+                });
+                scrollToBottom();
+            }
+            
+            // Long Polling 재시작
+            longPollingTimeout = setTimeout(fetchNewMessages, 1000);
+        }
+    };
+
+    xhr.send();
+}
+
+// 페이지 로드 시 Long Polling 시작
+window.onload = function() {
+    scrollToBottom();
+    fetchNewMessages();
+};
+
+
+
 </script>
 {% endblock %}
