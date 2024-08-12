@@ -9,5 +9,5 @@
     <button type="submit">삭제</button>
 </form>
 
-<a href="{% url 'recycle_user:recycle_detail' object.pk %}">취소</a>
+<a href="{% url 'recycle_user:recycle_detail' category_name=recycle.category item_name=recycle.name %}">취소</a>
 {% endblock %}

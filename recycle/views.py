@@ -10,14 +10,14 @@ import os
 
 class CategoryDetail(View):
     template_name = 'recycle/recycle_category.html'
-
+    
     def get(self, request, category_name):
         context = {
             'category_name': category_name,
             'recycles': Recycle.objects.filter(category=category_name)
         }
         return render(request, self.template_name, context)
-
+    
 
 def recycle_main(request):
     if request.method == 'POST':
@@ -26,10 +26,6 @@ def recycle_main(request):
     else:
         items = []
     return render(request, 'recycle/recycle_main.html', {'items': items})
-
-def recycle_detail(request, pk):
-    recycle = get_object_or_404(Recycle, pk=pk)
-    return render(request, 'recycle/recycle_detail.html', {'recycle': recycle})
 
 class AuthorRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
@@ -54,32 +50,42 @@ class RecycleCreate(StaffRequiredMixin, CreateView):
     
 class RecycleDetail(DetailView):
     model = Recycle
+    emplate_name = 'recycle/recycle_detail.html'
+    
+    def get_object(self):
+        category_name = self.kwargs.get('category_name')
+        item_name = self.kwargs.get('item_name')
+        return get_object_or_404(Recycle, category=category_name, name=item_name)
 
 class RecycleUpdate(AuthorRequiredMixin, UpdateView):
     model = Recycle
     form_class = RecycleForm
-    success_url = reverse_lazy('recycle_user:recycle_main')
+    template_name = 'recycle/recycle_form.html'
 
-    def get_queryset(self):
-        return Recycle.objects.all()  # 모든 Recycle 객체를 반환합니다.
+    def get_object(self):
+        category_name = self.kwargs.get('category_name')
+        item_name = self.kwargs.get('item_name')
+        return get_object_or_404(Recycle, category=category_name, name=item_name)
     
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse_lazy('recycle_user:recycle_detail', kwargs={
+            'category_name': self.object.category,
+            'item_name': self.object.name
+        })
     
 class RecycleDelete(AuthorRequiredMixin, DeleteView):
     model = Recycle
-    success_url = reverse_lazy('recycle_user:recycle_main')
-
-class CategoryDetail(View):
-    template_name = 'recycle/recycle_category.html'
-
-    def get(self, request, category_name):
-        context = {
-            'category_name': category_name,
-            'recycles': Recycle.objects.filter(category=category_name, is_in_category=True)
-        }
-        return render(request, self.template_name, context)
+    template_name = 'recycle/recycle_confirm_delete.html'
+    
+    def get_object(self):
+        category_name = self.kwargs.get('category_name')
+        item_name = self.kwargs.get('item_name')
+        return get_object_or_404(Recycle, category=category_name, name=item_name)
+    
+    def get_success_url(self):
+        return reverse_lazy('recycle_user:category_detail', kwargs={
+            'category_name': self.object.category
+        })
     
 def trash(request):
     return render(request, 'recycle/trash.html')

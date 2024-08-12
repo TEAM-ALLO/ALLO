@@ -27,15 +27,15 @@
         <h1>매번 헷갈리는 분리수거 방법,</h1>
         <h1>ALLO와 함께 알아보아요!</h1>
     </div>
-    <form method="post" class="recyle-search-container">
+    <form method="post" class="recycle-search-container">
         {% csrf_token %}
-        <input type="text" name="query" placeholder="예)우유, 형광등, 프링글스통" class="recyle-main-search">
+        <input type="text" name="query" placeholder="예)우유, 형광등, 프링글스통" class="recycle-main-search">
         <button type="submit"><img src="/static/img/search.png" alt="검색 아이콘" class="search-icon"></button>
     </form>
     {% if items %}
         <ul>
         {% for item in items %}
-            <a href="{% url 'recycle_user:recycle_detail' item.pk %}" class="recyle-post-container">
+            <a href="{% url 'recycle_user:recycle_detail' category_name=item.category item_name=item.name %}" class="recycle-post-container">
                 <p>{{ item.name }}</p>
                 <p>{{ item.category }}</p>
             </a>

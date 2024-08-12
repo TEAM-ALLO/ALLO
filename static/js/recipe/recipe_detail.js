@@ -88,6 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const recipeId = recipeIdElement.value;
     const currentUsername = currentUsernameElement.value;
 
+    console.log('recipeId:', recipeId);
+    console.log('currentUsername:', currentUsername);
+
     function getCsrfToken() {
         const cookieValue = document.cookie.split('; ')
             .find(row => row.startsWith('csrftoken='))
@@ -98,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateCommentList(comments, totalComments) {
         const commentList = document.getElementById('comment-list');
         const commentCount = document.querySelector('.recipe-detail-comment-title');
-    
+
         commentList.innerHTML = '';
         comments.forEach(comment => {
             const commentItem = document.createElement('li');
@@ -135,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
+
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -151,15 +155,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function setupCommentDeleteEventListeners() {
         const deleteButtons = document.querySelectorAll('.comment-delete-button');
-        
+
         console.log(deleteButtons); // 버튼이 올바르게 선택되었는지 확인
-    
+
         deleteButtons.forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault(); // 버튼 클릭 기본 동작 막기
                 const commentId = button.getAttribute('data-comment-id');
                 const url = `/recipe/${recipeId}/comments/${commentId}/delete/`;
-    
+
                 fetch(url, {
                     method: 'POST',
                     headers: {
@@ -168,6 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
+
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);  // 서버로부터의 응답을 확인
@@ -181,9 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
-    
-
     function setupLikeButton() {
         const likeButton = document.getElementById('like-button');
         if (likeButton) {
