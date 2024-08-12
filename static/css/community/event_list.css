@@ -1,0 +1,28 @@
+.community-header {
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    height: 50px;
+    display: flex;
+    align-items: center;    
+    justify-content: space-around;
+    color: #fff;
+    font-size: 20px;
+}
+.community-category:nth-child(1) {
+    color: black;
+}
+.button-group {
+    margin: 10px;
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+.button-group button {
+    color: #fff;
+    font-size: 20px;
+    background-color: var(--main--gray--color);
+    height: 100%;
+    width: 100%;
+}
