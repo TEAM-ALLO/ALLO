@@ -71,13 +71,14 @@ class RecipeListView(ListView):
 # 기존 recipe_list 뷰는 삭제합니다.
 
 
-
+@login_required
 def recipe_detail_view(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     comments = recipe.comments.all()
     comment_form = CommentForm()
     friend_request_sent = FriendRequest.objects.filter(from_user=request.user, to_user=recipe.author).exists()
     friend_request_received = FriendRequest.objects.filter(from_user=recipe.author, to_user=request.user).exists()
+    friends = request.user.friends.filter(username=recipe.author.username).exists()
     instructions_with_index = [
         (index + 1, instruction)
         for index, instruction in enumerate(recipe.instructions.splitlines())
@@ -89,6 +90,7 @@ def recipe_detail_view(request, id):
         'comment_form' : comment_form,
         'friend_request_sent': friend_request_sent,
         'friend_request_received': friend_request_received,
+        'friends':friends,
     }
     return render(request, 'recipe/recipe_detail.html', context)
 
@@ -185,26 +187,44 @@ def bookmarked_recipes(request):
     return render(request, 'recipe/recipe_bookmarked.html', {'recipes': recipes})
 
 @require_POST
+@login_required
 def comments_create(request, id):
-    if request.user.is_authenticated:
-        recipe = get_object_or_404(Recipe, id=id)
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.recipe = recipe
-            comment.user = request.user
-            comment.save()
-            request.user.participation_score += 1
-            request.user.save()
-        return redirect('recipe_user:recipe_detail', recipe.id)
-    return redirect('users_user:login')
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.recipe_id = id
+        comment.user = request.user
+        comment.save()
+        request.user.participation_score += 1
+        request.user.save()
+        comments = Comment.objects.filter(recipe_id=id).values('id','user__username','content')
+        comments_list = comments.count()
+
+        return JsonResponse({
+            'success': True,
+            'comments': list(comments),
+            'total_comments': comments_list  # 댓글 총 개수를 반환
+        })
+    else:
+        return JsonResponse({'success': False, 'errors': comment_form.errors})
 
 @require_POST
-def comments_delete(request, recipe_id, comment_id):
-    if request.user.is_authenticated:
-        comment = get_object_or_404(Comment, id=comment_id)
-        if request.user == comment.user:
-            request.user.participation_score -= 1  # 참여 점수 감소
-            request.user.save()
-            comment.delete()
-    return redirect('recipe_user:recipe_detail', recipe_id)
+@login_required
+def comments_delete(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+    comment = get_object_or_404(Comment, id=id)
+    if request.user == comment.user:
+        request.user.participation_score -= 1  # 참여 점수 감소
+        request.user.save()
+        comment.delete()
+
+        comments = recipe.comments.all().values('id', 'user__username', 'content', 'created_at')
+        comments_list = list(comments)
+
+        return JsonResponse({
+            'success': True,
+            'comments': comments_list,
+            'total_comments': recipe.comments.count()  # 댓글 총 개수를 반환
+        })
+    else:
+        return JsonResponse({'success': False, 'message': 'Unauthorized'})

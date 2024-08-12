@@ -32,5 +32,5 @@
     <button type="submit" class="btn btn-primary">수정 완료</button>
 </form>
 
-<a href="{% url 'recycle_user:recycle_detail' recycle.pk %}" class="btn btn-secondary">취소</a>
+<a href="{% url 'recycle_user:recycle_detail' category_name=recycle.category item_name=recycle.name %}" class="btn btn-secondary">취소</a>
 {% endblock %}

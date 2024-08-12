@@ -21,7 +21,7 @@
     <h2>{{ category.name }}</h2>
     <ul>
         {% for item in category.recycles %}
-            <li><a href="{% url 'recycle_user:recycle_detail' item.pk %}">{{ item.name }}</a></li>
+            <li><a href="{% url 'recycle_user:recycle_detail' category_name=recycle.category item_name=recycle.name %}">{{ item.name }}</a></li>
         {% endfor %}
     </ul>
 </div>
