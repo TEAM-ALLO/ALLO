@@ -28,17 +28,17 @@
     margin: 10px auto;
 }
 .interior-list-post {
-    border: 1px solid black;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
+    overflow-wrap: anywhere;
+    background-color: var(--light--gray--color);
 }
 .interior-list-img {
-    max-width: 80%;
-    aspect-ratio: 1;
+    width: 100%;
+    height: 180px;
     object-fit: cover;
+    margin: 0 auto;
 }
 .interior-list-post-title {
     font-size: 18px;
