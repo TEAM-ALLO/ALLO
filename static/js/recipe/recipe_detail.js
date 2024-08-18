@@ -117,9 +117,9 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             commentList.appendChild(commentItem);
         });
-    
+
         commentCount.textContent = `${totalComments}개의 댓글이 있습니다.`;
-        setupCommentDeleteEventListeners(); // 댓글 삭제 버튼에 이벤트 리스너 추가
+        setupCommentDeleteEventListeners(); // 이벤트 리스너 재설정
     }
 
     function setupCommentForm() {
@@ -138,12 +138,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
                         updateCommentList(data.comments, data.total_comments);
-                        commentForm.reset(); // 폼 리셋
+                        commentForm.reset();
                     } else {
                         console.error('Failed to submit comment:', data.errors);
                     }
@@ -155,9 +159,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function setupCommentDeleteEventListeners() {
         const deleteButtons = document.querySelectorAll('.comment-delete-button');
-
-        console.log(deleteButtons); // 버튼이 올바르게 선택되었는지 확인
-
         deleteButtons.forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault(); // 버튼 클릭 기본 동작 막기
@@ -172,10 +173,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    console.log(data);  // 서버로부터의 응답을 확인
                     if (data.success) {
                         updateCommentList(data.comments, data.total_comments);
                     } else {
@@ -186,6 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    
     function setupLikeButton() {
         const likeButton = document.getElementById('like-button');
         if (likeButton) {
@@ -213,47 +218,30 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-
-    function updateBookmarkCount(bookmarked, count) {
-        const bookmarkButton = document.getElementById('bookmark-button');
-        const bookmarksCountElement = document.getElementById('bookmarks-count');
-        if (bookmarkButton) {
-            if (bookmarked) {
-                bookmarkButton.querySelector('img').src = '/static/img/full-bookmark.svg';
-            } else {
-                bookmarkButton.querySelector('img').src = '/static/img/bookmark.svg';
-            }
-        }
-        if (bookmarksCountElement) {
-            bookmarksCountElement.textContent = count;
-        }
-    }
-
+    
     function setupBookmarkButton() {
-        const bookmarkButton = document.getElementById('bookmark-button');
-        if (bookmarkButton) {
-            bookmarkButton.addEventListener('click', function() {
-                const url = `/recipe/${recipeId}/bookmark/`;
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCsrfToken(),
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        updateBookmarkCount(data.bookmarked, data.bookmarks_count);
-                    } else {
-                        console.error('Failed to bookmark:', data.message);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        }
+        document.getElementById('bookmark-button').addEventListener('click', function() {
+            const recipeId = this.dataset.recipeId;
+            const url = `/recipe/${recipeId}/bookmark/`;
+    
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCsrfToken(),
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.bookmarked) {
+                    this.querySelector('img').src = '/static/img/full-bookmark.svg';
+                } else {
+                    this.querySelector('img').src = '/static/img/bookmark.svg';
+                }
+                document.getElementById('bookmarks-count').textContent = data.bookmarks_count;
+            })
+            .catch(error => console.error('Error:', error));
+        });    
     }
 
 

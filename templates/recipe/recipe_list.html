@@ -40,22 +40,26 @@
     <a href="{% url 'recipe_user:recipe_create' %}" class="recipe-list-btn">작성하기</a>
 </div>
 <ul class="recipe-list-container">
-{% for recipe in recipes %}
-    <a href="{% url 'recipe_user:recipe_detail' id=recipe.id %}" class="recipe-list-post">
-        {% if recipe.image %}
-            <img src="{{ recipe.image.url }}" alt="" class="recipe-list-img">
-        {% else %}
-            <img src="/static/img/empty2.svg" alt="" class="recipe-list-icon">
-        {% endif %}
-        <div class="recipe-post-name">{{ recipe.recipe_name }}</div>
-        <div class="recipe-post-info">
-            <p>조리 시간: {{ recipe.cooking_time }}분</p>
-            <p>난이도: {{ recipe.difficulty }}</p>
-        </div>               
+    {% if no_results %}
+    <li>검색 결과가 없습니다.</li>
+{% else %}
+    {% for recipe in recipes %}
+        <a href="{% url 'recipe_user:recipe_detail' id=recipe.id %}" class="recipe-list-post">
+            {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" alt="" class="recipe-list-img">
+            {% else %}
+                <img src="/static/img/empty2.svg" alt="" class="recipe-list-icon">
+            {% endif %}
+            <div class="recipe-post-name">{{ recipe.recipe_name }}</div>
+            <div class="recipe-post-info">
+                <p>조리 시간: {{ recipe.cooking_time }}분</p>
+                <p>난이도: {{ recipe.difficulty }}</p>
+            </div>               
     </a>
 {% empty %}
     <li>등록된 레시피가 없습니다.</li>
 {% endfor %}
+{% endif %}
 </ul>
 
 <!-- 페이지네이션 추가 -->
