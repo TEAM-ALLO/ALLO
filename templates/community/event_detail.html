@@ -3,8 +3,11 @@
 <link rel="stylesheet" href="/static/css/community/event_detail.css">
 {% endblock %}
 {% block content %}
-
-    <!-- nav 넣을 자리 -->
+<div class="community-header">
+    <div class="community-category"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category community-category-selected"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+</div>
 <div class="event-detail-container">
     <h2 class="event-title">{{ event.title }}</h2>
     {% if event.image %}

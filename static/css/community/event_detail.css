@@ -1,3 +1,19 @@
+.community-category {
+    color: #fff !important;
+}
+.community-category-selected {
+    color: black !important;
+}
+.community-header {
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    height: 50px;
+    display: flex;
+    align-items: center;    
+    justify-content: space-around;
+    color: #fff;
+    font-size: 20px;
+}
 .event-detail-container {
     width: 80%;
     margin: 0 auto;

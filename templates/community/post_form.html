@@ -5,9 +5,9 @@
 {% endblock %}
 {% block content %}
 <div class="community-header">
-    <div class="community-categoty">이벤트</div>
-    <div class="community-categoty">채팅방</div>
-    <div class="community-categoty">자유게시판</div>
+    <div class="community-category community-categoty-selected"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
 </div>
 <h1 class="post-title">
     {% if form.instance.pk %}

@@ -1,3 +1,9 @@
+.community-categoty {
+    color: #fff !important;
+}
+.community-categoty-selected {
+    color: black !important;
+}
 .community-header {
     width: 100%;
     background-color: var(--main--yellow--color);
@@ -7,9 +13,6 @@
     justify-content: space-around;
     color: #fff;
     font-size: 20px;
-}
-.community-categoty:nth-child(3) {
-    color: black;
 }
 .community-create-container {
     display: flex;

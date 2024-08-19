@@ -1,3 +1,9 @@
+.community-categoty {
+    color: #fff !important;
+}
+.community-categoty-selected {
+    color: black !important;
+}
 .community-header {
     width: 100%;
     background-color: var(--main--yellow--color);

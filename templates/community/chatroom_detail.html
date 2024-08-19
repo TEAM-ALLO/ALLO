@@ -6,9 +6,9 @@
 {% endblock %}
 {% block content %}
 <div class="community-header">
-    <div class="community-categoty"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
-    <div class="community-categoty"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
-    <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
 </div>
 <h2 class="receiver-username">{{ receiver.username }}님과의 채팅</h2>
     <div class="chatroom-detail-big-container" id="chat-messages">

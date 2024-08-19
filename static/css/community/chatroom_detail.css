@@ -1,8 +1,8 @@
-.community-categoty:nth-child(2) {
-    color: black !important;
-}
-.community-categoty:nth-child(3) {
+.community-categoty {
     color: #fff !important;
+}
+.community-categoty-selected {
+    color: black !important;
 }
 .receiver-username {
     text-align: center;
@@ -19,7 +19,6 @@
     height: calc(100vh - 347px);
     overflow-y: scroll;
 }
-
 
 /* 내가 받은 메시지 */
 .bubble-big-container-left {

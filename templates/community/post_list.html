@@ -5,9 +5,9 @@
 {% endblock %}
 {% block content %}
 <div class="community-header">
-    <div class="community-categoty"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
-    <div class="community-categoty"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
-    <div class="community-categoty"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category community-categoty-selected"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
 </div>
 <div class="community-top-box">
     <div id="community-top-notice">
@@ -17,7 +17,6 @@
         <a href="{% url 'community_user:post_create' %}" id="community-top-btn">글쓰기</a>
     {% endif %}
 </div>
-
 <div class="community-post-container">
     {% if posts %}
     {% for post in posts %}
