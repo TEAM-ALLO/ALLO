@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <div class="recycle-nav">
-    <a href="" id="recycle-nav-trash">분리수거</a>
+    <a href="{% url 'recycle_user:recycle_main' %}" id="recycle-nav-trash">분리수거</a>
     <a href="{% url 'recycle_user:clothing' %}">의류수거함</a>
     {% if user.is_staff %}
         <a href="{% url 'recycle_user:recycle_create' %}" class="btn btn-primary">새 글 작성</a>
@@ -32,18 +32,23 @@
         <input type="text" name="query" placeholder="예)우유, 형광등, 프링글스통" class="recycle-main-search">
         <button type="submit"><img src="/static/img/search.png" alt="검색 아이콘" class="search-icon"></button>
     </form>
-    {% if items %}
-        <ul>
-        {% for item in items %}
-            <a href="{% url 'recycle_user:recycle_detail' category_name=item.category item_name=item.name %}" class="recycle-post-container">
-                <p>{{ item.name }}</p>
-                <p>{{ item.category }}</p>
-            </a>
-        {% endfor %}
-        </ul>
+    {% if search_performed %}
+        {% if items %}
+            <ul>
+            {% for item in items %}
+                <a href="{% url 'recycle_user:recycle_detail' category_name=item.category item_name=item.name %}" class="recycle-post-container">
+                    <p>{{ item.name }}</p>
+                    <p>{{ item.category }}</p>
+                </a>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>앗, 해당 품목은 아직 정보가 없어요. 사이트 하단의 연락처로 요청해 주시면 빠른 시일 내에 반영할게요!</p>
+        {% endif %}
     {% endif %}
 </div>
 {% endblock %}
+
 {% block script %}
     <script src="/static/js/recycle/recycle_category.js"></script>
 {% endblock %}

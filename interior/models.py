@@ -4,12 +4,14 @@ from django.utils import timezone
 
 class InteriorPost(models.Model):
     CATEGORY_CHOICES = [
-        ('modern', 'Modern'),
-        ('classic', 'Classic'),
-        ('industrial', 'Industrial'),
-        ('scandinavian', 'Scandinavian'),
-        ('bohemian', 'Bohemian'),
-    ]
+        ('modern', '모던'),
+        ('european', '유럽풍'),
+        ('classic', '클래식'),
+        ('natural', '내추럴'),
+        ('colorful', '컬러풀'),
+        ('other', '기타'),
+]
+
 
     title = models.CharField(max_length=200, verbose_name="제목")
     content = models.TextField(verbose_name="내용")

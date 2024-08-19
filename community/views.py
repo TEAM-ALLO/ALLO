@@ -12,6 +12,7 @@ import time
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from users.models import Notification
+from django.contrib.contenttypes.models import ContentType
 
 User = get_user_model()
 
@@ -43,9 +44,8 @@ def notice_list(request):
     return render(request, 'community/notice_list.html', {'notices': notices})
 
 def notice_detail(request, pk):
-    event = get_object_or_404(Notice, pk=pk)
-    return render(request, 'community/notice_detail.html', {'event': event})
-
+    notice = get_object_or_404(Notice, pk=pk)  
+    return render(request, 'community/notice_detail.html', {'notice': notice})
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def notice_create(request):
@@ -146,15 +146,25 @@ def start_chat(request, username):
     return redirect('community_user:chatroom_detail', pk=chatroom.pk, username=username)
 
 
+
 @login_required
 def send_friend_request(request, username):
     to_user = get_object_or_404(User, username=username)
     if FriendRequest.objects.filter(from_user=request.user, to_user=to_user).exists():
         return JsonResponse({'status': 'error', 'message': '이미 친구 요청을 보냈습니다.'})
     else:
-        FriendRequest.objects.create(from_user=request.user, to_user=to_user)
-        return JsonResponse({'status': 'success', 'message': '친구 요청을 보냈습니다.'})
+        friend_request = FriendRequest.objects.create(from_user=request.user, to_user=to_user)
 
+        # 알림 생성 로직 추가
+        Notification.objects.create(
+            user=to_user,  # 알림을 받을 사용자 (친구 요청을 받은 사용자)
+            sender=request.user,  # 알림을 보낸 사용자 (친구 요청을 보낸 사용자)
+            notification_type='friend_request',  # 알림 타입
+            content_type=ContentType.objects.get_for_model(friend_request),  # 관련된 모델의 ContentType
+            object_id=friend_request.id  # 알림과 관련된 객체의 ID
+        )
+
+        return JsonResponse({'status': 'success', 'message': '친구 요청을 보냈습니다.'})
 
 @login_required
 @require_POST
@@ -164,8 +174,16 @@ def accept_friend_request(request, request_id):
         request.user.friends.add(friend_request.from_user)
         friend_request.from_user.friends.add(request.user)
         friend_request.delete()
-        return JsonResponse({'status': 'success', 'message': '친구 요청을 수락했습니다.'})
+        
+        # 친구 정보를 JSON으로 반환
+        friend_info = {
+            'username': friend_request.from_user.username,
+            'profile_url': f'/profile/{friend_request.from_user.username}/'  # URL 패턴에 맞게 조정
+        }
+        return JsonResponse({'status': 'success', 'message': '친구 요청을 수락했습니다.', 'friend': friend_info})
+    
     return JsonResponse({'status': 'error', 'message': '유효하지 않은 요청입니다.'})
+
 
 @login_required
 @require_POST

@@ -6,7 +6,7 @@
 {% endblock %}
 {% block content %}
 <div class="recycle-nav">
-    <a href="" id="recycle-nav-trash">분리수거</a>
+    <a href="{% url 'recycle_user:recycle_main' %}" id="recycle-nav-trash">분리수거</a>
     <a href="{% url 'recycle_user:clothing' %}">의류수거함</a>
     {% if user.is_staff %}
         <a href="{% url 'recycle_user:recycle_create' %}" class="btn btn-primary">새 글 작성</a>
@@ -33,7 +33,7 @@
   택배 송장, 테이프 등을 제거 후 차곡차곡 접거나 끈으로 묶어 배출한다.
 
 * 소량이거나 오염된 경우는 '일반쓰레기'로 배출
-* 오염된 종이, 영수증/전표, 코팅지, 벽지, 다른 재질이 혼합, 부착된 것은 '종량제 봉투'에 담아 '일반 쓰레기'로 배출
+* 오염된 종이, 영수증/전표, 코팅지, 벽지, 다른 재질이 혼합, 부착된 것은 '종량제 봉투'에 담아 '일반쓰레기'로 배출
   
 
 <h2># 종이팩</h2>
@@ -41,7 +41,7 @@
 2. 일반 종이류와 섞이지 않도록 가급적 끈 등으로 묶어 '종이류'로 배출한다. 
 
 Q1. 파쇄지 같은 경우에는 어떻게 처리하나요?
-A1. 파쇄지는 종이류가 아닌 '종량제 봉투'에 담아 '일반 쓰레기'로 배출합니다.
+A1. 파쇄지는 종이류가 아닌 '종량제 봉투'에 담아 '일반쓰레기'로 배출합니다.
 
 Q2.
 A2.

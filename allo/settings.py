@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'interior',
     'recipe',
     'recycle',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +78,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'allo.wsgi.application'
 
+ASGI_APPLICATION = "allo.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -151,6 +159,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 load_dotenv()
 

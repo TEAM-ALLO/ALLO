@@ -3,13 +3,14 @@ from django.conf import settings
 
 class Recycle(models.Model):
     CATEGORY_CHOICES = [
-        ('trash', '일반 쓰레기'),
+        ('trash', '일반쓰레기'),
         ('vinyl', '비닐류'),
         ('plastic', '플라스틱'),
-        ('can', '병 * 캔류'),
+        ('can', '병*캔류'),
         ('paper', '종이류'),
-        ('food', '음식물 쓰레기'),
-        ('clothing', '의류 수거함')
+        ('food', '음식물쓰레기'),
+        ('clothing', '의류수거함'),
+        ('others', '기타')
     ]
    
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)

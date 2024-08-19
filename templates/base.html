@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>ALLO</title>
     {% block head %} {% endblock %}
 </head>
@@ -20,10 +21,12 @@
             <img src="/static/img/ALLO.svg" alt="올로 로고 이미지" id="allo-logo-img2">
         </a>
         <nav id="header-nav">
-            <input type="text" id="header-nav-search" placeholder="검색어를 입력해 주세요.">
-            <a href="{% url 'users_user:search' %}" id="search_logo">
-                <img src="/static/img/search2.png" alt="검색창 아이콘" id="header-nav-search-icon">
-            </a>                
+            <form method="GET" action="{% url 'users_user:search' %}" id="header-nav-search-form">
+                <input type="text" name="q" id="header-nav-search" placeholder="검색어를 입력해 주세요.">
+                <button type="submit" id="search_logo">
+                    <img src="/static/img/search2.png" alt="검색창 아이콘" id="header-nav-search-icon">
+                </button>
+            </form>
             <div href="{% url 'users_user:search' %}" id="search_logo2">
                 <img src="/static/img/search2.png" alt="검색창 아이콘" id="notification-icon">
             </div>
@@ -58,6 +61,7 @@
     </div>
     <footer id="footer">
         © ALLO. 2024 All rights reserved.
+        / notalone@allo.com
     </footer>    
 </body>
 <script src="/static/js/main.js"></script>

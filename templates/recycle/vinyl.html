@@ -7,7 +7,7 @@
 {% endblock %}
 {% block content %}
 <div class="recycle-nav">
-    <a href="" id="recycle-nav-trash">분리수거</a>
+    <a href="{% url 'recycle_user:recycle_main' %}" id="recycle-nav-trash">분리수거</a>
     <a href="{% url 'recycle_user:clothing' %}">의류수거함</a>
     {% if user.is_staff %}
         <a href="{% url 'recycle_user:recycle_create' %}" class="btn btn-primary">새 글 작성</a>
@@ -26,10 +26,10 @@
 <div class="title-underline"></div>
 <div class="recycle-instructions">
     <p>이물질을 물로 헹구거나 제거한 후 재활용 봉투에 담아 배출합니다.</p>
-    <p>만약 비닐에 묻은 음식물, 스티커 등을 제거하기 어렵다면 '종량제 봉투'에 담아 '일반 쓰레기'로 배출해야 합니다.</p>
+    <p>만약 비닐에 묻은 음식물, 스티커 등을 제거하기 어렵다면 '종량제 봉투'에 담아 '일반쓰레기'로 배출해야 합니다.</p>
 
 <p> Q1. 이물질이 있는 과자, 빵, 라면, 삼각김밥 봉지 등은 재활용 가능한가요? </p>
-    <p>A1. 내용물을 비우고 물로 헹군 후  비닐류에 배출해 주세요! 단, 이물질 제거가 어렵다면 '종량제 봉투'에 담아 '일반 쓰레기'로 배출합니다. </p>
+    <p>A1. 내용물을 비우고 물로 헹군 후  비닐류에 배출해 주세요! 단, 이물질 제거가 어렵다면 '종량제 봉투'에 담아 '일반쓰레기'로 배출합니다. </p>
 
 <p>Q2. 재활용 표시가 없는 봉투, 에어캡, 시트지 등도 재활용 가능한가요?</p>
     <p>A2. 분리배출 표시가 없더라도 깨끗한 비닐류는 재활용이 가능합니다!</p>

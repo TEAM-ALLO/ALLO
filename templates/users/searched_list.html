@@ -13,8 +13,8 @@
 
     <h2>Recipes</h2>
     <ul>
-    {% for post in recipe_results %}
-        <li><a href="{% url 'recipe_user:recipe_detail' post.id %}">{{ post.title }}</a></li>
+    {% for recipe in recipe_results %}
+        <li><a href="{% url 'recipe_user:recipe_detail' recipe.id %}">{{ recipe.recipe_name }}</a></li>
     {% endfor %}
     </ul>
     <h2>Interior Posts</h2>
