@@ -9,16 +9,64 @@ from django.contrib.contenttypes.models import ContentType
 from users.models import Notification
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-
+from django.db.models import Q
+from datetime import timedelta
+from django.utils import timezone
+import random
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 def interior_list(request):
     category = request.GET.get('category', 'all')
+    query = request.GET.get('q', '')
+
     if category == 'all':
         posts = InteriorPost.objects.all().order_by('-created_at')
     else:
         posts = InteriorPost.objects.filter(category=category).order_by('-created_at')
-    return render(request, 'interior/interior_list.html', {'posts': posts, 'category': category})
+    
+    if query:
+        posts = posts.filter(Q(title__icontains=query) | Q(content__icontains=query))
+
+    # 최근 일주일 동안의 인기글 계산
+    one_week_ago = timezone.now() - timedelta(days=7)
+    recent_posts = InteriorPost.objects.filter(created_at__gte=one_week_ago)
+
+    # 하트 수가 1개 이상인 게시글 중에서 인기글을 선택
+    popular_posts = [post for post in recent_posts if post.total_likes() > 0]
+    if popular_posts:
+        max_engagement = max(post.total_engagements() for post in popular_posts)
+        top_posts = [post for post in popular_posts if post.total_engagements() == max_engagement]
+        popular_post = random.choice(top_posts) if top_posts else None
+    else:
+        popular_post = None
+
+    # 페이지네이션 설정
+    paginator = Paginator(posts, 9)  # 페이지당 9개의 게시글
+    page_number = request.GET.get('page')
+
+    try:
+        page_obj = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        # If page_number is not an integer, show the first page
+        page_obj = paginator.get_page(1)
+    except EmptyPage:
+        # If page_number is out of range, show the last page
+        page_obj = paginator.get_page(paginator.num_pages)
+
+    page_range = paginator.get_elided_page_range(page_obj.number, on_each_side=2, on_ends=1)
+
+    context = {
+        'posts': page_obj,
+        'category': category,
+        'query': query,
+        'popular_post': popular_post if not query else None,  # 검색어가 있을 때는 인기글 숨김
+        'page_obj': page_obj,
+        'page_range': page_range,
+        'category_name': '기타' if category == 'others' else category,  # 카테고리 이름 설정
+        'no_results': not page_obj.object_list.exists(),
+    }
+
+    return render(request, 'interior/interior_list.html', context)
 
 
 @login_required

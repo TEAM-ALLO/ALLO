@@ -31,6 +31,9 @@ class InteriorPost(models.Model):
 
     def total_bookmarks(self):
         return self.bookmarks.count()
+    
+    def total_engagements(self):
+        return self.total_likes() + self.total_bookmarks()
 
 
 class InteriorComment(models.Model):

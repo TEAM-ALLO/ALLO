@@ -3,23 +3,56 @@
     <link rel="stylesheet" href="/static/css/interior/interior_list.css">
 {% endblock %}
 {% block content %}
-<div class="interior-nav">
-    <a href="{% url 'interior_user:interior_list' %}?category=all" class="{% if category == 'all' %}active{% endif %}">전체</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=modern" class="{% if category == 'modern' %}active{% endif %}">모던</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=classic" class="{% if category == 'classic' %}active{% endif %}">클래식</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=industrial" class="{% if category == 'industrial' %}active{% endif %}">인더스트리얼</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=scandinavian" class="{% if category == 'scandinavian' %}active{% endif %}">스칸디나비안</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=bohemian" class="{% if category == 'bohemian' %}active{% endif %}">보헤미안</a>
+<div class="interior-search-container">
+    <form method="GET" action="{% url 'interior_user:interior_list' %}">
+        <input type="text" name="q" placeholder="검색어를 입력하세요..." value="{{ query }}">
+        <input type="submit" value="검색">
+        {% if category != 'all' %}
+        <input type="hidden" name="category" value="{{ category }}">
+        {% endif %}
+    </form>
 </div>
+
+<div class="interior-nav">
+    <a href="{% url 'interior_user:interior_list' %}?category=all{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'all' %}active{% endif %}">전체</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=modern{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'modern' %}active{% endif %}">모던</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=classic{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'classic' %}active{% endif %}">클래식</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=industrial{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'industrial' %}active{% endif %}">인더스트리얼</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=scandinavian{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'scandinavian' %}active{% endif %}">스칸디나비안</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=bohemian{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'bohemian' %}active{% endif %}">보헤미안</a>
+</div>
+
 <div class="interior-create-btn-div">
     <a href="{% url 'interior_user:interior_new' %}" class="interior-create-btn">작성하기</a>
 </div>
+
+{% if query %}
+    <h2 class="search-results-heading">"{{ query }}" 검색 결과</h2>
+{% endif %}
+
+{% if not query and popular_post %}
+    <div class="popular-posts-section">
+        <h2>인기 글</h2>
+        <div class="popular-post">
+            <a href="{% url 'interior_user:interior_detail' popular_post.pk %}">
+                <img src="{{ popular_post.image.url }}" alt="{{ popular_post.title }}" class="popular-post-img">
+                <h3>{{ popular_post.title }}</h3>
+                <p>하트 수: {{ popular_post.total_likes }} / 북마크 수: {{ popular_post.total_bookmarks }}</p>
+            </a>
+        </div>
+    </div>
+{% endif %}
+
 <div class="interior-list-big-container">
-    {% for post in posts %}
-    <a href="{% url 'interior_user:interior_detail' post.pk %}" class="interior-list-post">
-            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-list-img">
-            <h2 class="interior-list-post-title">{{ post.title }}</h2>
-    </a>
-    {% endfor %}
+    {% if posts|length > 0 %}
+        {% for post in posts %}
+        <a href="{% url 'interior_user:interior_detail' post.pk %}" class="interior-list-post">
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-list-img">
+                <h2 class="interior-list-post-title">{{ post.title }}</h2>
+        </a>
+        {% endfor %}
+    {% else %}
+        <p class="no-results">게시글이 없습니다.</p>
+    {% endif %}
 </div>
 {% endblock %}
