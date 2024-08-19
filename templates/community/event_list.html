@@ -14,20 +14,24 @@
             <button onclick="showSection('events')" class="color">이벤트 보기</button>
             <button onclick="showSection('notices')">공지사항 보기</button>
         </div>
-        <ul>
-            {% for event in events %}
-                <li>
-                    {% if event.image %}
-                        <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width: 100px;">
-                    {% endif %}
-                    <a href="{% url 'community_user:event_detail' event.pk %}">{{ event.title }}</a> - 
-                    {{ event.start_date }} ~ {{ event.end_date }}
-                </li>
-            {% endfor %}
-        </ul>
         {% if user.is_staff %}
-            <a href="{% url 'community_user:event_create' %}">Add Event</a>
-        {% endif %}
+        <div class="event-btn">
+            <a href="{% url 'community_user:event_create' %}">이벤트 작성</a>
+        </div>
+            {% endif %}
+        <div class="event-post-container">
+            {% for event in events %}
+            <a href="{% url 'community_user:event_detail' event.pk %}" class="event-post">
+                {% if event.image %}
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="event-img">
+                {% else %}
+                    <img src="/static/img/empty3.svg" alt="" class="event-icon">
+                {% endif %}
+                <h2>{{ event.title }}</h2>
+                <h4>{{ event.start_date }} </br>~ {{ event.end_date }}</h4>
+            </a>
+            {% endfor %}
+        </div>
     </div>
 
     <div id="notices" class="section" style="display:none;">
@@ -35,6 +39,11 @@
             <button onclick="showSection('events')">이벤트 보기</button>
             <button onclick="showSection('notices')">공지사항 보기</button>
         </div>
+        {% if user.is_staff %}
+        <div class="event-btn">
+            <a href="{% url 'community_user:notice_create' %}">공지 작성</a>
+        </div>
+            {% endif %}
         <ul>
             {% for notice in notices %}
                 <li>
@@ -43,9 +52,6 @@
                 </li>
             {% endfor %}
         </ul>
-        {% if user.is_staff %}
-            <a href="{% url 'community_user:notice_create' %}">Add Notice</a>
-        {% endif %}
     </div>
 </div>
 
