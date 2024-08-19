@@ -1,42 +1,87 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/users/notification.css' %}">
 {% block content %}
 <h1>알람</h1>
 <ul id="notification_list">
     {% for item in notifications %}
-    <li>
-        {% if item.notification.notification_type == 'like' %}
-            {% if item.content_type == 'Recipe' %}
-                {{ item.notification.sender.username }} liked your recipe: "{{ item.notification.content_object.recipe_name }}"
-            {% else %}
-                {{ item.notification.sender.username }} liked your post: "{{ item.notification.content_object.title }}"
-            {% endif %}
-        {% elif item.notification.notification_type == 'comment' %}
-            {% if item.content_type == 'Recipe' %}
-                {{ item.notification.sender.username }} commented on your recipe: "{{ item.notification.content_object.recipe_name }}"
-            {% else %}
-                {{ item.notification.sender.username }} commented on your post: "{{ item.notification.content_object.title }}"
-            {% endif %}
-        {% elif item.notification.notification_type == 'message' %}
-            {{ item.notification.sender.username }} sent you a message.
-        {% endif %}
+    <li id="notification-{{ item.notification.id }}" class="{% if item.is_read %}read-notification{% else %}unread-notification{% endif %}">
+        <a href="javascript:void(0);" onclick="markNotificationAsReadAndRedirect({{ item.notification.id }}, '{{ item.link }}')">
+            {{ item.message }}
+        </a>
         <small>{{ item.notification.timestamp }}</small>
     </li>
     {% empty %}
-    <li>No notifications.</li>
+    <li>알림이 없습니다.</li>
     {% endfor %}
 </ul>
 {% endblock %}
 
-{% block extra_js %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% block script %}
 <script>
-    function fetchNotifications() {
-        $.get("{% url 'notification' %}", function(data) {
-            $('#notification_list').html(data);
-        });
+    function getCsrfToken() {
+        const cookieValue = document.cookie.split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            ?.split('=')[1];
+        return cookieValue || '';
     }
+    
 
-    setInterval(fetchNotifications, 30000);  // 30초마다 알람을 확인합니다.
+    function markNotificationAsReadAndRedirect(notificationId, redirectUrl) {
+        console.log('Notification clicked, ID:', notificationId, 'Redirecting to:', redirectUrl);
+    
+        const data = { notification_ids: [notificationId] };
+        console.log('Sending data:', data);
+        
+        fetch('/notifications/read/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Notification marked as read, updating UI...');
+                const notificationElement = document.getElementById(`notification-${notificationId}`);
+                notificationElement.classList.remove('unread-notification');
+                notificationElement.classList.add('read-notification');
+                window.location.href = redirectUrl;
+            } else {
+                console.error('Error marking notification as read:', data.message);
+            }
+        })
+        .catch(error => console.error('Fetch error:', error));
+    }
+    
+    
+    
+    
+
+    // 웹소켓 연결 설정
+    const socket = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const notificationList = document.getElementById('notification_list');
+        
+        // 새로운 알림을 리스트에 추가
+        notificationList.insertAdjacentHTML('afterbegin',
+            `<li id="notification-${data.notification.id}" class="unread-notification">
+                <a href="javascript:void(0);" onclick="markNotificationAsReadAndRedirect(${data.notification.id}, '${data.notification.link}')">
+                    ${data.notification.message}
+                </a>
+                <small>${data.notification.timestamp}</small>
+            </li>`
+        );
+    };
+
+    socket.onclose = function(e) {
+        console.error('WebSocket connection closed unexpectedly');
+    };
 </script>
 {% endblock %}

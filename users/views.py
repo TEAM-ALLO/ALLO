@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import logout
@@ -15,6 +16,7 @@ from django.contrib import messages
 import datetime
 from django.contrib.auth.hashers import check_password
 from django.views.decorators.http import require_POST
+from .models import Notification
 
 
 def home(request):
@@ -227,34 +229,76 @@ def search(request):
 
 @login_required
 def notification(request):
-    print("Notification view called")
-    notifications = request.user.notifications.filter(is_read=False)
-    print(f"Notifications: {notifications.count()}")
-
-    # 각 알림에 대해 객체 타입을 계산하여 추가
+    notifications = request.user.notifications.all()  # 모든 알람을 가져옴
     notification_list = []
+
     for notification in notifications:
-        content_type = None
-        if hasattr(notification.content_object, 'recipe_name'):
-            content_type = 'Recipe'
-        elif hasattr(notification.content_object, 'title'):
-            content_type = 'Post'
+        message = ""
+        link = "#"
+        
+        if notification.notification_type == 'friend_request':
+            message = f"{notification.sender.username}님이 친구 요청을 보냈습니다."
+            link = f"/friend/{request.user.username}/"  # 친구 요청에 대한 링크를 알림을 받은 사용자의 페이지로 설정
+        elif notification.notification_type == 'like' or notification.notification_type == 'comment':
+            if notification.content_type.model == 'communitypost':
+                link = f"/community/post/{notification.object_id}/"
+                message = f"{notification.sender.username}님이 커뮤니티 게시글에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
+            elif notification.content_type.model == 'recipe':
+                link = f"/recipe/{notification.object_id}/"
+                message = f"{notification.sender.username}님이 레시피에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
+            elif notification.content_type.model == 'interiorpost':
+                link = f"/interior/detail/{notification.object_id}/"
+                message = f"{notification.sender.username}님이 인테리어 게시글에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
+        elif notification.notification_type == 'message':
+            link = f"/chatroom/{notification.object_id}/"  # 메시지 링크
+            message = f"{notification.sender.username}님으로부터 새로운 메시지가 도착했습니다."
+
         notification_list.append({
             'notification': notification,
-            'content_type': content_type,
+            'message': message,
+            'timestamp': notification.timestamp.strftime('%Y년 %m월 %d일 %I:%M %p'),
+            'is_read': notification.is_read,
+            'link': link  # 링크 추가
         })
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        print("AJAX request detected")
-        return render(request, 'users/notifications_list.html', {'notifications': notification_list})
     return render(request, 'users/notification.html', {'notifications': notification_list})
-
 
 @login_required
 @require_POST
 def mark_notifications_as_read(request):
-    notifications = request.user.notifications.filter(is_read=False)
-    notifications.update(is_read=True)
-    return JsonResponse({'success': True})
+    try:
+        # 요청에서 전달된 데이터를 직접 출력해 확인합니다.
+        print("Request body:", request.body)
+
+        # 요청에서 전달된 notification_ids를 추출합니다.
+        notification_ids = json.loads(request.body).get('notification_ids', [])
+        print("Received notification IDs:", notification_ids)  # 전달된 ID를 확인합니다.
+
+        # 전달된 notification_ids에 해당하는 알림을 필터링합니다.
+        notifications = Notification.objects.filter(id__in=notification_ids, user=request.user)
+        
+        if notifications.exists():
+            notifications.update(is_read=True)
+            print("Notifications updated to read:", notifications)  # 읽음으로 업데이트된 알림을 확인합니다.
+            return JsonResponse({'status': 'success'})
+        else:
+            print("Notification not found for user:", request.user)  # 알림을 찾지 못했을 때의 로그
+            return JsonResponse({'status': 'error', 'message': 'Notification not found'})
+    except Exception as e:
+        print("Error processing request:", e)
+        return JsonResponse({'status': 'error', 'message': str(e)})
 
 
+
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+def send_notification_to_user(user, message):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        f"user_{user.id}",  # 사용자 ID를 기반으로 그룹 이름을 지정
+        {
+            "type": "send_notification",  # 컨슈머에서 실행할 메서드 이름
+            "message": message,
+        },
+    )

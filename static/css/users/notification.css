@@ -1,0 +1,8 @@
+/* 알람 읽음 상태에 따른 스타일 */
+#notification_list .read-notification {
+    color: gray !important;
+}
+
+.unread-notification {
+    color: black;  /* 기본 글씨 색상 */
+}
