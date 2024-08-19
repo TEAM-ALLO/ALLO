@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST
 from .models import Event, Notice, ChatRoom, CommunityPost, Message, FriendRequest, Comment
-from .forms import PostForm, MessageForm, CommentForm, EventForm
+from .forms import PostForm, MessageForm, CommentForm, EventForm, NoticeForm
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
@@ -43,22 +43,21 @@ def notice_list(request):
     return render(request, 'community/notice_list.html', {'notices': notices})
 
 def notice_detail(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    return render(request, 'community/event_detail.html', {'event': event})
+    event = get_object_or_404(Notice, pk=pk)
+    return render(request, 'community/notice_detail.html', {'event': event})
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def notice_create(request):
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
+        form = NoticeForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('community_user:notice_list')
-        
         else:
             print(form.errors)
     else:
-        form = PostForm()
+        form = NoticeForm()
     return render(request, 'community/notice_form.html', {'form': form})
 
 
