@@ -29,9 +29,17 @@
 <a href="{% url 'recipe_user:recipe_detail' id=popular_recipe.id %}" class="recipe-list-popular">
     <img src="{% if popular_recipe.image %}{{ popular_recipe.image.url }}{% else %}/static/img/empty2.svg{% endif %}" alt="">
     <div>
-        <h2>{{ popular_recipe.recipe_name }}</h2>
-        <h3>{{ popular_recipe.author }}</h3>
-        <h4>{{ popular_recipe.created_at }}</h4>
+        <div class="recipe-popular-info">
+            <h3>{{ popular_recipe.recipe_name }}</h3>
+            <h4>{{ popular_recipe.author }}</h4>
+            <p>{{ popular_recipe.created_at }}</p>
+        </div>
+        <div class="recipe-popular-react">
+            <img src="/static/img/full-heart.svg" alt="좋아요 수">
+            <p>{{ popular_recipe.total_likes }}</p>
+            <img src="/static/img/full-bookmark.svg" alt="북마크 수">
+            <p>{{ popular_recipe.total_bookmarks }}</p>
+        </div>
     </div>
 </a>
 {% endif %}
