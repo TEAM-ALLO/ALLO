@@ -1,3 +1,6 @@
+#recipe-category-select {
+    display: none;
+}
 .recipe-detail-img {
     height: 100%;
     width: 40%;

@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block head %}
     <link rel="stylesheet" href="/static/css/interior/interior_list.css">
 {% endblock %}
 {% block content %}
 <div class="interior-nav">
-    <a href="{% url 'interior_user:interior_list' %}?category=all{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'all' %}active{% endif %}">전체</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=modern{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'modern' %}active{% endif %}">모던</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=classic{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'classic' %}active{% endif %}">클래식</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=industrial{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'industrial' %}active{% endif %}">인더스트리얼</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=scandinavian{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'scandinavian' %}active{% endif %}">스칸디나비안</a>
-    <a href="{% url 'interior_user:interior_list' %}?category=bohemian{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'bohemian' %}active{% endif %}">보헤미안</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=all{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'all' %}category-select{% endif %}">전체</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=modern{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'modern' %}category-select{% endif %}">모던</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=european{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'european' %}category-select{% endif %}">유럽풍</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=classic{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'classic' %}category-select{% endif %}">클래식</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=natural{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'natural' %}category-select{% endif %}">내추럴</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=colorful{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'colorful' %}category-select{% endif %}">컬러풀</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=other{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'other' %}category-select{% endif %}">기타</a>
 </div>
 <form method="GET" action="{% url 'interior_user:interior_list' %}" class="interior-search-form">
     <input type="text" name="q" placeholder="검색어를 입력하세요..." value="{{ query }}" class="interior-search-container">
@@ -59,4 +61,7 @@
         <p class="no-results">게시글이 없습니다.</p>
     {% endif %}
 </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/interior/interior_category.js' %}"></script>
 {% endblock %}
