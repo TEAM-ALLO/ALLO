@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <div class="recycle-nav">
-    <a href="" id="recycle-nav-trash">분리수거</a>
+    <a href="{% url 'recycle_user:recycle_main' %}" id="recycle-nav-trash">분리수거</a>
     <a href="{% url 'recycle_user:clothing' %}">의류수거함</a>
     {% if user.is_staff %}
         <a href="{% url 'recycle_user:recycle_create' %}" class="btn btn-primary">새 글 작성</a>
@@ -43,7 +43,7 @@
             {% endfor %}
             </ul>
         {% else %}
-            <p>앗, 해당 품목은 아직 정보가 없어요. 사이트 하단의 연락처로 요청해주시면 빠른 시일 내에 반영하겠습니다.</p>
+            <p>앗, 해당 품목은 아직 정보가 없어요. 사이트 하단의 연락처로 요청해 주시면 빠른 시일 내에 반영할게요!</p>
         {% endif %}
     {% endif %}
 </div>
