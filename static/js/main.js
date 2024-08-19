@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     let searchLogo=document.getElementById("search_logo");
     let searchLogo2=document.getElementById("search_logo2");
-    let headerNavSearch=document.getElementById("header-nav-search");
+    let headerNavSearch=document.getElementById('header-nav-search-input');
     let headerNavSearchIcon=document.getElementById("header-nav-search-icon");
 
     searchLogo2.addEventListener("click", function() {
