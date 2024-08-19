@@ -215,7 +215,7 @@ def delete_friend(request, username):
 def search(request):
     query = request.GET.get('q', '')
     community_results = CommunityPost.objects.filter(title__icontains=query) | CommunityPost.objects.filter(content__icontains=query)
-    recipe_results = Recipe.objects.filter(recipe_name__icontains=query) | Recipe.objects.filter(recipe_name__icontains=query)
+    recipe_results = Recipe.objects.filter(recipe_name__icontains=query) | Recipe.objects.filter(ingredients__icontains=query)
     interior_results = InteriorPost.objects.filter(title__icontains=query) | InteriorPost.objects.filter(content__icontains=query)
 
     context = {

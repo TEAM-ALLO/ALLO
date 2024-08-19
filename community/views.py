@@ -44,9 +44,8 @@ def notice_list(request):
     return render(request, 'community/notice_list.html', {'notices': notices})
 
 def notice_detail(request, pk):
-    event = get_object_or_404(Notice, pk=pk)
-    return render(request, 'community/notice_detail.html', {'event': event})
-
+    notice = get_object_or_404(Notice, pk=pk)  
+    return render(request, 'community/notice_detail.html', {'notice': notice})
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def notice_create(request):
