@@ -1,5 +1,5 @@
 from django import forms
-from .models import CommunityPost, Message, Comment, Event
+from .models import CommunityPost, Message, Comment, Event, Notice
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -40,3 +40,7 @@ class EventForm(forms.ModelForm):
         fields = ['title', 'start_date', 'end_date', 'description','image']
 
 
+class NoticeForm(forms.ModelForm):
+    class Meta:
+        model = Notice
+        fields = ['title', 'content', 'image']
