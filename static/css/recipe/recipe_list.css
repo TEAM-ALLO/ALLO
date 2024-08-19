@@ -8,6 +8,9 @@
     align-items: center;
     justify-content: space-around;
 }
+.category-select {
+    color: black !important;
+}
 .recipe-list-mention {
     margin: 10px auto;
     font-size: 20px;
