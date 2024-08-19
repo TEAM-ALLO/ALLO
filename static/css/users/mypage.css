@@ -88,8 +88,8 @@
 .mypage-user-info-r {
     padding: 50px;
     margin: 20px;
-    border: 5px solid rgba(255, 215, 50, 0.45);
     border-radius: 50px;
+    background-color: var(--light--gray--color);
 }
 .mypage-user-info-r > h2 {
     text-align: center;

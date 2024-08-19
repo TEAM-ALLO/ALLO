@@ -4,13 +4,11 @@
     <link rel="stylesheet" href="/static/css/community/chatroom_list.css">
 {% endblock %}
 {% block content %}
-<div class="community-header">
-    <div class="community-category"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
-    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
-    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+<div class="friend-header">
+    <a href="{% url 'users_user:friend_list' request.user.username %}">친구</a>
+    <a href="/community/chatrooms" class="friend-select">채팅방</a>
 </div>
 <h3 class="community-chatroom-title">친구와 채팅을 시작해보세요!</h3>
-<!-- <h4 class="community-friend-title">친구 목록</h4> -->
 <div class="community-friend-big-container">
     {% for friend in friends %}
         <a href="{% url 'community_user:start_chat' friend.username %}" class="chatroom-friend-container">

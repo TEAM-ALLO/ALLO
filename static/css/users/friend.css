@@ -1,7 +1,7 @@
 h3 {
     font-weight: bold;
     font-size: 20px;
-    width: 70%;
+    width: 80%;
     margin: 10px  auto;
 }
 .friend-title {
@@ -18,7 +18,7 @@ h3 {
 .friend-received-container {
     display: flex;
     background-color: var(--light--gray--color);
-    width: 70%;
+    width: 80%;
     margin: 10px auto;
     border-radius: 10px;
 }
@@ -54,22 +54,21 @@ h3 {
     display: flex;
     align-items: center;
 }
-#friend-list > li {
+#friend-list > a {
     display: flex;
     flex-direction: column;
-    gap: 10px;
     flex-wrap: nowrap;
     width: 180px;
     padding: 10px;
     background-color: var(--light--gray--color);
     border-radius: 10px;
-    margin: 10px;
 }
 #friend-list {
-    width: 70%;
-    margin: 0 auto;
+    width: 80%;
+    margin: 0 auto 10px auto;
     display: flex;
     flex-wrap: wrap;
+    gap: 10px;
 }
 #friend-list > li > img {
     width: 160px;

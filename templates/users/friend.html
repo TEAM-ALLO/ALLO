@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block head %}
     <link rel="stylesheet" href="/static/css/users/friend.css">
+    <link rel="stylesheet" href="{% static 'css/community/chatroom_list.css' %}">
 {% endblock %}
 {% block content %}
-<div class="friend-title">{{ user.username }}님의 친구</div>
+<div class="friend-header">
+    <a href="{% url 'users_user:friend_list' request.user.username %}" class="friend-select">친구</a>
+    <a href="/community/chatrooms">채팅방</a>
+</div>
 <h3>친구 요청</h3>
-<ul class="friend-received-big-container">
+<div class="friend-received-big-container">
     {% for request in received_requests %}
-        <li class="friend-received-container" id="request-{{ request.id }}">
+        <div class="friend-received-container" id="request-{{ request.id }}">
             {% if request.from_user.profile_image %}
                 <img src="{{ request.from_user.profile_image.url }}" alt="프로필 사진" class="mypage-img">
             {% else %}
@@ -23,13 +28,13 @@
                     <button class="btn btn-danger" onclick="handleFriendRequest('decline', {{ request.id }})">거절</button>
                 </div>
             </div>
-        </li>
+        </div>
     {% endfor %}
-</ul>
+</div>
 <h3>친구 목록</h3>
 <ul id="friend-list">
     {% for friend in friends %}
-        <li>
+        <a href="{% url 'users_user:friend_profile' friend.username %}">
             {% if friend.profile_image %}
                 <img src="{{ friend.profile_image.url }}" alt="프로필 사진" class="mypage-img">
             {% else %}
@@ -37,7 +42,6 @@
             {% endif %}
             <p class="community-friend-name">{{ friend.username }}</p>
         </a>
-        </li>
     {% endfor %}
 </ul>
 {% endblock %}
