@@ -20,12 +20,14 @@ class CategoryDetail(View):
     
 
 def recycle_main(request):
+    search_performed = False
+    items = []
     if request.method == 'POST':
         query = request.POST.get('query', '')
-        items = Recycle.objects.filter(name__icontains=query)
-    else:
-        items = []
-    return render(request, 'recycle/recycle_main.html', {'items': items})
+        if query:
+            search_performed = True
+            items = Recycle.objects.filter(name__icontains=query)
+    return render(request, 'recycle/recycle_main.html', {'items': items, 'search_performed': search_performed})
 
 class AuthorRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
