@@ -4,56 +4,28 @@
 {% endblock %}
 {% block content %}
 <div class="community-header">
-    <div class="community-category"><a href="{% url 'community_user:event_list' %}">공지 및 이벤트</a></div>
-    <div class="community-category"><a href="{% url 'community_user:chatroom_list' %}">채팅방</a></div>
     <div class="community-category"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category community-category-selected"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
 </div>
 <div class="community-content">
-    <div id="events" class="section">
-        <div class="button-group">
-            <button onclick="showSection('events')" class="color">이벤트 보기</button>
-            <button onclick="showSection('notices')">공지사항 보기</button>
-        </div>
-        <ul>
-            {% for event in events %}
-                <li>
-                    {% if event.image %}
-                        <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width: 100px;">
-                    {% endif %}
-                    <a href="{% url 'community_user:event_detail' event.pk %}">{{ event.title }}</a> - 
-                    {{ event.start_date }} ~ {{ event.end_date }}
-                </li>
-            {% endfor %}
-        </ul>
-        {% if user.is_staff %}
-            <a href="{% url 'community_user:event_create' %}">Add Event</a>
-        {% endif %}
+    {% if user.is_staff %}
+    <div class="event-btn">
+        <a href="{% url 'community_user:notice_create' %}">공지 작성</a>
     </div>
-
-    <div id="notices" class="section" style="display:none;">
-        <div class="button-group">
-            <button onclick="showSection('events')">이벤트 보기</button>
-            <button onclick="showSection('notices')">공지사항 보기</button>
-        </div>
-        <ul>
-            {% for notice in notices %}
-                <li>
-                    <a href="{% url 'community_user:notice_detail' notice.pk %}">{{ notice.title }}</a> - 
-                    {{ notice.created_at }}
-                </li>
-            {% endfor %}
-        </ul>
-        {% if user.is_staff %}
-            <a href="{% url 'community_user:notice_create' %}">Add Notice</a>
-        {% endif %}
+    {% endif %}
+    <div class="event-post-container">
+        {% for notice in notices %}
+            <a href="{% url 'community_user:notice_detail' notice.pk %}" class="event-post">
+                {% if notice.image %}
+                    <img src="{{ notice.image.url }}" alt="{{ notice.title }}" class="event-img">
+                {% else %}
+                    <img src="/static/img/empty3.svg" alt="" class="event-icon">
+                {% endif %}
+                <h2>{{ notice.title }}</h2>
+                <h3>{{ notice.created_at }}</h3>
+            </a>
+        {% endfor %}
     </div>
 </div>
-
-<script>
-    function showSection(sectionId) {
-        document.getElementById('events').style.display = 'none';
-        document.getElementById('notices').style.display = 'none';
-        document.getElementById(sectionId).style.display = 'block';
-    }
-</script>
 {% endblock %}

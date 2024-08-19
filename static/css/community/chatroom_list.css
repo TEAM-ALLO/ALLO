@@ -1,8 +1,8 @@
-.community-categoty:nth-child(2) {
-    color: black !important;
-}
-.community-categoty:nth-child(3) {
+.community-categoty {
     color: #fff !important;
+}
+.community-categoty-selected {
+    color: black !important;
 }
 .community-chatroom-title {
     text-align: center;
