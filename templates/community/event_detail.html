@@ -1,18 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ event.title }}</title>
-</head>
-<body>
-    <h1>{{ event.title }}</h1>
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/community/event_detail.css">
+{% endblock %}
+{% block content %}
+
+    <!-- nav 넣을 자리 -->
+<div class="event-detail-container">
+    <h2 class="event-title">{{ event.title }}</h2>
     {% if event.image %}
-    <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width: 300px;">
-    {% else %}
-        <p>No image available</p>
+    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="event-img">
     {% endif %}
-    <p>{{ event.description }}</p>
-    <p><strong>Start Date:</strong> {{ event.start_date }}</p>
-    <p><strong>End Date:</strong> {{ event.end_date }}</p>
-    <a href="{% url 'community_user:event_list' %}">Back to Events</a>
-</body>
-</html>
+    <p class="event-desc">{{ event.description }}</p>
+    <div class="event-date-container">
+        <h3>
+            시작
+        </h3>
+        <p>
+            {{ event.start_date }}
+        </p>
+    </div>
+    <div class="event-date-container">
+        <h3>
+            끝
+        </h3>
+        <p>
+            {{ event.end_date }}
+        </p>        
+    </div>
+    <div class="event-btn-container">
+        <a href="{% url 'community_user:event_list' %}" class="event-detail-btn">목록</a>
+    </div>
+</div>
+    {% endblock %}
