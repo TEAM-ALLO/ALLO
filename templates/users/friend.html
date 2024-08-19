@@ -30,13 +30,14 @@
 <ul id="friend-list">
     {% for friend in friends %}
         <li>
-            {% if friend.profile_image %}
-                <img src="{{ friend.profile_image.url }}" alt="프로필 사진" class="mypage-img">
-            {% else %}
-                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
-            {% endif %}
-            <p class="community-friend-name">{{ friend.username }}</p>
-        </a>
+            <a href="{% url 'users_user:friend_profile' friend.username %}">
+                {% if friend.profile_image %}
+                    <img src="{{ friend.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+                {% else %}
+                    <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+                {% endif %}
+                <p class="community-friend-name">{{ friend.username }}</p>
+            </a>
         </li>
     {% endfor %}
 </ul>
@@ -83,9 +84,23 @@
     function addToFriendList(username) {
         const friendList = document.getElementById('friend-list');
         const newFriend = document.createElement('li');
+
+        // 친구 프로필로 연결되는 링크를 추가
         const friendLink = document.createElement('a');
         friendLink.href = `{% url 'users_user:friend_profile' 'USERNAME_PLACEHOLDER' %}`.replace('USERNAME_PLACEHOLDER', username);
-        friendLink.textContent = username;
+
+        // 프로필 이미지 및 이름 추가
+        const profileImg = document.createElement('img');
+        profileImg.src = "/static/img/user.svg"; // 기본 프로필 이미지 사용
+        profileImg.alt = "프로필 사진";
+        profileImg.className = "mypage-img";
+
+        const friendName = document.createElement('p');
+        friendName.className = "community-friend-name";
+        friendName.textContent = username;
+
+        friendLink.appendChild(profileImg);
+        friendLink.appendChild(friendName);
         newFriend.appendChild(friendLink);
         friendList.appendChild(newFriend);
     }

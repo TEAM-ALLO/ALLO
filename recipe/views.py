@@ -6,6 +6,8 @@ from .forms import RecipeForm, CommentForm
 from django.views.generic import ListView
 from community.models import FriendRequest
 from django.http import JsonResponse
+from users.models import Notification
+from django.contrib.contenttypes.models import ContentType
 
 class RecipeListView(ListView):
     model = Recipe
@@ -148,8 +150,18 @@ def like_recipe(request, id):
         recipe.likes.add(request.user)
         recipe.author.participation_score += 1
         recipe.author.save()
+        
+        # 좋아요 알림 생성
+        if recipe.author != request.user:  # 본인에게는 알림이 가지 않도록
+            Notification.objects.create(
+                user=recipe.author,
+                sender=request.user,
+                notification_type='like',
+                content_type=ContentType.objects.get_for_model(recipe),
+                object_id=recipe.id
+            )
+    
     return JsonResponse({'liked': recipe.likes.filter(username=request.user.username).exists(), 'likes_count': recipe.likes.count()})
-
 @login_required
 @require_POST
 def bookmark_recipe(request, id):
@@ -184,7 +196,19 @@ def comments_create(request, id):
         comment.save()
         request.user.participation_score += 1
         request.user.save()
-        comments = Comment.objects.filter(recipe_id=id).values('id','user__username','content')
+
+        # 댓글 알림 생성
+        recipe = comment.recipe
+        if recipe.author != request.user:  # 본인에게는 알림이 가지 않도록
+            Notification.objects.create(
+                user=recipe.author,
+                sender=request.user,
+                notification_type='comment',
+                content_type=ContentType.objects.get_for_model(recipe),
+                object_id=recipe.id
+            )
+
+        comments = Comment.objects.filter(recipe_id=id).values('id', 'user__username', 'content')
         comments_list = comments.count()
 
         return JsonResponse({
@@ -194,6 +218,7 @@ def comments_create(request, id):
         })
     else:
         return JsonResponse({'success': False, 'errors': comment_form.errors})
+
 
 @require_POST
 @login_required
