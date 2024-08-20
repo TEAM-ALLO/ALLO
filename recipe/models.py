@@ -34,7 +34,7 @@ class Recipe(models.Model):
         return self.recipe_name
 
     def get_absolute_url(self):
-        return reverse('recipe_detail', args=[str(self.id)])
+        return reverse('recipe_user:recipe_detail', args=[str(self.id)])
 
     class Meta:
         ordering = ['-created_at']
@@ -54,4 +54,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
-    
+
+class UserChoice(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, null=True, blank=True)
+    recipe_name = models.CharField(max_length=255, null=True, blank=True)  # CSV 항목에 대한 반응을 저장
+    liked = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if self.recipe:
+            return f"{self.user.username} - {self.recipe.recipe_name} - {'Liked' if self.liked else 'Disliked'}"
+        else:
+            return f"{self.user.username} - {self.recipe_name} - {'Liked' if self.liked else 'Disliked'}"

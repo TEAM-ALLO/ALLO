@@ -4,7 +4,7 @@ from .views import recipe_create_view, RecipeListView,recipe_detail_view, recipe
 from django.conf import settings
 from django.conf.urls.static import static
 from community import views as community_views
-
+from . import views
 
 app_name = 'recipe_user'
 
@@ -20,8 +20,14 @@ urlpatterns = [
     path('bookmarked/', bookmarked_recipes, name='bookmarked_recipes'),
     path('<int:id>/comments/', comments_create, name='comments_create'),
     path('<int:recipe_id>/comments/<int:comment_id>/delete/', comments_delete, name='comments_delete'),
+    path('<int:id>/recommend/', views.recommend_similar_recipes, name='recommend_similar_recipes'),
     path('send_friend_request/<str:username>/', community_views.send_friend_request, name='send_friend_request'),
     path('accept_friend_request/<int:request_id>/', community_views.accept_friend_request, name='accept_friend_request'),
     path('decline_friend_request/<int:request_id>/', community_views.decline_friend_request, name='decline_friend_request'),
+    path('recipe/<int:id>/like/', views.like_recipe, name='like_recipe'),
+    path('recipe/<int:id>/dislike/', views.dislike_recipe, name='dislike_recipe'),
+    path('csv/like/', views.like_csv_recipe, name='like_csv_recipe'),
+    path('csv/dislike/', views.dislike_csv_recipe, name='dislike_csv_recipe'),
 
+    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

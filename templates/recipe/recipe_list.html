@@ -45,6 +45,53 @@
     </div>
 </a>
 {% endif %}
+<!-- 개인적인 취향에 맞춘 추천 레시피 섹션 추가 -->
+{% if preferred_recipes %}
+    <h2>당신이 좋아할 만한 레시피</h2>
+    <ul class="preferred-recipe-list">
+        {% for recipe in preferred_recipes %}
+            {% if recipe.recipe_name %}
+                <!-- Recipe 객체가 있을 때 -->
+                <li>
+                    <div class="preferred-recipe-item">
+                        <div class="preferred-recipe-name">{{ recipe.recipe_name }}</div>
+                        <div class="reaction-buttons">
+                            <form action="{% url 'recipe_user:like_recipe' recipe.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="like-button">좋아요</button>
+                            </form>
+                            <form action="{% url 'recipe_user:dislike_recipe' recipe.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="dislike-button">싫어요</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            {% else %}
+                <!-- 단순 문자열이 있을 때 -->
+                <li>
+                    <div class="preferred-recipe-item">
+                        <div class="preferred-recipe-name">{{ recipe }}</div>
+                        <div class="reaction-buttons">
+                            <form action="{% url 'recipe_user:like_csv_recipe' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="recipe_name" value="{{ recipe }}">
+                                <button type="submit" class="like-button">좋아요</button>
+                            </form>
+                            <form action="{% url 'recipe_user:dislike_csv_recipe' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="recipe_name" value="{{ recipe }}">
+                                <button type="submit" class="dislike-button">싫어요</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>    
+    
+{% endif %}
+
 
 <div class="recipe-list-btn-box">
     <a href="{% url 'recipe_user:recipe_create' %}" class="recipe-list-btn">작성하기</a>
