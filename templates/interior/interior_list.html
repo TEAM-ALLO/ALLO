@@ -14,7 +14,7 @@
     <a href="{% url 'interior_user:interior_list' %}?category=other{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'other' %}category-select{% endif %}">기타</a>
 </div>
 <form method="GET" action="{% url 'interior_user:interior_list' %}" class="interior-search-form">
-    <input type="text" name="q" placeholder="검색어를 입력하세요..." value="{{ query }}" class="interior-search-container">
+    <input type="text" name="q" placeholder="검색어를 입력하세요" value="{{ query }}" class="interior-search-container">
     <input type="image" src="/static/img/search2.png" class="interior-search-img">
     {% if category != 'all' %}
     <input type="hidden" name="category" value="{{ category }}">

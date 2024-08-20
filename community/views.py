@@ -202,7 +202,7 @@ def post_list(request):
 @login_required
 def post_create(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
@@ -218,7 +218,7 @@ def post_create(request):
 def post_update(request, pk):
     post = get_object_or_404(CommunityPost, pk=pk)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
             return redirect('community_user:post_list')
