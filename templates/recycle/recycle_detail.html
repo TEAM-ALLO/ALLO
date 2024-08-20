@@ -23,7 +23,7 @@
 <h1>{{ recycle.name }}</h1>
 <p>카테고리: {{ recycle.get_category_display }}</p>
 <p>{{ recycle.description }}</p>
-
+<p>{{ recycle.tip }}</p>
 {% if recycle.image %}
     <img src="{{ recycle.image.url }}" alt="{{ recycle.name }}">
 {% endif %}

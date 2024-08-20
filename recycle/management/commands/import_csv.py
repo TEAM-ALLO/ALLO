@@ -34,6 +34,7 @@ class Command(BaseCommand):
                     name=row['name'],
                     description=row.get('description', ''),
                     image=row.get('image', ''),
+                    tip=row.get('tip', ''),
                     author=superuser  # author 필드 설정
                 )
 

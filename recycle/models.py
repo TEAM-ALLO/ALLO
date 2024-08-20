@@ -14,9 +14,10 @@ class Recycle(models.Model):
     ]
    
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
-    name = models.CharField(max_length=100)  # 항목의 이름
-    description = models.TextField()  # 항목의 설명
-    image = models.ImageField(upload_to='recycle_images/', blank=True, null=True)  # 항목의 이미지
+    name = models.CharField(max_length=100) 
+    description = models.TextField() 
+    image = models.ImageField(upload_to='recycle_images/', blank=True, null=True)  
+    tip = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     
     
