@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from .models import Recycle
 from .forms import RecycleForm
 import os
+from django.db.models import Q
 
 class CategoryDetail(View):
     template_name = 'recycle/recycle_category.html'
@@ -26,7 +27,9 @@ def recycle_main(request):
         query = request.POST.get('query', '')
         if query:
             search_performed = True
-            items = Recycle.objects.filter(name__icontains=query)
+            items = Recycle.objects.filter(
+                Q(name__icontains=query) | Q(description__icontains=query)
+            )
     return render(request, 'recycle/recycle_main.html', {'items': items, 'search_performed': search_performed})
 
 class AuthorRequiredMixin(object):

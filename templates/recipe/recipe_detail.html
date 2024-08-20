@@ -6,12 +6,15 @@
 {% endblock %}
 {% block content %}
 <div class="recipe-nav">
-    <a href="{% url 'recipe_user:recipe_list' %}?category=korean">한식</a>
-    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese">일식</a>
-    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese">중식</a>
-    <a href="{% url 'recipe_user:recipe_list' %}?category=western">양식</a>
-    <a href="{% url 'recipe_user:recipe_list' %}?category=snack">분식</a>
-    <a href="{% url 'recipe_user:recipe_list' %}?category=others">기타</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=korean" class="{% if request.GET.category == 'korean' %}category-select{% endif %}">한식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese" class="{% if request.GET.category == 'japanese' %}category-select{% endif %}">일식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese" class="{% if request.GET.category == 'chinese' %}category-select{% endif %}">중식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=western" class="{% if request.GET.category == 'western' %}category-select{% endif %}">양식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=snack" class="{% if request.GET.category == 'snack' %}category-select{% endif %}">분식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=others" class="{% if request.GET.category == 'others' %}category-select{% endif %}">기타</a>
+</div>
+<div id="recipe-category-select">
+    {{recipe.category}}
 </div>
 <div class="recipe-detail-info">
     {% if recipe.image %}
@@ -129,4 +132,5 @@
 
 {% block script %}
 <script src="{% static 'js/recipe/recipe_detail.js' %}"></script>
+<script src="/static/js/recipe/recipe_category.js"></script>
 {% endblock %}

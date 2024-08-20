@@ -2,6 +2,7 @@
 {% load static %}
 {% block head %}
 <link rel="stylesheet" href="/static/css/community/event_detail.css">
+<link rel="stylesheet" href="/static/css/community/notice_detail.css">
 {% endblock %}
 {% block content %}
 <div class="community-header">
@@ -9,12 +10,15 @@
     <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
     <div class="community-category community-category-selected"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
 </div>
-<h1>{{ notice.title }}</h1>
-{% if notice.image %}
-<img src="{{ notice.image.url }}" alt="{{ notice.title }}" style="max-width: 300px;">
-{% endif %}
-<p>{{ notice.content }}</p>
-<p>{{ notice.created_at }}</p>
-<a href="{% url 'community_user:notice_list' %}" class="event-detail-btn">목록</a>
+<div class="notice-detail-container">
+    <h1>{{ notice.title }}</h1>
+    <p>{{ notice.created_at }}</p>
+    {% if notice.image %}
+    <img src="{{ notice.image.url }}" alt="{{ notice.title }}">
+    {% endif %}
+    <p class="notice-detail-content">{{ notice.content }}</p>
+    <a href="{% url 'community_user:notice_list' %}" class="event-detail-btn">목록</a>    
+</div>
+
 
 {% endblock %}

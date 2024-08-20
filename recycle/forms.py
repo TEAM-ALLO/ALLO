@@ -4,7 +4,7 @@ from .models import Recycle
 class RecycleForm(forms.ModelForm):
     class Meta:
         model = Recycle
-        fields = ['category', 'name', 'description','image']
+        fields = ['category', 'name', 'description', 'image', 'tip']
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -15,4 +15,4 @@ class RecycleForm(forms.ModelForm):
 class NewField (forms.ModelForm):
     class Meta:
         model = Recycle
-        fields = ['category', 'name', 'description','image']
+        fields = ['category', 'name', 'description', 'image', 'tip']
