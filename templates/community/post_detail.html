@@ -58,9 +58,14 @@
             {% endif %}
         </div>
     </div>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" alt="{{ post.post_title }}" class="recipe-detail-img">
+    {% endif %}
+
     <div class="post-detail-content-box">
         {{ post.content }}
     </div>
+
 </div>
 <p class="post-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
 <ul id="comment-list">
