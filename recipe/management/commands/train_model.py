@@ -11,19 +11,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # CSV 파일 경로 설정
-        file_path_1 = os.path.join(settings.BASE_DIR, 'TB_RECIPE_SEARCH-220701.csv')
+        # file_path_1 = os.path.join(settings.BASE_DIR, 'TB_RECIPE_SEARCH-220701.csv')
         file_path_2 = os.path.join(settings.BASE_DIR, 'TB_RECIPE_SEARCH-20231130.csv')
 
         # CSV 파일 로드
-        df1 = pd.read_csv(file_path_1)
+        # df1 = pd.read_csv(file_path_1)
         df2 = pd.read_csv(file_path_2)
 
         # C열에 해당하는 요리 이름 추출
-        recipe_names_1 = df1.iloc[:, 2].dropna().unique()  # C열 (0-index라서 2)
-        recipe_names_2 = df2.iloc[:, 2].dropna().unique()
+        # recipe_names_1 = df1.iloc[:, 2].dropna().unique()  # C열 (0-index라서 2)
+        recipe_names = df2[0].tolist()
 
-        # 두 파일의 요리 이름 합치기
-        recipe_names = list(set(recipe_names_1).union(set(recipe_names_2)))
 
         # 요리 이름을 Recipe 모델에 저장
         for name in recipe_names:

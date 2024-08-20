@@ -5,21 +5,46 @@
   <form method="post">
     {% csrf_token %}
     
-    {% if similar_recipes %}
-      <h2>이와 관련된 레시피</h2>
-      <ul>
-        {% for recipe in similar_recipes %}
-          <li>
-            <input type="radio" id="recipe{{ recipe.id }}" name="selected_recipe" value="{{ recipe.id }}">
-            <label for="recipe{{ recipe.id }}">{{ recipe.recipe_name }}</label>
-          </li>
-        {% endfor %}
-      </ul>
+    <!-- 게시글 중 비슷한 레시피 -->
+    {% if similar_recipes_db %}
+        <h2>게시글 중 비슷한 레시피</h2>
+        <ul class="similar-recipe-list">
+          {% for recipe in similar_recipes_db %}
+              <li>
+                  <div class="similar-recipe-item">
+                      <div class="similar-recipe-name">
+                          <a href="{{ recipe.get_absolute_url }}">{{ recipe.recipe_name }}</a>
+                      </div>
+                  </div>
+              </li>
+          {% endfor %}
+        </ul>
     {% else %}
-      <p>관련된 레시피가 없습니다.</p>
+        <p>비슷한 게시글이 없습니다.</p>
     {% endif %}
-    
 
+    <!-- 추가로 비슷한 레시피 추천합니다 -->
+    {% if missing_names or csv_similar_recipes_db %}
+        <h2>추가로 비슷한 레시피 추천합니다</h2>
+        <ul class="similar-recipe-list">
+          {% for recipe in csv_similar_recipes_db %}
+              <li>
+                  <div class="similar-recipe-item">
+                      <div class="similar-recipe-name">{{ recipe.recipe_name }}</div>
+                  </div>
+              </li>
+          {% endfor %}
+          {% for name in missing_names %}
+              <li>
+                  <div class="similar-recipe-item">
+                      <div class="similar-recipe-name">{{ name }}</div>
+                  </div>
+              </li>
+          {% endfor %}
+        </ul>
+    {% else %}
+        <p>추가로 추천할 레시피가 없습니다.</p>
+    {% endif %}
     
     <button type="submit">목록</button>
   </form>

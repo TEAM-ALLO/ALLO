@@ -61,7 +61,7 @@ class RecipeListView(ListView):
         context['no_results'] = search_query and not context['recipes']
 
         # 개인적인 취향에 맞춘 추천 레시피 추가
-        context['preferred_recipes'] = get_user_preferred_recipes_from_csv(self.request.user)
+        context['preferred_recipes'] = get_user_preferred_recipes_from_csv(self.request)
 
         popular_recipe = self.get_queryset().order_by('-likes').first()
         context['popular_recipe'] = popular_recipe
@@ -264,43 +264,136 @@ def get_similar_recipes(recipe_id, top_n=3):
     return Recipe.objects.filter(id__in=similar_recipes)
 
 def load_recipe_names_from_csv():
-    # CSV 파일 경로 설정
-    file_path_1 = os.path.join(settings.BASE_DIR, 'TB_RECIPE_SEARCH-220701.csv')
-    file_path_2 = os.path.join(settings.BASE_DIR, 'TB_RECIPE_SEARCH-20231130.csv')
-
-    # CSV 파일 로드
-    with open(file_path_1, 'r', encoding='cp949', errors='replace') as f1:
-        df1 = pd.read_csv(f1)
-    with open(file_path_2, 'r', encoding='cp949', errors='replace') as f2:
-        df2 = pd.read_csv(f2)
-
-    # C열에 해당하는 요리 이름 추출
-    recipe_names_1 = df1.iloc[:, 2].dropna().unique()  # C열 (0-index라서 2)
-    recipe_names_2 = df2.iloc[:, 2].dropna().unique()
-
-    # 두 파일의 요리 이름 합치기
-    recipe_names = list(set(recipe_names_1).union(set(recipe_names_2)))
-
+    file_path = os.path.join(settings.BASE_DIR, 'TB_RECIPE_SEARCH-20231130.csv')
+    df = pd.read_csv(file_path, header=None, encoding='cp949')
+    recipe_names = df[0].tolist()
     return recipe_names
 
+from difflib import SequenceMatcher
 
+def calculate_similarity(a, b):
+    return SequenceMatcher(None, a, b).ratio()
 
-def get_user_preferred_recipes_from_csv(user, top_n=3):
-    # CSV에서 레시피 이름을 가져옵니다.
+def find_similar_recipes_in_csv(recipe_name, top_n=3, threshold=0.5):
     recipe_names = load_recipe_names_from_csv()
+    
+    # 유사도 계산
+    similar_names = [(name, calculate_similarity(recipe_name, name)) for name in recipe_names]
+    
+    # 유사도가 threshold 이상인 항목 필터링 및 정렬
+    similar_names = [name for name, similarity in sorted(similar_names, key=lambda x: x[1], reverse=True) if similarity >= threshold]
+    
+    # 중복된 이름 제거
+    unique_similar_names = list(dict.fromkeys(similar_names))
+    
+    return unique_similar_names[:top_n]
 
-    # 무작위로 top_n개의 레시피 이름을 선택합니다.
-    preferred_recipe_names = random.sample(recipe_names, top_n)
+import datetime
 
-    # 해당 레시피 이름에 해당하는 Recipe 인스턴스를 반환합니다.
-    preferred_recipes = Recipe.objects.filter(recipe_name__in=preferred_recipe_names)
-    return preferred_recipes
+def get_user_preferred_recipes_from_csv(request, top_n=3):
+    try:
+        user = request.user  # 현재 사용자를 가져옴
+    except AttributeError as e:
+        print(f"Error retrieving user: {e}")
+        raise
+    # 세션에서 추천 목록을 가져옵니다.
+    session_key = 'preferred_recipe_list'
+    last_update_key = 'last_update'
+
+    # 세션에서 저장된 목록과 마지막 업데이트 날짜를 가져옵니다.
+    preferred_recipes = request.session.get(session_key)
+    last_update = request.session.get(last_update_key)
+
+    # 현재 날짜 확인
+    today = datetime.date.today()
+
+    if preferred_recipes is not None and last_update == str(today):
+        # 이미 오늘 업데이트된 목록이 있으면 이를 반환합니다.
+        return preferred_recipes
+    else:
+        # 새 목록을 생성하고 세션에 저장합니다.
+        recipe_names = load_recipe_names_from_csv()
+
+        disliked_recipes = UserChoice.objects.filter(user=user, liked=False).values_list('recipe_name', flat=True)
+        filtered_recipe_names = [name for name in recipe_names if name not in disliked_recipes]
+
+        if len(filtered_recipe_names) >= top_n:
+            preferred_recipe_names = random.sample(filtered_recipe_names, top_n)
+        else:
+            preferred_recipe_names = filtered_recipe_names
+
+        preferred_recipes = list(Recipe.objects.filter(recipe_name__in=preferred_recipe_names))
+        missing_recipe_names = [name for name in preferred_recipe_names if name not in [recipe.recipe_name for recipe in preferred_recipes]]
+
+        preferred_recipes += missing_recipe_names
+
+        # 세션에 저장
+        request.session[session_key] = preferred_recipes
+        request.session[last_update_key] = str(today)
+
+        return preferred_recipes
+
+
 
 @login_required
+def like_recipe(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+    user_choice, created = UserChoice.objects.get_or_create(user=request.user, recipe=recipe)
+    user_choice.liked = True
+    user_choice.save()
+    return redirect(request.META.get('HTTP_REFERER', 'recipe_user:recipe_list'))
+
+@login_required
+def dislike_recipe(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+    user_choice, created = UserChoice.objects.get_or_create(user=request.user, recipe=recipe)
+    user_choice.liked = False
+    user_choice.save()
+    return redirect(request.META.get('HTTP_REFERER', 'recipe_user:recipe_list'))
+
+
+@login_required
+def like_csv_recipe(request):
+    recipe_name = request.POST.get('recipe_name')
+    if recipe_name:
+        UserChoice.objects.update_or_create(
+            user=request.user, 
+            recipe_name=recipe_name,
+            defaults={'liked': True}
+        )
+    return redirect(request.META.get('HTTP_REFERER', 'recipe_user:recipe_list'))
+
+@login_required
+def dislike_csv_recipe(request):
+    recipe_name = request.POST.get('recipe_name')
+    if recipe_name:
+        UserChoice.objects.update_or_create(
+            user=request.user, 
+            recipe_name=recipe_name,
+            defaults={'liked': False}
+        )
+    return redirect(request.META.get('HTTP_REFERER', 'recipe_user:recipe_list'))
+
+
 def recommend_similar_recipes(request, id):
     selected_recipe = get_object_or_404(Recipe, id=id)
-    similar_recipes = get_similar_recipes_based_on_names(selected_recipe.recipe_name, request.user)
-    preferred_recipes = get_user_preferred_recipes_from_csv(request.user)
+    
+    # 데이터베이스에서 비슷한 레시피 찾기 (자신의 게시글 제외)
+    similar_recipes_db = get_similar_recipes_based_on_names(selected_recipe.recipe_name, request.user)
+    
+    # CSV 파일에서 비슷한 레시피 이름 찾기
+    similar_recipe_names_csv = find_similar_recipes_in_csv(selected_recipe.recipe_name)
+    print(f"Similar recipes in CSV: {similar_recipe_names_csv}")
+    
+    # CSV 파일에서 찾은 레시피 이름으로 데이터베이스에서 검색
+    csv_similar_recipes_db = Recipe.objects.filter(recipe_name__in=similar_recipe_names_csv).exclude(author=request.user)
+
+    # CSV에서 찾은 레시피 이름 중 데이터베이스에 없는 경우 단순 문자열로 추가
+    found_names = [recipe.recipe_name for recipe in csv_similar_recipes_db]
+    missing_names = [name for name in similar_recipe_names_csv if name not in found_names]
+
+    # **여기서 수정: request.user 대신 request 전달**
+    preferred_recipes = get_user_preferred_recipes_from_csv(request)
 
     if request.method == 'POST':
         selected_recipe_id = request.POST.get('selected_recipe')
@@ -308,28 +401,65 @@ def recommend_similar_recipes(request, id):
             selected_recipe = Recipe.objects.get(id=selected_recipe_id)
             UserChoice.objects.create(user=request.user, recipe=selected_recipe, liked=True)
         else:
-            for recipe in similar_recipes:
+            for recipe in similar_recipes_db:
                 UserChoice.objects.create(user=request.user, recipe=recipe, liked=False)
-            for recipe in preferred_recipes:
+            for recipe in csv_similar_recipes_db:
                 UserChoice.objects.create(user=request.user, recipe=recipe, liked=False)
         return redirect('recipe_user:recipe_list')
 
-
     context = {
-        'similar_recipes': similar_recipes,
+        'similar_recipes_db': similar_recipes_db,  # 데이터베이스에서 찾은 레시피
+        'csv_similar_recipes_db': csv_similar_recipes_db,  # CSV에서 찾은 레시피 중 데이터베이스에 있는 것
+        'missing_names': missing_names,  # CSV에서 찾았지만 데이터베이스에 없는 레시피 이름
         'preferred_recipes': preferred_recipes,
     }
     return render(request, 'recipe/recommendation.html', context)
 
 
-def get_similar_recipes_based_on_names(recipe_name, user, top_n=3):
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+def calculate_levenshtein_similarity(a, b):
+    return SequenceMatcher(None, a, b).ratio()
+
+def remove_whitespace(text):
+    return text.replace(" ", "")
+
+def get_similar_recipes_based_on_names(recipe_name, user, top_n=3, similarity_threshold=0.1):
     disliked_recipes = UserChoice.objects.filter(user=user, liked=False).values_list('recipe_id', flat=True)
-    print(f"Disliked recipes for user {user.username}: {list(disliked_recipes)}")
     
-    recipes = Recipe.objects.filter(recipe_name__icontains=recipe_name).exclude(id__in=disliked_recipes).order_by('?')[:top_n]
-    print(f"Found {recipes.count()} similar recipes for recipe name '{recipe_name}'")
+    all_recipes = Recipe.objects.exclude(author=user).exclude(id__in=disliked_recipes)
     
-    return recipes
+    # 띄어쓰기 제거
+    recipe_name_no_space = remove_whitespace(recipe_name)
+    recipe_names = [remove_whitespace(recipe.recipe_name) for recipe in all_recipes]
+    recipe_names.insert(0, recipe_name_no_space)  # 검색어를 첫 번째 위치에 추가
+    
+    # TF-IDF 벡터화 with extended N-gram range
+    vectorizer = TfidfVectorizer(ngram_range=(1, 4))  # N-gram 범위를 4까지 확장
+    tfidf_matrix = vectorizer.fit_transform(recipe_names)
+    
+    # 코사인 유사도 계산
+    cosine_similarities = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix).flatten()
+    
+    # Levenshtein 유사도 계산
+    levenshtein_similarities = [calculate_levenshtein_similarity(recipe_name_no_space, name) for name in recipe_names]
+    
+    # 두 유사도 점수의 평균을 구함
+    combined_similarities = [(cos_sim + lev_sim) / 2 for cos_sim, lev_sim in zip(cosine_similarities, levenshtein_similarities)]
+    
+    # 유사도가 임계값 이상인 레시피 선택
+    similar_indices = [i for i, similarity in enumerate(combined_similarities) if similarity >= similarity_threshold]
+    
+    # 첫 번째 항목(검색어 자체)을 제외하고 상위 top_n 개 추출
+    similar_indices = similar_indices[1:top_n+1]
+    
+    similar_recipes = [all_recipes[i-1] for i in similar_indices]  # i-1로 수정해 all_recipes에서 올바른 인덱스를 가져옵니다.
+    
+    
+    return similar_recipes
+
+
 
 import os
 import pickle
@@ -353,18 +483,40 @@ def get_similar_recipes(recipe_id, top_n=3):
         print("Count matrix or DataFrame is not loaded")
         return []
 
-    cosine_sim = cosine_similarity(count_matrix)
-    idx = df.index[df['id'] == recipe_id].tolist()
-    if not idx:
-        print(f"No index found for recipe ID {recipe_id}")
+    try:
+        cosine_sim = cosine_similarity(count_matrix)
+        idx = df.index[df['id'] == recipe_id].tolist()
+        if not idx:
+            print(f"No index found for recipe ID {recipe_id}")
+            return []
+        
+        idx = idx[0]
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:top_n + 1]
+        
+        similar_recipes = [df.iloc[i[0]]['id'] for i in sim_scores]
+        print(f"Similar recipes IDs: {similar_recipes}")
+        
+        return Recipe.objects.filter(id__in=similar_recipes)
+    except Exception as e:
+        print(f"Error during similarity calculation: {e}")
         return []
+
+
+@login_required
+def recipe_list_view(request):
+    preferred_recipes = get_user_preferred_recipes_from_csv(request, top_n=3)  # request를 전달합니다.
     
-    idx = idx[0]
-    sim_scores = list(enumerate(cosine_sim[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1:top_n + 1]
-    
-    similar_recipes = [df.iloc[i[0]]['id'] for i in sim_scores]
-    print(f"Similar recipes IDs: {similar_recipes}")
-    
-    return Recipe.objects.filter(id__in=similar_recipes)
+    context = {
+        'preferred_recipes': preferred_recipes,
+        # 다른 필요한 컨텍스트
+    }
+    return render(request, 'recipe/recipe_list.html', context)
+
+def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['preferred_recipes'] = get_user_preferred_recipes_from_csv(self.request)  # self.request를 전달합니다.
+    return context
+
+
