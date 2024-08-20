@@ -4,6 +4,7 @@
 {% endblock %}
 {% block content %}
 <div class="recipe-nav">
+    <a href="{% url 'recipe_user:recipe_list' %}?category=all" class="{% if request.GET.category == 'all' %}category-select{% endif %}">전체</a>
     <a href="{% url 'recipe_user:recipe_list' %}?category=korean" class="{% if request.GET.category == 'korean' %}category-select{% endif %}">한식</a>
     <a href="{% url 'recipe_user:recipe_list' %}?category=japanese" class="{% if request.GET.category == 'japanese' %}category-select{% endif %}">일식</a>
     <a href="{% url 'recipe_user:recipe_list' %}?category=chinese" class="{% if request.GET.category == 'chinese' %}category-select{% endif %}">중식</a>

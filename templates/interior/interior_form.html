@@ -1,9 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
+    <link rel="stylesheet" href="{% static 'css/interior/interior_list.css' %}">
     <link rel="stylesheet" href="{% static 'css/interior/interior_create.css' %}">
 {% endblock %}
 {% block content %}
+<div class="interior-nav">
+    <a href="{% url 'interior_user:interior_list' %}?category=all{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'all' %}category-select{% endif %}">전체</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=modern{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'modern' %}category-select{% endif %}">모던</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=european{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'european' %}category-select{% endif %}">유럽풍</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=classic{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'classic' %}category-select{% endif %}">클래식</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=natural{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'natural' %}category-select{% endif %}">내추럴</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=colorful{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'colorful' %}category-select{% endif %}">컬러풀</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=other{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'other' %}category-select{% endif %}">기타</a>
+</div>
 <h2>새 인테리어</h2>
 <form method="post" enctype="multipart/form-data" class="interior-create-form">
     {% csrf_token %}

@@ -58,6 +58,9 @@
             {% endif %}
         </div>
     </div>
+    {% if post.image %}
+    <img src="{{ post_images.image.url }}" alt="{{ post.post_title }}" class="recipe-detail-img">
+    {% endif %}
     <div class="post-detail-content-box">
         {{ post.content }}
     </div>
