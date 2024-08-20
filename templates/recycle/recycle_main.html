@@ -29,7 +29,7 @@
     </div>
     <form method="post" class="recycle-search-container">
         {% csrf_token %}
-        <input type="text" name="query" placeholder="예)우유, 형광등, 프링글스통" class="recycle-main-search">
+        <input type="text" name="query" placeholder="예) 우유, 영수증, 식용유" class="recycle-main-search">
         <button type="submit"><img src="/static/img/search.png" alt="검색 아이콘" class="search-icon"></button>
     </form>
     {% if search_performed %}

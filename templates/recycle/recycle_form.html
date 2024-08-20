@@ -20,12 +20,16 @@
         {{ form.description }}
     </div>
     <div class="form-group">
+        <div>팁</div>
+        {{ form.tip }}
+    </div>
+    <div class="form-group">
         <div>이미지</div>
         {{ form.image }}
     </div>
     <div class="recycle-form-btns">
         <a href="{% url 'recycle_user:recycle_main' %}">목록</a>
-        <button type="submit">분리수거 작성</button>
+        <button type="submit">작성</button>
     </div>
 </form>
 {% endblock %}
