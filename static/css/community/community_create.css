@@ -25,57 +25,54 @@
     text-align: center;
     margin: 10px auto;
 }
-#id_title {
+.community-create-container {
     width: 80%;
     margin: 0 auto;
-    padding: 10px 20px;
-    border: 6px solid var(--light--gray--color);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.community-create-container > div {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: center;
+}
+.community-create-container h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--main--red--color);
+    width: 66px;
+    margin-right: 10px;
+
+}
+.community-create-container input {
+    width: 300px;
+}
+#id_title,
+#id_content {
+    background-color: var(--light--gray--color);
+    padding: 10px;
+    border-radius: 10px;
+    border: 0;
 }
 #id_content {
-    width: 80%;
-    margin: 0 auto;
-    min-height: 300px;
-    padding: 20px;
-    border-left: 6px solid var(--light--gray--color);
-    border-right: 6px solid var(--light--gray--color);
-    border-top: 0;
-    border-bottom: 0;
     resize: none;
+    width: 300px;
 }
-#id-content:focus {
-    outline: none!important;
+#id_content:focus {
+    outline: none;
 }
-#id_image {
-    display: flex;
+.post-form-btns {
+    margin: 0 auto 10px auto;
 }
-.community-form-bottom {
-    width: 80% !important;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 auto;
-    border: 6px solid var(--light--gray--color);
-}
-/* .community-create-form-container {
-    min-width: 300px;
-} */
-.community-create-btn {
+.post-form-btns button,
+.post-form-btns a {
     background-color: var(--main--red--color);
-    padding: 10px;
-    color: #fff;
-    border-radius: 10px;
-    font-size: 16px;
-    
-    /* 지금 폰트 사이즈 13.33px */
-}
-.community-list-btn {
-    display: flex;
-    justify-content: center;
-    margin: 10px auto;
-    background-color: var(--main--red--color);
-    padding: 10px;
     border-radius: 10px;
     color: #fff !important;
-    width: 69.05px;
+    padding: 10px;
+    font-size: 16px;
+    height: 44px;
+    line-height: 1.5;
 }

@@ -1,17 +1,24 @@
 {% extends 'base.html' %}
-
 {% load static %}
-
+{% block head %}
 <link rel="stylesheet" href="{% static 'css/users/notification.css' %}">
+{% endblock %}
 {% block content %}
-<h1>알람</h1>
+<h1 class="notification-nav">알림</h1>
 <ul id="notification_list">
     {% for item in notifications %}
-    <li id="notification-{{ item.notification.id }}" class="{% if item.is_read %}read-notification{% else %}unread-notification{% endif %}">
+    <li id="notification-{{ item.notification.id }}" class="noti-container {% if item.is_read %}read-notification{% else %}unread-notification{% endif %}">
         <a href="javascript:void(0);" onclick="markNotificationAsReadAndRedirect({{ item.notification.id }}, '{{ item.link }}')">
-            {{ item.message }}
+        {% if item.notification.sender.profile_image %}
+            <img src="{{ item.notification.sender.profile_image.url }}" alt="프로필 사진">
+        {% else %}
+            <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진">
+        {% endif %}
+            <div>
+                <p>{{ item.message }}</p>
+                <p>{{ item.notification.timestamp }}</p>
+            </div>
         </a>
-        <small>{{ item.notification.timestamp }}</small>
     </li>
     {% empty %}
     <li>알림이 없습니다.</li>
