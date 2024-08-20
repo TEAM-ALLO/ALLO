@@ -16,7 +16,7 @@
     게시글 작성
     {% endif %}
 </h1>
-<form method="post" class="community-create-container">
+<form method="post" enctype="multipart/form-data" class="community-create-container">
     {% csrf_token %}
     {{ form.title }}
     {{ form.content }}
