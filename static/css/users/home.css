@@ -59,7 +59,7 @@
 }
 .slide-logo-img {
     max-height: 80%;
-    max-width: 50%;
+    max-width: 30%;
     border-radius: 50%;
     aspect-ratio: auto;
 }
@@ -77,6 +77,8 @@
 }
 .slide-logo2-img {
     margin: 20px 0;
+    width: 380px;
+    height: 200px;
 }
 .slide1-right > p {
     color: #B89D30;
