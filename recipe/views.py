@@ -1,5 +1,6 @@
+from urllib import request
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Recipe, Comment
+from .models import Recipe, Comment, UserChoice
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .forms import RecipeForm, CommentForm
@@ -8,6 +9,10 @@ from community.models import FriendRequest
 from django.http import JsonResponse
 from users.models import Notification
 from django.contrib.contenttypes.models import ContentType
+import random
+import pandas as pd
+import os
+from django.conf import settings
 
 class RecipeListView(ListView):
     model = Recipe
@@ -54,6 +59,9 @@ class RecipeListView(ListView):
 
         context['search_query'] = search_query
         context['no_results'] = search_query and not context['recipes']
+
+        # 개인적인 취향에 맞춘 추천 레시피 추가
+        context['preferred_recipes'] = get_user_preferred_recipes_from_csv(self.request.user)
 
         popular_recipe = self.get_queryset().order_by('-likes').first()
         context['popular_recipe'] = popular_recipe
@@ -240,3 +248,123 @@ def comments_delete(request, recipe_id, comment_id):
         }, json_dumps_params={'ensure_ascii': False})
     else:
         return JsonResponse({'success': False, 'message': 'Unauthorized'})
+
+
+def get_similar_recipes(recipe_id, top_n=3):
+    if count_matrix is None or df is None:
+        return []
+
+    cosine_sim = cosine_similarity(count_matrix)
+    idx = df.index[df['id'] == recipe_id].tolist()[0]
+    sim_scores = list(enumerate(cosine_sim[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:top_n + 1]
+
+    similar_recipes = [df.iloc[i[0]]['id'] for i in sim_scores]
+    return Recipe.objects.filter(id__in=similar_recipes)
+
+def load_recipe_names_from_csv():
+    # CSV 파일 경로 설정
+    file_path_1 = os.path.join(settings.BASE_DIR, 'TB_RECIPE_SEARCH-220701.csv')
+    file_path_2 = os.path.join(settings.BASE_DIR, 'TB_RECIPE_SEARCH-20231130.csv')
+
+    # CSV 파일 로드
+    with open(file_path_1, 'r', encoding='cp949', errors='replace') as f1:
+        df1 = pd.read_csv(f1)
+    with open(file_path_2, 'r', encoding='cp949', errors='replace') as f2:
+        df2 = pd.read_csv(f2)
+
+    # C열에 해당하는 요리 이름 추출
+    recipe_names_1 = df1.iloc[:, 2].dropna().unique()  # C열 (0-index라서 2)
+    recipe_names_2 = df2.iloc[:, 2].dropna().unique()
+
+    # 두 파일의 요리 이름 합치기
+    recipe_names = list(set(recipe_names_1).union(set(recipe_names_2)))
+
+    return recipe_names
+
+
+
+def get_user_preferred_recipes_from_csv(user, top_n=3):
+    # CSV에서 레시피 이름을 가져옵니다.
+    recipe_names = load_recipe_names_from_csv()
+
+    # 무작위로 top_n개의 레시피 이름을 선택합니다.
+    preferred_recipe_names = random.sample(recipe_names, top_n)
+
+    # 해당 레시피 이름에 해당하는 Recipe 인스턴스를 반환합니다.
+    preferred_recipes = Recipe.objects.filter(recipe_name__in=preferred_recipe_names)
+    return preferred_recipes
+
+@login_required
+def recommend_similar_recipes(request, id):
+    selected_recipe = get_object_or_404(Recipe, id=id)
+    similar_recipes = get_similar_recipes_based_on_names(selected_recipe.recipe_name, request.user)
+    preferred_recipes = get_user_preferred_recipes_from_csv(request.user)
+
+    if request.method == 'POST':
+        selected_recipe_id = request.POST.get('selected_recipe')
+        if selected_recipe_id:
+            selected_recipe = Recipe.objects.get(id=selected_recipe_id)
+            UserChoice.objects.create(user=request.user, recipe=selected_recipe, liked=True)
+        else:
+            for recipe in similar_recipes:
+                UserChoice.objects.create(user=request.user, recipe=recipe, liked=False)
+            for recipe in preferred_recipes:
+                UserChoice.objects.create(user=request.user, recipe=recipe, liked=False)
+        return redirect('recipe_user:recipe_list')
+
+
+    context = {
+        'similar_recipes': similar_recipes,
+        'preferred_recipes': preferred_recipes,
+    }
+    return render(request, 'recipe/recommendation.html', context)
+
+
+def get_similar_recipes_based_on_names(recipe_name, user, top_n=3):
+    disliked_recipes = UserChoice.objects.filter(user=user, liked=False).values_list('recipe_id', flat=True)
+    print(f"Disliked recipes for user {user.username}: {list(disliked_recipes)}")
+    
+    recipes = Recipe.objects.filter(recipe_name__icontains=recipe_name).exclude(id__in=disliked_recipes).order_by('?')[:top_n]
+    print(f"Found {recipes.count()} similar recipes for recipe name '{recipe_name}'")
+    
+    return recipes
+
+import os
+import pickle
+from django.conf import settings
+from sklearn.metrics.pairwise import cosine_similarity
+
+vectorizer_path = os.path.join(settings.BASE_DIR, 'count_vectorizer.pkl')
+df_path = os.path.join(settings.BASE_DIR, 'recipes_df.pkl')
+
+if os.path.exists(vectorizer_path) and os.path.exists(df_path):
+    with open(vectorizer_path, 'rb') as f:
+        count_matrix = pickle.load(f)
+    with open(df_path, 'rb') as f:
+        df = pickle.load(f)
+else:
+    count_matrix = None
+    df = None
+
+def get_similar_recipes(recipe_id, top_n=3):
+    if count_matrix is None or df is None:
+        print("Count matrix or DataFrame is not loaded")
+        return []
+
+    cosine_sim = cosine_similarity(count_matrix)
+    idx = df.index[df['id'] == recipe_id].tolist()
+    if not idx:
+        print(f"No index found for recipe ID {recipe_id}")
+        return []
+    
+    idx = idx[0]
+    sim_scores = list(enumerate(cosine_sim[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:top_n + 1]
+    
+    similar_recipes = [df.iloc[i[0]]['id'] for i in sim_scores]
+    print(f"Similar recipes IDs: {similar_recipes}")
+    
+    return Recipe.objects.filter(id__in=similar_recipes)

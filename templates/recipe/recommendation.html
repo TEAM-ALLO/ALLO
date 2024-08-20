@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>추천 레시피</h1>
+  <form method="post">
+    {% csrf_token %}
+    
+    {% if similar_recipes %}
+      <h2>이와 관련된 레시피</h2>
+      <ul>
+        {% for recipe in similar_recipes %}
+          <li>
+            <input type="radio" id="recipe{{ recipe.id }}" name="selected_recipe" value="{{ recipe.id }}">
+            <label for="recipe{{ recipe.id }}">{{ recipe.recipe_name }}</label>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>관련된 레시피가 없습니다.</p>
+    {% endif %}
+    
+
+    
+    <button type="submit">목록</button>
+  </form>
+{% endblock %}

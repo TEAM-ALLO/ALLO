@@ -54,4 +54,14 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
+
+class UserChoice(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, null=True, blank=True)
+    liked = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.recipe.recipe_name if self.recipe else 'None'} - {'Liked' if self.liked else 'Disliked'}"
+    
     

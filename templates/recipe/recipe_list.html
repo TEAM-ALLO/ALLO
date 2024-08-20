@@ -43,7 +43,19 @@
     </div>
 </a>
 {% endif %}
-
+<!-- 개인적인 취향에 맞춘 추천 레시피 섹션 추가 -->
+{% if preferred_recipes %}
+    <h2>당신이 좋아할 만한 레시피</h2>
+    <ul class="preferred-recipe-list">
+        {% for recipe in preferred_recipes %}
+            <li>
+                <div class="preferred-recipe-item">
+                    <div class="preferred-recipe-name">{{ recipe }}</div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 <div class="recipe-list-btn-box">
     <a href="{% url 'recipe_user:recipe_create' %}" class="recipe-list-btn">작성하기</a>
 </div>
