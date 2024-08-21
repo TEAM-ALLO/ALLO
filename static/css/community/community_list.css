@@ -118,3 +118,7 @@
 .community-post-icon {
     width: 20px;
 }
+.no-post {
+    width: 80%;
+    margin: 10px auto;
+}
