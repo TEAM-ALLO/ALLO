@@ -12,11 +12,16 @@
 </div>
 <div class="notice-detail-container">
     <h1>{{ notice.title }}</h1>
+    <div>
+        {% if user.is_staff %}
+            <a href="{% url 'community_user:notice_delete' notice.pk %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this notice?');">Delete</a>
+        {% endif %}
+    </div>
     <p>{{ notice.created_at }}</p>
     {% if notice.image %}
     <img src="{{ notice.image.url }}" alt="{{ notice.title }}">
     {% endif %}
-    <p class="notice-detail-content">{{ notice.content }}</p>
+    <p class="notice-detail-content">{{ notice.content|linebreaksbr }}</p>
     <a href="{% url 'community_user:notice_list' %}" class="event-detail-btn">목록</a>    
 </div>
 

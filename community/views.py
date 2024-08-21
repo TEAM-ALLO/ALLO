@@ -60,6 +60,20 @@ def notice_create(request):
         form = NoticeForm()
     return render(request, 'community/notice_form.html', {'form': form})
 
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def notice_delete(request, pk):
+    notice = get_object_or_404(Notice, pk=pk)
+    notice.delete()
+    return redirect('community_user:notice_list')
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def event_delete(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.delete()
+    return redirect('community_user:event_list')
+
 
 @login_required
 def chatroom_list(request):
