@@ -76,3 +76,16 @@
     height: 44px;
     line-height: 1.5;
 }
+.community-img-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.community-img-container text,
+.community-img-container a,
+.community-img-container label,
+.community-img-container input,
+.community-img-container br {
+    width: 386px;
+    margin-left: 310px;
+}

@@ -1,17 +1,14 @@
-// 햄버거버튼 클릭하면 사이드바 나타나도록
 document.addEventListener('DOMContentLoaded', function() {
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const sidebar = document.getElementById('sidebar');
+    
     hamburgerBtn.addEventListener('click', function() {
-        if (sidebar.classList.contains('hidden')) {
-            sidebar.classList.remove('hidden');
-            sidebar.style.display = 'inline-flex';
-        } else {
-            sidebar.classList.add('hidden');
-            sidebar.style.display = 'none';
-        }
+        sidebar.style.display = sidebar.style.display === 'inline-flex' ? 'none' : 'inline-flex';
+        
+        hamburgerBtn.classList.toggle('open');
     });
-})
+});
+
 
 // 헤더의 돋보기 버튼 클릭하면 검색창 나타나도록
 document.addEventListener('DOMContentLoaded', function() {

@@ -1,3 +1,14 @@
+.map-btn {
+    display: flex;
+    align-items: center;
+    width: 70%;
+    margin: 20px auto 10px auto;
+    justify-content: end;
+    gap: 5px;
+}
+.map-btn img {
+    height: 20px;
+}
 .clothing-title {
     font-size: 20px;
     font-weight: bold;
@@ -25,4 +36,13 @@
 }
 .recycle-instructions > p {
     line-height: 1.2;
+}
+.trash-main-btn {
+    color: #fff !important;
+    background-color: var(--main--red--color);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px auto;
+    display: block;
+    width: 143px;
 }

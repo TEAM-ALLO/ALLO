@@ -26,7 +26,7 @@
         <h2>내용</h2>
         {{ form.content }}
     </div>
-    <div>
+    <div class="community-img-container">
         <h2>이미지</h2>
         {{ form.image }}
     </div>
@@ -35,4 +35,7 @@
         <button type="submit" class="community-create-btn">작성하기</button>
     </div>
 </form>
+{% endblock %}
+{% block script %}
+<script src="/static/js/community/community_update.js"></script>
 {% endblock %}

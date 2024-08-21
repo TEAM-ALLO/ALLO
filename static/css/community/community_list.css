@@ -28,8 +28,8 @@
     height: 50px;
     display: flex;
     gap: 10px;
-    margin-top: 10px;
-    width: 100%;
+    margin: 10px auto;
+    width: 80%;
 }
 #community-top-notice {
     width: 100%;
@@ -57,11 +57,16 @@
 }
 .community-post-container {
     margin: 10px;
-    border: 6px solid var(--main--gray--color);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 .community-post-box {
-    border: 1px solid var(--main--gray--color);
     display: flex;
+    width: 80%;
+    margin: 0 auto;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
     cursor: pointer;
 }
 .community-post-box-left {

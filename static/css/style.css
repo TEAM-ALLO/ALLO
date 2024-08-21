@@ -49,6 +49,9 @@
     gap: 7px;
     cursor: pointer;
 }
+.open {
+  gap: 4px !important;
+}
 #hamburger-btn > div {
     width: 40px;
     height: 6px;
@@ -62,6 +65,18 @@
 #hamburger-btn>div:nth-child(3) {
     background-color: var(--main--blue--color);
 }
+#hamburger-btn.open > div:nth-child(1) {
+  transform: rotate(45deg) translate(7px, 7px);
+  background-color: var(--main--red--color);
+}
+#hamburger-btn.open > div:nth-child(2) {
+  opacity: 0;
+}
+#hamburger-btn.open > div:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+  background-color: var(--main--red--color);
+}
+
 
 /* sidenar */
 #sidebar {
@@ -79,6 +94,10 @@
 .sidebar-category {
     margin: 30px;
     font-size: 20px;
+}
+.sidebar-category:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
 }
 /* search */
 .search_logo {
