@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <div class="recycle-nav">
-    <a href="{% url 'recycle_user:recycle_main' %}" id="recycle-nav-trash">분리수거</a>
+    <a href="{% url 'recycle_user:recycle_main' %}" id="recycle-nav-trash" class="recycle-nav-select">분리수거</a>
     <a href="{% url 'recycle_user:clothing' %}">의류수거함</a>
 </div>
 
@@ -34,8 +34,8 @@
             <ul>
             {% for item in items %}
                 <a href="{% url 'recycle_user:recycle_detail' category_name=item.category item_name=item.name %}" class="recycle-post-container">
-                    <p>{{ item.name }}</p>
-                    <p>{{ item.category }}</p>
+                    <p>{{ item.category }} - {{ item.name }}</p>
+                    <!-- <p>{{ item.category }}</p> -->
                 </a>
             {% endfor %}
             </ul>
