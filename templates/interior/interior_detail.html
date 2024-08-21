@@ -26,7 +26,7 @@
         {% else %}
         <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진" class="author-img">
         {% endif %}
-        <p>{{ post.author }}</p>
+        <p>{{ post.author.name }}</p>
     </div>
     <p class="interior-detail-user-btns">
         {% if request.user == post.author %}
@@ -79,20 +79,20 @@
     </ul>
 </div>
 {% endif %}
-<p class="interior-detail-content">{{ post.content }}</p>
+<div class="interior-detail-content">{{ post.content|linebreaks }}</div>
 <!-- 댓글 목록 -->
 <p class="interior-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
 <ul id="comment-list">
     {% for comment in comments %}
     <li class="interior-detail-comment-container">
         <div class="interior-detail-comment-user">
-            {{ comment.user.username }}
+            {{ comment.user.name }}
             {% if request.user.username == comment.user.username %}
             <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
             {% endif %}
         </div>
         <div>
-            {{ comment.content }}
+            {{ comment.content|linebreaks }}
         </div>
     </li>
     {% endfor %}

@@ -83,6 +83,10 @@
     width: 70%;
     margin: 10px auto;
 }
+.interior-detail-content > p {
+    width: 100%;
+    margin: 0 auto;
+}
 .furniture-list h3 {
     font-weight: bold;
     text-align: center;
@@ -132,6 +136,7 @@
     position: absolute;
     right: calc(((100vw - 70%) / 2) + 10px);
     bottom: 10px;
+    cursor: pointer;
 }
 .main-container>form {
     position: relative;

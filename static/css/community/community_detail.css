@@ -115,6 +115,7 @@
     position: absolute;
     right: calc(((100vw - 70%) / 2) + 10px);
     bottom: 10px;
+    cursor: pointer;
 }
 .main-container>form {
     position: relative;

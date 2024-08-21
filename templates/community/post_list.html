@@ -50,18 +50,11 @@
                     <p>댓글이 없습니다.</p>
                 {% endif %}
             </div>
-            <!-- <div class="community-post-box-ud">
-            {% if request.user == post.author %}
-                <a href="{% url 'community_user:post_update' post.id %}">Edit</a>
-                <a href="{% url 'community_user:post_delete' post.id %}">Delete</a>
-            {% endif %}
-            </div> -->
         </div>
-    <!-- </a> -->
     </div>
     {% endfor %}
 {% else %}
-<p>작성된 게시글이 없습니다.</p>    
+<p class="no-post">작성된 게시글이 없습니다.</p>    
 {% endif %}
 </div>
 {% endblock %}
