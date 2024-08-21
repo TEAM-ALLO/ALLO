@@ -42,7 +42,7 @@
                 {% endif %}
             {% endif %}
         </div>
-        <p>작성자: {{ recipe.author }}</p>
+        <p>작성자: {{ recipe.author.name }}</p>
         <p>{{ recipe.servings }}인분</p>
         <div class="recipe-detail-cook">
             <p>난이도: {{ recipe.difficulty }}</p>
@@ -92,7 +92,7 @@
     {% for comment in comments %}
     <li class="recipe-detail-comment-container">
         <div class="recipe-detail-comment-user">
-            {{ comment.user.username }}
+            {{ comment.user.name }}
             {% if request.user.username == comment.user.username %}
             <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
             {% endif %}

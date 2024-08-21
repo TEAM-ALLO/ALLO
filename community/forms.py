@@ -4,7 +4,10 @@ from .models import CommunityPost, Message, Comment, Event, Notice
 class PostForm(forms.ModelForm):
     class Meta:
         model = CommunityPost
-        fields = ['title', 'content','image']
+        fields = ['title', 'content', 'image']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 10}),
+        }
 
 class MessageForm(forms.ModelForm):
     content = forms.CharField(

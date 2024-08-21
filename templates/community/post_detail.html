@@ -26,7 +26,7 @@
             {% else %}
                 <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
             {% endif %}
-            {{ post.author.username }} | {{ post.date_posted|date:"Y-m-d H:i" }}
+            {{ post.author.name }} | {{ post.date_posted|date:"Y-m-d H:i" }}
         </p>
         <div class="actions">
             <button id="like-button" data-post-id="{{ post.pk }}">
@@ -62,7 +62,7 @@
     <img src="{{ post.image.url }}" alt="{{ post.post_title }}" class="recipe-detail-img">
     {% endif %}
     <div class="post-detail-content-box">
-        {{ post.content }}
+        {{ post.content|linebreaksbr }}
     </div>
 
 </div>
@@ -71,7 +71,7 @@
     {% for comment in comments %}
     <li class="post-detail-comment-container">
         <div class="post-detail-comment-user">
-            {{ comment.user.username }}
+            {{ comment.user.name }}
             {% if request.user.username == comment.user.username %}
             <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
             {% endif %}

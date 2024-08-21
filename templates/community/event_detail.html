@@ -10,10 +10,15 @@
 </div>
 <div class="event-detail-container">
     <h2 class="event-title">{{ event.title }}</h2>
+    <div>
+        {% if user.is_staff %}
+            <a href="{% url 'community_user:event_delete' event.pk %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+        {% endif %}
+    </div>
     {% if event.image %}
     <img src="{{ event.image.url }}" alt="{{ event.title }}" class="event-img">
     {% endif %}
-    <p class="event-desc">{{ event.description }}</p>
+    <p class="event-desc">{{ event.description|linebreaksbr }}</p>
     <div class="event-date-container">
         <h3>
             시작

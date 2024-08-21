@@ -8,7 +8,11 @@ class InteriorPostForm(forms.ModelForm):
     class Meta:
         model = InteriorPost
         fields = ['title', 'content', 'image', 'category','furniture_list']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 10}),
+        }
 
+        
 class CommentForm(forms.ModelForm):
     class Meta:
         model = InteriorComment
