@@ -336,7 +336,7 @@ def get_user_preferred_recipes_from_csv(request, top_n=3):
 
 
 @login_required
-def like_recipe(request, id):
+def recommend_like_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     user_choice, created = UserChoice.objects.get_or_create(user=request.user, recipe=recipe)
     user_choice.liked = True
@@ -344,7 +344,7 @@ def like_recipe(request, id):
     return redirect(request.META.get('HTTP_REFERER', 'recipe_user:recipe_list'))
 
 @login_required
-def dislike_recipe(request, id):
+def recommend_dislike_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     user_choice, created = UserChoice.objects.get_or_create(user=request.user, recipe=recipe)
     user_choice.liked = False

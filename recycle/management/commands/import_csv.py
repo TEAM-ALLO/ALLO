@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 import os
 from recycle.models import Recycle
 from users.models import User
+
 class Command(BaseCommand):
     help = 'Import ALLO CSV file into the database'
 
