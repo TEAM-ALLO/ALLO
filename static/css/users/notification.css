@@ -45,3 +45,10 @@
     border-radius: 50%;
     object-fit: cover;
 }
+.delete-notification-btn {
+    text-align: left;
+    width: 30px;
+}
+.delete-notification-btn:hover {
+    text-decoration: underline;
+}
