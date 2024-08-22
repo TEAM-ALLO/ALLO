@@ -336,7 +336,7 @@ def get_user_preferred_recipes_from_csv(request, top_n=3):
 
 
 @login_required
-def like_recipe(request, id):
+def recommend_like_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     user_choice, created = UserChoice.objects.get_or_create(user=request.user, recipe=recipe)
     user_choice.liked = True
@@ -344,7 +344,7 @@ def like_recipe(request, id):
     return redirect(request.META.get('HTTP_REFERER', 'recipe_user:recipe_list'))
 
 @login_required
-def dislike_recipe(request, id):
+def recommend_dislike_recipe(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     user_choice, created = UserChoice.objects.get_or_create(user=request.user, recipe=recipe)
     user_choice.liked = False
@@ -425,7 +425,7 @@ def calculate_levenshtein_similarity(a, b):
 def remove_whitespace(text):
     return text.replace(" ", "")
 
-def get_similar_recipes_based_on_names(recipe_name, user, top_n=3, similarity_threshold=0.1):
+def get_similar_recipes_based_on_names(recipe_name, user, top_n=5, similarity_threshold=0.1):
     disliked_recipes = UserChoice.objects.filter(user=user, liked=False).values_list('recipe_id', flat=True)
     
     all_recipes = Recipe.objects.exclude(author=user).exclude(id__in=disliked_recipes)
@@ -435,29 +435,19 @@ def get_similar_recipes_based_on_names(recipe_name, user, top_n=3, similarity_th
     recipe_names = [remove_whitespace(recipe.recipe_name) for recipe in all_recipes]
     recipe_names.insert(0, recipe_name_no_space)  # 검색어를 첫 번째 위치에 추가
     
-    # TF-IDF 벡터화 with extended N-gram range
-    vectorizer = TfidfVectorizer(ngram_range=(1, 4))  # N-gram 범위를 4까지 확장
-    tfidf_matrix = vectorizer.fit_transform(recipe_names)
-    
-    # 코사인 유사도 계산
-    cosine_similarities = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix).flatten()
-    
-    # Levenshtein 유사도 계산
-    levenshtein_similarities = [calculate_levenshtein_similarity(recipe_name_no_space, name) for name in recipe_names]
-    
-    # 두 유사도 점수의 평균을 구함
-    combined_similarities = [(cos_sim + lev_sim) / 2 for cos_sim, lev_sim in zip(cosine_similarities, levenshtein_similarities)]
+    # 각 레시피에 대해 종합 유사도를 계산
+    combined_similarities = [get_combined_similarity_score(recipe_name_no_space, name) for name in recipe_names]
     
     # 유사도가 임계값 이상인 레시피 선택
     similar_indices = [i for i, similarity in enumerate(combined_similarities) if similarity >= similarity_threshold]
     
-    # 첫 번째 항목(검색어 자체)을 제외하고 상위 top_n 개 추출
-    similar_indices = similar_indices[1:top_n+1]
+     # 현재 선택된 레시피 이름을 제외하고 상위 top_n 개 추출
+    similar_indices = [i for i in similar_indices if recipe_names[i] != recipe_name_no_space][:top_n]
     
     similar_recipes = [all_recipes[i-1] for i in similar_indices]  # i-1로 수정해 all_recipes에서 올바른 인덱스를 가져옵니다.
     
-    
     return similar_recipes
+
 
 
 
@@ -519,4 +509,36 @@ def get_context_data(self, **kwargs):
     context['preferred_recipes'] = get_user_preferred_recipes_from_csv(self.request)  # self.request를 전달합니다.
     return context
 
+def calculate_word_based_similarity(recipe_name_1, recipe_name_2):
+    words_1 = set(recipe_name_1.split())
+    words_2 = set(recipe_name_2.split())
+    
+    intersection = words_1.intersection(words_2)
+    union = words_1.union(words_2)
+    
+    return len(intersection) / len(union)
+
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
+
+def calculate_cosine_similarity(recipe_name_1, recipe_name_2):
+    vectorizer = TfidfVectorizer()  # 또는 다른 적절한 벡터라이저 사용
+    tfidf_matrix = vectorizer.fit_transform([recipe_name_1, recipe_name_2])
+    return cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0]
+
+
+def get_embedding_based_similarity(recipe_name_1, recipe_name_2):
+    embedding_1 = model.encode(recipe_name_1)
+    embedding_2 = model.encode(recipe_name_2)
+    return cosine_similarity([embedding_1], [embedding_2])[0][0]
+
+def get_combined_similarity_score(recipe_name_1, recipe_name_2):
+    cos_sim = calculate_cosine_similarity(recipe_name_1, recipe_name_2)
+    lev_sim = calculate_levenshtein_similarity(recipe_name_1, recipe_name_2)
+    word_sim = calculate_word_based_similarity(recipe_name_1, recipe_name_2)
+    embed_sim = get_embedding_based_similarity(recipe_name_1, recipe_name_2)
+    
+    # 각 유사도에 가중치를 부여하여 결합
+    return (cos_sim + lev_sim + word_sim + embed_sim) / 4
 

@@ -84,9 +84,7 @@
     </div>
     {% endfor %}
 </div>
-
-<!-- 댓글 부분 -->
-{% if comments %}
+<!-- 댓글 목록 -->
   <p class="recipe-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
   <ul id="comment-list">
     {% for comment in comments %}
@@ -98,15 +96,11 @@
             {% endif %}
         </div>
         <div>
-            {{ comment.content }}
+            {{ comment.content|linebreaks }}
         </div>
     </li>
     {% endfor %}
   </ul>
-{% else %}
-  <p class="recipe-detail-comment-title">작성된 댓글이 없습니다.</p>
-{% endif %}
-
 
 <!-- 댓글 작성 -->
 {% if request.user.is_authenticated %}
