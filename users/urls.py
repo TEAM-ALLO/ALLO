@@ -17,6 +17,6 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('notifications/', views.notification, name='notification'),  # 알람 리스트
     path('notifications/read/', views.mark_notifications_as_read, name='mark_notifications_as_read'),  # 알람 읽음 처리
-
+    path('notifications/delete/', views.delete_notification, name='delete_notification'),
     
 ]
