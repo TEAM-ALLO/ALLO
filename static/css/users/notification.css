@@ -52,3 +52,7 @@
 .delete-notification-btn:hover {
     text-decoration: underline;
 }
+.alarm-delete {
+    margin-left: 70px;
+    margin-bottom: 10Fpx;
+}
