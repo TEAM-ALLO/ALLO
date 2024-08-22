@@ -19,7 +19,7 @@
     margin: 0 auto 10px auto;
     display: flex;
     max-height: 450px;
-    object-fit: cover;
+    object-fit: contain;
 }
 .interior-detail-info {
     display: flex;
@@ -109,7 +109,7 @@
 
 /* 댓글 */
 .comment-line {
-    border-top: 7px solid var(--light--gray--color);
+    /* border-top: 7px solid var(--light--gray--color); */
     padding-top: 20px;
 }
 .interior-detail-comment-title {
@@ -118,7 +118,7 @@
     
 }
 .comment-line {
-    border-top: 7px solid var(--light--gray--color);
+    /* border-top: 7px solid var(--light--gray--color); */
     padding-top: 20px;
 }
 .interior-container form>p {

@@ -165,7 +165,7 @@
     resize: none;
 }
 .comment-line {
-    border-top: 7px solid var(--light--gray--color);
+    /* border-top: 7px solid var(--light--gray--color); */
     padding-top: 20px;
 }
 .recipe-detail-comment-title {

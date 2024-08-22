@@ -14,6 +14,19 @@
     margin: 100px;
     gap: 50px;
 }
+.recycle-header ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.recycle-header ul a {
+    background-color: var(--light--gray--color);
+    padding: 15px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 10px;
+}
 .recycle-header-ment {
     font-size: 20px;
     font-weight: bold;

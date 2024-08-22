@@ -93,7 +93,7 @@
 
 /* 댓글 */
 .comment-line {
-    border-top: 7px solid var(--light--gray--color);
+    /* border-top: 7px solid var(--light--gray--color); */
     padding-top: 20px;
 }
 .post-detail-comment-title {
