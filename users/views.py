@@ -201,6 +201,15 @@ def friend_profile_view(request, username):
     }
     return render(request, 'users/friend_profile.html', context)
 
+def get_profile_image(request, username):
+    user = User.objects.get(username=username)
+    if user.profile_image:
+        profile_image_url = user.profile_image.url
+    else:
+        profile_image_url = None  # 기본 이미지를 사용하도록 None 반환
+
+    return JsonResponse({'profile_image_url': profile_image_url})
+
 @login_required
 def delete_friend(request, username):
     friend = get_object_or_404(User, username=username)
