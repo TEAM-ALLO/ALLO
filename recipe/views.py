@@ -383,6 +383,7 @@ def recommend_similar_recipes(request, id):
     
     # 데이터베이스에서 비슷한 레시피 찾기 (자신의 게시글 제외)
     similar_recipes_db = get_similar_recipes_based_on_names(selected_recipe.recipe_name, request.user)
+    print(f"Similar recipes in db: {similar_recipes_db}")
     
     # CSV 파일에서 비슷한 레시피 이름 찾기
     similar_recipe_names_csv = find_similar_recipes_in_csv(selected_recipe.recipe_name)
@@ -512,6 +513,28 @@ def get_context_data(self, **kwargs):
     context['preferred_recipes'] = get_user_preferred_recipes_from_csv(self.request)  # self.request를 전달합니다.
     return context
 
+from konlpy.tag import Okt
+
+okt = Okt()
+
+def tokenize_korean_text(text):
+    # 명사(Noun), 형용사(Adjective), 동사(Verb) 등 추출
+    tokens = [word for word, pos in okt.pos(text) if pos in ['Noun', 'Adjective', 'Verb']]
+    return tokens
+
+def filter_stopwords_and_short_tokens(tokens):
+    # 불용어 리스트 정의
+    stopwords = set(['을', '를', '이', '가', '의', '에', '도', '으로', '하다'])
+    
+    # 불용어 제거 및 길이 1 이하 토큰 제거
+    return [token for token in tokens if token not in stopwords and len(token) > 1]
+
+def tokenize_and_filter(text):
+    tokens = tokenize_korean_text(text)
+    filtered_tokens = filter_stopwords_and_short_tokens(tokens)
+    return filtered_tokens
+
+
 def calculate_word_based_similarity(recipe_name_1, recipe_name_2):
     words_1 = set(recipe_name_1.split())
     words_2 = set(recipe_name_2.split())
@@ -519,17 +542,31 @@ def calculate_word_based_similarity(recipe_name_1, recipe_name_2):
     intersection = words_1.intersection(words_2)
     union = words_1.union(words_2)
     
+    if len(union) == 0:
+        return 0.0  # 합집합이 0인 경우 유사도 0으로 처리
+    
     return len(intersection) / len(union)
+
 
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
+model = SentenceTransformer('jhgan/ko-sroberta-multitask')
 
 def calculate_cosine_similarity(recipe_name_1, recipe_name_2):
-    vectorizer = TfidfVectorizer()  # 또는 다른 적절한 벡터라이저 사용
-    tfidf_matrix = vectorizer.fit_transform([recipe_name_1, recipe_name_2])
-    return cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0]
-
+    vectorizer = TfidfVectorizer(tokenizer=tokenize_korean_text, token_pattern=None, ngram_range=(1, 3))
+        
+    try:
+        tfidf_matrix = vectorizer.fit_transform([recipe_name_1, recipe_name_2])
+    
+        if tfidf_matrix.shape[1] == 0:
+            return 0.0
+        
+        cos_sim = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
+        return cos_sim[0][0]
+    
+    except ValueError as e:
+        return 0.0  # 오류 시 기본값 반환
+    
 
 def get_embedding_based_similarity(recipe_name_1, recipe_name_2):
     embedding_1 = model.encode(recipe_name_1)
@@ -542,6 +579,12 @@ def get_combined_similarity_score(recipe_name_1, recipe_name_2):
     word_sim = calculate_word_based_similarity(recipe_name_1, recipe_name_2)
     embed_sim = get_embedding_based_similarity(recipe_name_1, recipe_name_2)
     
-    # 각 유사도에 가중치를 부여하여 결합
-    return (cos_sim + lev_sim + word_sim + embed_sim) / 4
-
+    # 모든 유사도가 0.0인 경우 추천에서 제외 (유사도 0.0 반환)
+    if cos_sim == 0.0 and lev_sim == 0.0 and word_sim == 0.0:
+        return 0.0
+    
+    print(f"Comparing {recipe_name_1} with {recipe_name_2}:")
+    print(f"cos_sim: {cos_sim}, lev_sim: {lev_sim}, word_sim: {word_sim}, embed_sim: {embed_sim}")
+    
+    # 임베딩 기반 유사도에 더 높은 가중치 부여
+    return (0.1 * (cos_sim + lev_sim + word_sim) + 0.9 * embed_sim) / 1.0
