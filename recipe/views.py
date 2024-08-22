@@ -22,12 +22,14 @@ class RecipeListView(ListView):
 
     def get_queryset(self):
         queryset = Recipe.objects.order_by('-id')
-        category = self.request.GET.get('category', '')
+        category = request.GET.get('category', 'all')
         search_query = self.request.GET.get('search', '')
 
-        if category:
+        if category == 'all':
+            queryset =Recipe.objects.all().order_by('-id')
+        else:
             queryset = queryset.filter(category=category)
-
+        
         if search_query:
             queryset = queryset.filter(recipe_name__icontains=search_query)
 

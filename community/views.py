@@ -107,6 +107,7 @@ def chatroom_detail(request, pk, username):
                         {
                             'id': msg.id,
                             'sender': msg.sender.username,
+                            'sender_profile_image': msg.sender.profile_image.url if msg.sender.profile_image else None,
                             'content': msg.content,
                             'image': msg.image.url if msg.image else None,
                             'timestamp': msg.timestamp.strftime('%Y-%m-%d %H:%M:%S')
@@ -132,6 +133,7 @@ def chatroom_detail(request, pk, username):
                 return JsonResponse({
                     'id': message.id,
                     'sender': message.sender.username,
+                    'sender_profile_image': message.sender.profile_image.url if message.sender.profile_image else None,
                     'content': message.content,
                     'image': message.image.url if message.image else None,
                     'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
@@ -148,6 +150,7 @@ def chatroom_detail(request, pk, username):
         'form': form,
         'receiver': receiver
     })
+
 
 
 @login_required
