@@ -34,6 +34,16 @@
     flex-direction: column;
     gap: 5px;
 }
+.similar-recipe-name a div {
+    max-width: 50%;
+    max-height: 315px;
+    margin: 0 auto;
+    object-fit: contain;
+}
+.similar-recipe-name a p {
+    text-align: center;
+    margin-top: 10px;
+}
 .recommend-container button {
     background-color: var(--main--red--color);
     border-radius: 10px;
