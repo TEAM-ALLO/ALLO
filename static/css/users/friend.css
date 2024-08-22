@@ -22,6 +22,10 @@ h3 {
     margin: 10px auto;
     border-radius: 10px;
 }
+.friend-received-container img {
+    width: 100px;
+    height: 100px;
+}
 .friend-received-info {
     display: flex;
     flex-direction: column;
