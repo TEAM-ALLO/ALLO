@@ -422,5 +422,10 @@ def create_message_notification(sender, instance, created, **kwargs):
             sender=instance.sender,
             notification_type='message',
             content_type=ContentType.objects.get_for_model(instance),
-            object_id=instance.pk
+            object_id=instance.chatroom.pk,
+            
         )
+
+def rule_view(request):
+    return render(request, 'community/rule.html')
+

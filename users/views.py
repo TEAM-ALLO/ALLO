@@ -2,6 +2,7 @@ import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import logout
+from django.urls import reverse
 from .models import User
 from community.models import FriendRequest
 from django.contrib.auth.decorators import login_required
@@ -246,8 +247,9 @@ def notification(request):
         link = "#"
         
         if notification.notification_type == 'friend_request':
-            message = f"{notification.sender.name}님이 친구 요청을 보냈습니다."
-            link = f"/friend/{request.user.name}/"  # 친구 요청에 대한 링크를 알림을 받은 사용자의 페이지로 설정
+            if notification.notification_type == 'friend_request':
+                message = f"{notification.sender.name}님이 친구 요청을 보냈습니다."
+                link = reverse('community_user:friend', args=[notification.user.username])
         elif notification.notification_type == 'like' or notification.notification_type == 'comment':
             if notification.content_type.model == 'communitypost':
                 link = f"/community/post/{notification.object_id}/"
@@ -259,9 +261,7 @@ def notification(request):
                 link = f"/interior/detail/{notification.object_id}/"
                 message = f"{notification.sender.name}님이 인테리어 게시글에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
         elif notification.notification_type == 'message':
-            link = f"/community/chatroom/{notification.object_id}/{notification.sender.username}"  # 메시지 링크
-            message = f"{notification.sender.username}님으로부터 새로운 메시지가 도착했습니다."
-            link = f"/community/chatroom/{notification.object_id}/{notification.sender.username}/"  # 메시지 링크
+            link = reverse('community_user:chatroom_detail', args=[notification.object_id, notification.user.username])
             message = f"{notification.sender.name}님으로부터 새로운 메시지가 도착했습니다."
 
         notification_list.append({
@@ -313,3 +313,16 @@ def send_notification_to_user(user, message):
             "message": message,
         },
     )
+
+@login_required
+@require_POST
+def delete_notification(request):
+    try:
+        notification_id = json.loads(request.body).get('notification_id')
+        notification = Notification.objects.get(id=notification_id, user=request.user)
+        notification.delete()
+        return JsonResponse({'status': 'success'})
+    except Notification.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Notification not found'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})
