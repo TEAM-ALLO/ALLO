@@ -250,7 +250,7 @@ def notification(request):
                 link = f"/interior/detail/{notification.object_id}/"
                 message = f"{notification.sender.username}님이 인테리어 게시글에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
         elif notification.notification_type == 'message':
-            link = f"/chatroom/{notification.object_id}/"  # 메시지 링크
+            link = f"/community/chatroom/{notification.object_id}/{notification.sender.username}"  # 메시지 링크
             message = f"{notification.sender.username}님으로부터 새로운 메시지가 도착했습니다."
 
         notification_list.append({

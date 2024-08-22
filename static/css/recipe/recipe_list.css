@@ -45,6 +45,8 @@
 }
 .recipe-popular-info h3 {
     font-size: 18px;
+    max-height: 72px;
+    overflow-y: hidden;
     font-weight: bold;
 }
 .recipe-popular-react {
@@ -70,6 +72,51 @@
 .recipe-search-icon {
     width: 40px;
     height: 40px;
+}
+.recipe-prefer-container {
+    width: 100%;
+    margin: 10px auto;
+}
+.recipe-prefer-container h2 {
+    font-size: 20px;
+    font-weight: bold;
+    width: 80%;
+    margin: 10px auto;
+}
+.recipe-prefer-container h3 {
+    width: 80%;
+    margin: 10px auto;
+}
+.preferred-recipe-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin: 10px auto;
+    width: 80%;
+}
+.preferred-recipe-item {
+    background-color: var(--light--gray--color);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+}
+.preferred-recipe-name {
+    font-size: 18px;
+    font-weight: 500;
+}
+.reaction-buttons {
+    display: flex;
+    gap: 10px;
+}
+.reaction-buttons button:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.recipe-results-heading {
+    text-align: center;
+    margin: 5px auto;
 }
 .recipe-list-btn-box {
     display: flex;
@@ -123,4 +170,6 @@
 }
 .pagination strong {
     font-weight: bold;
+}.active-class {
+    color: black;
 }

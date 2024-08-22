@@ -48,6 +48,8 @@
             <p>난이도: {{ recipe.difficulty }}</p>
             <p>조리 시간: {{ recipe.cooking_time }}분</p>
         </div>
+        <a class="recipe-detail-recommend"
+        href="{% url 'recipe_user:recommend_similar_recipes' id=recipe.id %}">비슷한 레시피 추천받으러 가기</a>
     </div>
 </div>
 <div class="recipe-detail-btns">
@@ -122,7 +124,6 @@
 
 <div class="btn-div">
     <a href="{% url 'recipe_user:recipe_list' %}" class="recipe-detail-btn">목록</a>
-    <a href="{% url 'recipe_user:recommend_similar_recipes' id=recipe.id %}">비슷한 레시피 추천받기</a>
 </div>
 
 <input type="hidden" id="current-username" value="{{ request.user.username }}">

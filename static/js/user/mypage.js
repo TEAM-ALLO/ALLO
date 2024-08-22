@@ -188,26 +188,6 @@ document.addEventListener("DOMContentLoaded",function() {
         });
     });
 
-    //팝업창
-    // document.getElementById('profile-edit-btn').addEventListener('click', function(event) {
-    //     event.preventDefault();
-    //     document.getElementById('profile-edit-popup').style.display = 'block';
-    // });
-
-    // document.getElementById('profile-edit-form').addEventListener('submit', function() {
-    //     document.getElementById('profile-edit-popup').style.display = 'none';
-    // });
-
-    // document.getElementById('password-change-btn').addEventListener('click', function(event) {
-    //     event.preventDefault();
-    //     document.getElementById('profile-edit-popup').style.display = 'none';
-    //     document.getElementById('password-change-popup').style.display = 'block';
-    // });
-
-    // document.getElementById('password-change-form').addEventListener('submit', function() {
-    //     document.getElementById('password-change-popup').style.display = 'none';
-
-    // });
 
     // 프로필 편집 팝업 열기
     document.getElementById('profile-edit-btn').addEventListener('click', function(event) {
@@ -233,6 +213,10 @@ document.addEventListener("DOMContentLoaded",function() {
         });
     });
 
+    document.getElementById('profile-edit-close').addEventListener('click', function(event) {
+        document.getElementById('profile-edit-popup').style.display = 'none';
+    });
+
     // 비밀번호 변경 팝업 열기
     document.getElementById('password-change-btn').addEventListener('click', function(event) {
         event.preventDefault();
@@ -243,6 +227,10 @@ document.addEventListener("DOMContentLoaded",function() {
     // 비밀번호 변경 팝업 폼 제출
     document.getElementById('password-change-form').addEventListener('submit', function() {
         // 폼 제출 후 팝업 닫기
+        document.getElementById('password-change-popup').style.display = 'none';
+    });
+
+    document.getElementById('password-change-close').addEventListener('click', function(event) {
         document.getElementById('password-change-popup').style.display = 'none';
     });
 

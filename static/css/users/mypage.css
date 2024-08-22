@@ -44,7 +44,8 @@
     width: 100%;
 }
 .content-section a {
-    border: 6px solid var(--light--gray--color);
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
     width: 70%;
     margin: 10px auto;
     padding: 20px;
@@ -158,18 +159,22 @@
     border-radius: 10px;
     z-index: 1;
 }
-
 #profile-edit-popup {
     padding: 30px;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
 }
-
 #profile-edit-popup h2 {
     font-size: 20px;
     text-align: center;
     font-weight: bold;
     margin-bottom: 20px;
+    position: relative;
 }
-
+#profile-edit-popup h2 img {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
 #profile-edit-form {
     display: flex;
     flex-direction: column;
@@ -216,14 +221,20 @@
 /* 비밀번호 변경 팝업창 */
 #password-change-popup {
     padding: 30px;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
 }
 #password-change-popup h2 {
     text-align: center;
     font-weight: bold;
     font-size: 20px;
     margin-bottom: 20px;
+    position: relative;
 }
-
+#password-change-popup h2 img {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
 #password-change-popup p {
     color: red;
     margin-top: 30px;
