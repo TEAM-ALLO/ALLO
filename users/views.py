@@ -201,6 +201,15 @@ def friend_profile_view(request, username):
     }
     return render(request, 'users/friend_profile.html', context)
 
+def get_profile_image(request, username):
+    user = User.objects.get(username=username)
+    if user.profile_image:
+        profile_image_url = user.profile_image.url
+    else:
+        profile_image_url = None  # 기본 이미지를 사용하도록 None 반환
+
+    return JsonResponse({'profile_image_url': profile_image_url})
+
 @login_required
 def delete_friend(request, username):
     friend = get_object_or_404(User, username=username)
@@ -237,21 +246,23 @@ def notification(request):
         link = "#"
         
         if notification.notification_type == 'friend_request':
-            message = f"{notification.sender.username}님이 친구 요청을 보냈습니다."
-            link = f"/friend/{request.user.username}/"  # 친구 요청에 대한 링크를 알림을 받은 사용자의 페이지로 설정
+            message = f"{notification.sender.name}님이 친구 요청을 보냈습니다."
+            link = f"/friend/{request.user.name}/"  # 친구 요청에 대한 링크를 알림을 받은 사용자의 페이지로 설정
         elif notification.notification_type == 'like' or notification.notification_type == 'comment':
             if notification.content_type.model == 'communitypost':
                 link = f"/community/post/{notification.object_id}/"
-                message = f"{notification.sender.username}님이 커뮤니티 게시글에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
+                message = f"{notification.sender.name}님이 커뮤니티 게시글에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
             elif notification.content_type.model == 'recipe':
                 link = f"/recipe/{notification.object_id}/"
-                message = f"{notification.sender.username}님이 레시피에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
+                message = f"{notification.sender.name}님이 레시피에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
             elif notification.content_type.model == 'interiorpost':
                 link = f"/interior/detail/{notification.object_id}/"
-                message = f"{notification.sender.username}님이 인테리어 게시글에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
+                message = f"{notification.sender.name}님이 인테리어 게시글에 {'좋아요를 눌렀습니다' if notification.notification_type == 'like' else '댓글을 남겼습니다'}."
         elif notification.notification_type == 'message':
             link = f"/community/chatroom/{notification.object_id}/{notification.sender.username}"  # 메시지 링크
             message = f"{notification.sender.username}님으로부터 새로운 메시지가 도착했습니다."
+            link = f"/community/chatroom/{notification.object_id}/{notification.sender.username}/"  # 메시지 링크
+            message = f"{notification.sender.name}님으로부터 새로운 메시지가 도착했습니다."
 
         notification_list.append({
             'notification': notification,

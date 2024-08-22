@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block head %}
 <link rel="stylesheet" href="/static/css/recycle/recycle_category.css">
 <link rel="stylesheet" href="/static/css/recycle/recycle_main.css">
@@ -33,8 +34,6 @@
         {% endif%}
     </div>    
 </div>
-
-
 
 {% if user.is_staff %}
 <div class="recycle-detail-btns">

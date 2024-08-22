@@ -24,8 +24,8 @@ urlpatterns = [
     path('send_friend_request/<str:username>/', community_views.send_friend_request, name='send_friend_request'),
     path('accept_friend_request/<int:request_id>/', community_views.accept_friend_request, name='accept_friend_request'),
     path('decline_friend_request/<int:request_id>/', community_views.decline_friend_request, name='decline_friend_request'),
-    path('recipe/<int:id>/like/', views.like_recipe, name='like_recipe'),
-    path('recipe/<int:id>/dislike/', views.dislike_recipe, name='dislike_recipe'),
+    path('recipe/<int:id>/like/', views.recommend_like_recipe, name='like_recipe'),
+    path('recipe/<int:id>/dislike/', views.recommend_dislike_recipe, name='dislike_recipe'),
     path('csv/like/', views.like_csv_recipe, name='like_csv_recipe'),
     path('csv/dislike/', views.dislike_csv_recipe, name='dislike_csv_recipe'),
 

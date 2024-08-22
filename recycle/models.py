@@ -16,7 +16,7 @@ class Recycle(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     name = models.CharField(max_length=100) 
     description = models.TextField() 
-    image = models.ImageField(upload_to='recycle_images/', blank=True, null=True)  
+    image = models.CharField(max_length=255, null=True, blank=True)
     tip = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     
@@ -24,4 +24,7 @@ class Recycle(models.Model):
     def __str__(self):
         return self.name
     
+    @property
+    def image_url(self):
+        return f'recycle_images/{self.image}'
 
