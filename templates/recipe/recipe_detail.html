@@ -25,7 +25,23 @@
     {% endif %}
     <div class="recipe-detail-menu">
         <div class="recipe-title-container">
-            <h1 class="recipe-title">{{ recipe.recipe_name }}</h1>            
+            <div>
+                {% if recipe.category == "western" %}
+                <div>양식</div>
+                {% elif recipe.category == "korean" %}
+                <div>한식</div>
+                {% elif recipe.category == "chinese" %}
+                <div>중식</div>
+                {% elif recipe.category == "japanese" %}
+                <div>일식</div>
+                {% elif recipe.category == "snack" %}
+                <div>분식</div>
+                {% elif recipe.category == "others" %}
+                <div>기타</div>
+                {% endif %}
+                <h1 class="recipe-title">{{ recipe.recipe_name }}</h1>               
+            </div>
+       
             {% if request.user == recipe.author %}
             <div class="recipe-detail-user-btns">
                 <a href="{% url 'recipe_user:recipe_edit' id=recipe.id %}">수정</a>

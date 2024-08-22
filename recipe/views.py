@@ -429,7 +429,7 @@ def calculate_levenshtein_similarity(a, b):
 def remove_whitespace(text):
     return text.replace(" ", "")
 
-def get_similar_recipes_based_on_names(recipe_name, user, top_n=5, similarity_threshold=0.1):
+def get_similar_recipes_based_on_names(recipe_name, user, top_n=5, similarity_threshold=0.4):
     disliked_recipes = UserChoice.objects.filter(user=user, liked=False).values_list('recipe_id', flat=True)
     
     all_recipes = Recipe.objects.exclude(author=user).exclude(id__in=disliked_recipes)
@@ -438,7 +438,8 @@ def get_similar_recipes_based_on_names(recipe_name, user, top_n=5, similarity_th
     recipe_name_no_space = remove_whitespace(recipe_name)
     recipe_names = [remove_whitespace(recipe.recipe_name) for recipe in all_recipes]
     recipe_names.insert(0, recipe_name_no_space)  # 검색어를 첫 번째 위치에 추가
-    
+
+
     # 각 레시피에 대해 종합 유사도를 계산
     combined_similarities = [get_combined_similarity_score(recipe_name_no_space, name) for name in recipe_names]
     
@@ -587,4 +588,4 @@ def get_combined_similarity_score(recipe_name_1, recipe_name_2):
     print(f"cos_sim: {cos_sim}, lev_sim: {lev_sim}, word_sim: {word_sim}, embed_sim: {embed_sim}")
     
     # 임베딩 기반 유사도에 더 높은 가중치 부여
-    return (0.1 * (cos_sim + lev_sim + word_sim) + 0.9 * embed_sim) / 1.0
+    return (0.4 * (cos_sim + lev_sim + word_sim) + 0.6 * embed_sim) / 1.0

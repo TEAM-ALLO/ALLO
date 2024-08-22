@@ -104,8 +104,9 @@
     gap: 10px;
 }
 .community-content {
-    max-height: 30px;
+    max-height: 32px;
     overflow: hidden;
+    width: calc(100% - 40px);
 }
 .community-post-box-comment {
     display: flex;
