@@ -194,7 +194,9 @@
 
 <!-- 프로필 편집 팝업창 -->
 <div id="profile-edit-popup" class="popup" style="display: none;">
-    <h2>프로필 편집</h2>
+    <h2>프로필 편집
+        <img src="/static/img/no.svg" alt="엑스 모양 아이콘" id="profile-edit-close">
+    </h2>
     <form method="post" enctype="multipart/form-data" id="profile-edit-form" action="{% url 'users_user:profile_edit' %}">
         {% csrf_token %}
         <div>
@@ -222,7 +224,9 @@
 
 <!-- 비밀번호 변경 팝업창 -->
 <div id="password-change-popup" class="popup" style="display: none;">
-    <h2>비밀번호 변경</h2>
+    <h2>비밀번호 변경
+        <img src="/static/img/no.svg" alt="엑스 모양 아이콘" id="password-change-close">
+    </h2>
     <form method="post" id="password-change-form">
         {% csrf_token %}
         <div>

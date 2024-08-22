@@ -13,21 +13,21 @@
     <a href="{% url 'recipe_user:recipe_list' %}?category=others" class="{% if request.GET.category == 'others' %}category-select{% endif %}">기타</a>
 </div>
 
-
 <form method="GET" action="{% url 'recipe_user:recipe_list' %}" class="search-form">
     <input type="text" name="search" placeholder="검색어를 입력하세요" value="{{ request.GET.search }}" class="recipe-search-container">
     <button type="submit">
         <img src="/static/img/search2.png" alt="검색어 아이콘" class="recipe-search-icon">
     </button>
 </form>
+
+{% if not request.GET.search and popular_recipe %}
 <h1 class="recipe-list-mention">
     {% if category_name == '기타' %}
-        지금 가장 인기있는 음식!
+        지금 가장 인기있는 음식
     {% else %}
-        지금 가장 인기있는 {{ category_name }}!
+        지금 가장 인기있는 {{ category_name }}
     {% endif %}
 </h1>
-{% if popular_recipe %}
 <a href="{% url 'recipe_user:recipe_detail' id=popular_recipe.id %}" class="recipe-list-popular">
     <img src="{% if popular_recipe.image %}{{ popular_recipe.image.url }}{% else %}/static/img/empty2.svg{% endif %}" alt="">
     <div>
@@ -44,10 +44,12 @@
         </div>
     </div>
 </a>
-{% endif %}
+
 <!-- 개인적인 취향에 맞춘 추천 레시피 섹션 추가 -->
 {% if preferred_recipes %}
-    <h2>당신이 좋아할 만한 레시피</h2>
+<div class="recipe-prefer-container">
+    <h2>{{ user.name }}님이 좋아할 만한 레시피</h2>
+    <h3>선호도에 따라 추천 메뉴가 추후에 변경돼요!</h3>
     <ul class="preferred-recipe-list">
         {% for recipe in preferred_recipes %}
             {% if recipe.recipe_name %}
@@ -58,11 +60,11 @@
                         <div class="reaction-buttons">
                             <form action="{% url 'recipe_user:like_recipe' recipe.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="like-button">좋아요</button>
+                                <button type="submit" class="like-button recommend-like">좋아요</button>
                             </form>
                             <form action="{% url 'recipe_user:dislike_recipe' recipe.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="dislike-button">싫어요</button>
+                                <button type="submit" class="dislike-button recommend-hate">싫어요</button>
                             </form>
                         </div>
                     </div>
@@ -76,12 +78,12 @@
                             <form action="{% url 'recipe_user:like_csv_recipe' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="recipe_name" value="{{ recipe }}">
-                                <button type="submit" class="like-button">좋아요</button>
+                                <button type="submit" class="like-button recommend-like">좋아요</button>
                             </form>
                             <form action="{% url 'recipe_user:dislike_csv_recipe' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="recipe_name" value="{{ recipe }}">
-                                <button type="submit" class="dislike-button">싫어요</button>
+                                <button type="submit" class="dislike-button recommend-hate">싫어요</button>
                             </form>
                         </div>
                     </div>
@@ -89,17 +91,20 @@
             {% endif %}
         {% endfor %}
     </ul>    
-    
+</div>
+{% endif %}
 {% endif %}
 
-
+{% if request.GET.search %}
+    <h2 class="recipe-results-heading">검색어 : {{ request.GET.search }}</h2>
+{% endif %}
 <div class="recipe-list-btn-box">
     <a href="{% url 'recipe_user:recipe_create' %}" class="recipe-list-btn">작성하기</a>
 </div>
 <ul class="recipe-list-container">
     {% if no_results %}
     <li>검색 결과가 없습니다.</li>
-{% else %}
+    {% else %}
     {% for recipe in recipes %}
         <a href="{% url 'recipe_user:recipe_detail' id=recipe.id %}" class="recipe-list-post">
             {% if recipe.image %}
@@ -142,4 +147,5 @@
 {% endblock %}
 {% block script %}
 <script src="/static/js/recipe/recipe_category.js"></script>
+<script src="/static/js/recipe/recipe_list.js"></script>
 {% endblock %}

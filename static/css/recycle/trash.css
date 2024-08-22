@@ -61,6 +61,11 @@
 .recycle-type p {
     font-weight: bold;
 }
+.recycle-type ul {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 .recycle-question h2 {
     font-weight: bold;
     font-size: 18px;

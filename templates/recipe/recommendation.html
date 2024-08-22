@@ -1,36 +1,59 @@
 {% extends "base.html" %}
-
+{% block head %}
+<link rel="stylesheet" href="/static/css/recipe/recipe_recommend.css">
+<link rel="stylesheet" href="/static/css/recipe/recipe_list.css">
+{% endblock %}
 {% block content %}
-  <h1>추천 레시피</h1>
-  <form method="post">
+<div class="recipe-nav">
+    <a href="{% url 'recipe_user:recipe_list' %}?category=all" class="{% if request.GET.category == 'all' %}category-select{% endif %}">전체</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=korean" class="{% if request.GET.category == 'korean' %}category-select{% endif %}">한식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese" class="{% if request.GET.category == 'japanese' %}category-select{% endif %}">일식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese" class="{% if request.GET.category == 'chinese' %}category-select{% endif %}">중식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=western" class="{% if request.GET.category == 'western' %}category-select{% endif %}">양식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=snack" class="{% if request.GET.category == 'snack' %}category-select{% endif %}">분식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=others" class="{% if request.GET.category == 'others' %}category-select{% endif %}">기타</a>
+</div>
+  <h1 class="recommend-title">추천 레시피</h1>
+  <form method="post" class="recommend-container">
     {% csrf_token %}
-    
-    <!-- 게시글 중 비슷한 레시피 -->
+    <div>
+    <h2>게시글 중 비슷한 레시피</h2>
     {% if similar_recipes_db %}
-        <h2>게시글 중 비슷한 레시피</h2>
         <ul class="similar-recipe-list">
           {% for recipe in similar_recipes_db %}
               <li>
                   <div class="similar-recipe-item">
                       <div class="similar-recipe-name">
-                          <a href="{{ recipe.get_absolute_url }}">{{ recipe.recipe_name }}</a>
+                          <a href="{{ recipe.get_absolute_url }}">
+                            <div>
+                                <h4>{{ recipe.author.name }}</h4>
+                                {% if recipe.author.profile_image %}
+                                    <img src="{{ recipe.author.profile_image.url }}" alt="프로필 사진">
+                                {% else %}
+                                    <img src="/static/img/user.svg" alt="기본 프로필 사진">
+                                {% endif %}
+                            </div>
+                            <p>{{ recipe.recipe_name }}</p>
+                        </a>
                       </div>
                   </div>
               </li>
           {% endfor %}
         </ul>
     {% else %}
-        <p>비슷한 게시글이 없습니다.</p>
+        <p class="no-recommend">비슷한 게시글이 없습니다.</p>
     {% endif %}
 
-    <!-- 추가로 비슷한 레시피 추천합니다 -->
+    <h2>추가 레시피</h2>
     {% if missing_names or csv_similar_recipes_db %}
-        <h2>추가로 비슷한 레시피 추천합니다</h2>
         <ul class="similar-recipe-list">
           {% for recipe in csv_similar_recipes_db %}
               <li>
                   <div class="similar-recipe-item">
-                      <div class="similar-recipe-name">{{ recipe.recipe_name }}</div>
+                      <div class="similar-recipe-name">
+                        <p>{{ recipe.recipe_name }}</p>
+                    </div>
+                      <p>{{ recipe.recipe_name }}</p>
                   </div>
               </li>
           {% endfor %}
@@ -43,9 +66,9 @@
           {% endfor %}
         </ul>
     {% else %}
-        <p>추가로 추천할 레시피가 없습니다.</p>
+        <p class="no-recommend">추가로 추천할 레시피가 없습니다.</p>
     {% endif %}
-    
+</div>
     <button type="submit">목록</button>
   </form>
 {% endblock %}

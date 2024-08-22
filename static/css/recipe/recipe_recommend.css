@@ -1,0 +1,48 @@
+.recommend-title {
+    width: 80%;
+    margin: 10px auto;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+}
+.recommend-container {
+    width: 80%;
+    margin: 50px auto 10px auto;
+    max-width: 500px;
+    min-height: 400px;
+}
+.recommend-container > div {
+    min-height: calc(100vh - 315px);
+}
+.recommend-container h2 {
+    font-size: 20px;
+    font-weight: bold;
+    background-color: var(--main--red--color);
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    color: #fff;
+}
+.similar-recipe-name {
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px auto;
+}
+.similar-recipe-name a div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.recommend-container button {
+    background-color: var(--main--red--color);
+    border-radius: 10px;
+    color: #fff;
+    margin: 10px auto;
+    font-size: 16px;
+    padding: 10px;
+    display: flex;
+}
+.no-recommend {
+    margin: 10px auto;
+}
