@@ -197,6 +197,10 @@
 #profile-edit-form > div:nth-child(5) input {
     padding: 5px 3px;
 }
+#profile-edit-close,
+#password-change-close {
+    cursor: pointer;
+}
 .mypage-btns {
     display: flex;
     gap: 20px;

@@ -111,6 +111,10 @@
     display: flex;
     gap: 10px;
 }
+.community-post-box-content h2,
+.community-post-box-comment h2 {
+    width: 30px;
+}
 .community-post-box-ud {
     display: flex;
     gap: 10px;

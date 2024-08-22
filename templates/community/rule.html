@@ -1,55 +1,16 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        p {
-            margin: 10px 0;
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        ul li {
-            margin-bottom: 10px;
-            padding-left: 20px;
-            position: relative;
-        }
-        ul li:before {
-            content: "⭐";
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-        .highlight {
-            color: #d9534f;
-            font-weight: bold;
-        }
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 5px;
-        }
-        .notice {
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/community/community_list.css">
+    <link rel="stylesheet" href="/static/css/community/rule.css">
+{% endblock %}
+{% block content %}
+<div class="community-header">
+    <div class="community-category community-categoty-selected"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+</div>
+<div class="rule-container">
     <h2>🎉 환영합니다!</h2>
     <p>이 커뮤니티는 자취생들이 서로 도움을 주고받을 수 있는 공간입니다. 원활한 소통과 건전한 커뮤니티를 유지하기 위해 아래의 규칙을 준수해 주세요:</p>
     
@@ -102,5 +63,5 @@
 
         <p>작업 후, 더욱 향상된 서비스로 찾아뵙겠습니다. 감사합니다.</p>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
