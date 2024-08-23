@@ -17,7 +17,7 @@ from django.contrib.contenttypes.models import ContentType
 User = get_user_model()
 
 def event_list(request):
-    events = Event.objects.all()
+    events = Event.objects.all().order_by('-created_at')
     return render(request, 'community/event_list.html', {'events': events})
 
 @login_required
@@ -40,7 +40,7 @@ def event_detail(request, pk):
     return render(request, 'community/event_detail.html', {'event': event})
 
 def notice_list(request):
-    notices = Notice.objects.all()
+    notices = Notice.objects.all().order_by('-created_at')
     return render(request, 'community/notice_list.html', {'notices': notices})
 
 def notice_detail(request, pk):
@@ -186,20 +186,27 @@ def send_friend_request(request, username):
 @login_required
 @require_POST
 def accept_friend_request(request, request_id):
-    friend_request = get_object_or_404(FriendRequest, id=request_id)
-    if friend_request.to_user == request.user:
-        request.user.friends.add(friend_request.from_user)
-        friend_request.from_user.friends.add(request.user)
-        friend_request.delete()
-        
-        # 친구 정보를 JSON으로 반환
-        friend_info = {
-            'username': friend_request.from_user.username,
-            'profile_url': f'/profile/{friend_request.from_user.username}/'  # URL 패턴에 맞게 조정
-        }
-        return JsonResponse({'status': 'success', 'message': '친구 요청을 수락했습니다.', 'friend': friend_info})
+    friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
+    friend = friend_request.from_user
     
-    return JsonResponse({'status': 'error', 'message': '유효하지 않은 요청입니다.'})
+    # 친구 관계를 추가
+    request.user.friends.add(friend)
+    friend.friends.add(request.user)
+    
+    # 요청을 삭제
+    friend_request.delete()
+    
+    # 반환할 데이터를 준비
+    response_data = {
+        'status': 'success',
+        'message': f'{friend.name}님이 친구로 추가되었습니다.',
+        'friend': {
+            'username': friend.username,
+            'name': friend.name,
+            'profile_image': friend.profile_image.url if friend.profile_image else None,
+        }
+    }
+    return JsonResponse(response_data)
 
 
 @login_required
@@ -213,7 +220,7 @@ def decline_friend_request(request, request_id):
 
 
 def post_list(request):
-    posts = CommunityPost.objects.all()
+    posts = CommunityPost.objects.all().order_by('-created_at')
     return render(request, 'community/post_list.html', {'posts': posts})
 
 @login_required
@@ -327,16 +334,6 @@ def post_detail(request, pk):
     }
     
     return render(request, 'community/post_detail.html', context)
-
-@login_required
-def friend(request, username):
-    user = get_object_or_404(User, username=username)
-    received_requests = FriendRequest.objects.filter(to_user=user)
-    context = {
-        'user': user,
-        'received_requests': received_requests
-    }
-    return render(request, 'users/friend.html', context)
 
 
 @login_required

@@ -260,3 +260,8 @@
 .main-container p>textarea:focus {
     outline: none;
 }
+
+.recipe-title-container #btn-warning,
+.recipe-title-container #btn-info {
+   cursor: default;
+}
