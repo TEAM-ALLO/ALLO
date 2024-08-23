@@ -432,7 +432,18 @@ def remove_whitespace(text):
 def get_similar_recipes_based_on_names(recipe_name, user, top_n=5, similarity_threshold=0.4):
     disliked_recipes = UserChoice.objects.filter(user=user, liked=False).values_list('recipe_id', flat=True)
     
-    all_recipes = Recipe.objects.exclude(author=user).exclude(id__in=disliked_recipes)
+    # 자기 자신의 레시피만 제외하고 모든 레시피 가져오기
+    all_recipes = Recipe.objects.all().exclude(author=user)
+    
+    # 필터링된 레시피 확인
+    print(f"All recipes available for comparison: {all_recipes}")
+    
+    recipe_name_no_space = remove_whitespace(recipe_name)
+    recipe_names = [remove_whitespace(recipe.recipe_name) for recipe in all_recipes]
+    recipe_names.insert(0, recipe_name_no_space)  # 검색어를 첫 번째 위치에 추가
+    
+    # 전체 레시피 이름 목록 확인
+    print(f"Recipe names being compared: {recipe_names}")
     
     # 띄어쓰기 제거
     recipe_name_no_space = remove_whitespace(recipe_name)
