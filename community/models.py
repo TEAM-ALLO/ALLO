@@ -8,6 +8,7 @@ class Event(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     image = models.ImageField(upload_to='event_images/', verbose_name="이벤트 포스터", null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title

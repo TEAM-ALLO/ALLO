@@ -206,3 +206,6 @@
     display: flex;
     align-items: center;
 }
+#friend-request-button {
+    cursor: pointer;
+}

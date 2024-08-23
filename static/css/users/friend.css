@@ -58,7 +58,7 @@ h3 {
     display: flex;
     align-items: center;
 }
-#friend-list > a {
+#friend-list a {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -80,6 +80,23 @@ h3 {
     object-fit: cover;
     border-radius: 50%;
 }
+#friend-list > li > .friend-item {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 180px;
+    padding: 10px;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+}
+
+#friend-list > li > .mypage-img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 .community-friend-name {
     font-size: 18px;
     text-align: center;

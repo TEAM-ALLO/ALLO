@@ -239,7 +239,7 @@ def search(request):
 
 @login_required
 def notification(request):
-    notifications = request.user.notifications.all()  # 모든 알람을 가져옴
+    notifications = request.user.notifications.all().order_by('-timestamp')  # 모든 알람을 가져옴
     notification_list = []
 
     for notification in notifications:
@@ -249,7 +249,7 @@ def notification(request):
         if notification.notification_type == 'friend_request':
             if notification.notification_type == 'friend_request':
                 message = f"{notification.sender.name}님이 친구 요청을 보냈습니다."
-                link = reverse('community_user:friend', args=[notification.user.username])
+                link = reverse('users_user:friend_list', args=[notification.user.username])
         elif notification.notification_type == 'like' or notification.notification_type == 'comment':
             if notification.content_type.model == 'communitypost':
                 link = f"/community/post/{notification.object_id}/"
