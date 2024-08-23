@@ -49,6 +49,6 @@ python manage.py runserver
 ```
 
 ## 발표 자료
-[발표 자료]([https://github.com/TEAM-ALLO/ALLO/blob/main/ALLO_%EB%B0%9C%ED%91%9C_ppt.pptx](https://github.com/TEAM-ALLO/ALLO/blob/develop/ALLO_%EB%B0%9C%ED%91%9C_ppt.pptx))
+[발표 자료](https://github.com/TEAM-ALLO/ALLO/blob/develop/ALLO_%EB%B0%9C%ED%91%9C_ppt.pptx)
 
 
