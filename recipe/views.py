@@ -377,17 +377,43 @@ def dislike_csv_recipe(request):
         )
     return redirect(request.META.get('HTTP_REFERER', 'recipe_user:recipe_list'))
 
+from django.core.cache import cache
 
+def get_similar_recipes_based_on_names(recipe_name, user, top_n=5, similarity_threshold=0.4):
+    cache_key = f"similar_recipes_{user.id}_{recipe_name}"
+    similar_recipes = cache.get(cache_key)
+    
+    if similar_recipes:
+        return similar_recipes
+
+    disliked_recipes = UserChoice.objects.filter(user=user, liked=False).values_list('recipe_id', flat=True)
+    all_recipes = Recipe.objects.all().exclude(author=user).exclude(id__in=disliked_recipes)
+    
+    recipe_name_no_space = remove_whitespace(recipe_name)
+    recipe_names = [remove_whitespace(recipe.recipe_name) for recipe in all_recipes]
+    recipe_names.insert(0, recipe_name_no_space)
+
+    combined_similarities = get_combined_similarity_scores_parallel(recipe_name_no_space, recipe_names)
+    
+    similar_indices = [i for i, similarity in enumerate(combined_similarities) if similarity >= similarity_threshold]
+    similar_indices = [i for i in similar_indices if recipe_names[i] != recipe_name_no_space][:top_n]
+
+    similar_recipes = [all_recipes[i-1] for i in similar_indices]
+
+    cache.set(cache_key, similar_recipes, timeout=60*60*5)  # 캐시 분 설정
+    return similar_recipes
+
+
+
+@login_required
 def recommend_similar_recipes(request, id):
     selected_recipe = get_object_or_404(Recipe, id=id)
     
     # 데이터베이스에서 비슷한 레시피 찾기 (자신의 게시글 제외)
     similar_recipes_db = get_similar_recipes_based_on_names(selected_recipe.recipe_name, request.user)
-    print(f"Similar recipes in db: {similar_recipes_db}")
     
     # CSV 파일에서 비슷한 레시피 이름 찾기
     similar_recipe_names_csv = find_similar_recipes_in_csv(selected_recipe.recipe_name)
-    print(f"Similar recipes in CSV: {similar_recipe_names_csv}")
     
     # CSV 파일에서 찾은 레시피 이름으로 데이터베이스에서 검색
     csv_similar_recipes_db = Recipe.objects.filter(recipe_name__in=similar_recipe_names_csv).exclude(author=request.user)
@@ -396,7 +422,7 @@ def recommend_similar_recipes(request, id):
     found_names = [recipe.recipe_name for recipe in csv_similar_recipes_db]
     missing_names = [name for name in similar_recipe_names_csv if name not in found_names]
 
-    # **여기서 수정: request.user 대신 request 전달**
+    # 사용자의 선호 레시피 가져오기
     preferred_recipes = get_user_preferred_recipes_from_csv(request)
 
     if request.method == 'POST':
@@ -420,6 +446,7 @@ def recommend_similar_recipes(request, id):
     return render(request, 'recipe/recommendation.html', context)
 
 
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -429,41 +456,13 @@ def calculate_levenshtein_similarity(a, b):
 def remove_whitespace(text):
     return text.replace(" ", "")
 
-def get_similar_recipes_based_on_names(recipe_name, user, top_n=5, similarity_threshold=0.4):
-    disliked_recipes = UserChoice.objects.filter(user=user, liked=False).values_list('recipe_id', flat=True)
-    
-    # 자기 자신의 레시피만 제외하고 모든 레시피 가져오기
-    all_recipes = Recipe.objects.all().exclude(author=user)
-    
-    # 필터링된 레시피 확인
-    print(f"All recipes available for comparison: {all_recipes}")
-    
-    recipe_name_no_space = remove_whitespace(recipe_name)
-    recipe_names = [remove_whitespace(recipe.recipe_name) for recipe in all_recipes]
-    recipe_names.insert(0, recipe_name_no_space)  # 검색어를 첫 번째 위치에 추가
-    
-    # 전체 레시피 이름 목록 확인
-    print(f"Recipe names being compared: {recipe_names}")
-    
-    # 띄어쓰기 제거
-    recipe_name_no_space = remove_whitespace(recipe_name)
-    recipe_names = [remove_whitespace(recipe.recipe_name) for recipe in all_recipes]
-    recipe_names.insert(0, recipe_name_no_space)  # 검색어를 첫 번째 위치에 추가
 
+from concurrent.futures import ThreadPoolExecutor
 
-    # 각 레시피에 대해 종합 유사도를 계산
-    combined_similarities = [get_combined_similarity_score(recipe_name_no_space, name) for name in recipe_names]
-    
-    # 유사도가 임계값 이상인 레시피 선택
-    similar_indices = [i for i, similarity in enumerate(combined_similarities) if similarity >= similarity_threshold]
-    
-     # 현재 선택된 레시피 이름을 제외하고 상위 top_n 개 추출
-    similar_indices = [i for i in similar_indices if recipe_names[i] != recipe_name_no_space][:top_n]
-    
-    similar_recipes = [all_recipes[i-1] for i in similar_indices]  # i-1로 수정해 all_recipes에서 올바른 인덱스를 가져옵니다.
-    
-    return similar_recipes
-
+def get_combined_similarity_scores_parallel(recipe_name_no_space, recipe_names, max_workers=4):
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        similarities = list(executor.map(lambda name: get_combined_similarity_score(recipe_name_no_space, name), recipe_names))
+    return similarities
 
 
 
@@ -483,6 +482,9 @@ if os.path.exists(vectorizer_path) and os.path.exists(df_path):
 else:
     count_matrix = None
     df = None
+
+
+model = SentenceTransformer('jhgan/ko-sroberta-multitask')
 
 def get_similar_recipes(recipe_id, top_n=3):
     if count_matrix is None or df is None:
@@ -509,7 +511,6 @@ def get_similar_recipes(recipe_id, top_n=3):
         print(f"Error during similarity calculation: {e}")
         return []
 
-
 @login_required
 def recipe_list_view(request):
     preferred_recipes = get_user_preferred_recipes_from_csv(request, top_n=3)  # request를 전달합니다.
@@ -520,10 +521,12 @@ def recipe_list_view(request):
     }
     return render(request, 'recipe/recipe_list.html', context)
 
+
 def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context['preferred_recipes'] = get_user_preferred_recipes_from_csv(self.request)  # self.request를 전달합니다.
     return context
+
 
 from konlpy.tag import Okt
 
