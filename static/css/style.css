@@ -199,3 +199,52 @@ display: flex;
 align-items: center;
 gap: 10px;
 }
+
+@media screen and (max-width: 600px){
+#allo-logo-img2 {
+    width: 0;
+}
+}
+@media screen and (max-width: 515px){
+#header-nav-search {
+    width: 250px;
+}
+}
+@media screen and (max-width: 470px){
+#footer > div > div {
+  font-size: 18px;
+}
+}
+@media screen and (max-width: 460px){
+#header-nav-search {
+    width: 200px;
+}
+}
+@media screen and (max-width: 436px){
+#footer > div > div {
+  font-size: 17px;
+}
+}
+@media screen and (max-width: 421px){
+#footer > div > div {
+  font-size: 16px;
+}
+}
+@media screen and (max-width: 410px){
+#header-nav-search {
+    width: 150px;
+}
+#footer img {
+  height: 25px;
+  width: 25px;
+}
+}
+@media screen and (max-width: 395px){
+#footer > div > div {
+  font-size: 15px;
+}
+#footer img {
+  height: 22px;
+  width: 22px;
+}
+}
