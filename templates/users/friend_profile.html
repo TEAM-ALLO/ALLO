@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/users/friend.css">
+<link rel="stylesheet" href="/static/css/users/mypage.css">
+ <link rel="stylesheet" href="/static/css/users/friend_profile.css">
+{% endblock %}
+
+{% block content %}
+<div class="friend-header">
+    <a href="{% url 'users_user:friend_list' request.user.username %}" class="friend-select">친구</a>
+    <a href="/community/chatrooms">채팅방</a>
+</div>
+<h1 class="friend-profile-title">{{ user.username }}님의 프로필</h1>
+<div class="mypage-user-info">
+    <div class="mypage-user-info-l">
+    {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+    {% else %}
+        <img src="/static/img/user.svg"  alt="기본 프로필 사진" class="mypage-img">
+    {% endif %}
+        <button class="btn btn-danger" onclick="deleteFriend('{{ user.username }}')">친구 삭제</button>
+    </div>
+    <div class="mypage-user-info-r"> <!-- 왼쪽 노란 부분 -->
+        <h2>{{ user.name }}님</h2> <!-- 상단 -->
+        <div class="mypage-postit"> <!--하단-->
+            <div class="mypage-ranking-divs"> <!-- 단상 -->
+                <div></div>
+                <div></div>
+                <div></div>
+                <div class="mypage-ranking-divs-title">My ranking</div>
+            </div>
+            <div class="mypage-my-ranking">{{ ranking }}위</div>
+        </div>
+    </div>    
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function getCsrfToken() {
+        const cookieValue = document.cookie.split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            .split('=')[1];
+        return cookieValue;
+    }
+
+    function deleteFriend(username) {
+        const url = `{% url 'users_user:delete_friend' 'username' %}`.replace('username', username);
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = `{% url 'users_user:friend_list' request.user.username %}`;
+            } else {
+                alert('친구 삭제에 실패했습니다.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}

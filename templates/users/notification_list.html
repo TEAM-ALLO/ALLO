@@ -1,0 +1,14 @@
+{% for notification in notifications %}
+<li>
+    {% if notification.notification_type == 'like' %}
+        {{ notification.sender.username }} liked your post: "{{ notification.content_object.title }}"
+    {% elif notification.notification_type == 'comment' %}
+        {{ notification.sender.username }} commented on your post: "{{ notification.content_object.title }}"
+    {% elif notification.notification_type == 'message' %}
+        {{ notification.sender.username }} sent you a message.
+    {% endif %}
+    <small>{{ notification.timestamp }}</small>
+</li>
+{% empty %}
+<li>No notifications.</li>
+{% endfor %}

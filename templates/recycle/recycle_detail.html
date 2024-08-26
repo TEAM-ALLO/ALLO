@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/recycle/recycle_category.css">
+<link rel="stylesheet" href="/static/css/recycle/recycle_main.css">
+<link rel="stylesheet" href="/static/css/recycle/recycle_detail.css">
+{% endblock %}
+{% block content %}
+<div class="recycle-nav">
+    <a href="{% url 'recycle_user:recycle_main' %}" id="recycle-nav-trash" class="recycle-nav-select">분리수거</a>
+    <a href="{% url 'recycle_user:clothing' %}">의류수거함</a>
+</div>
+
+<div id="recycle-sub-nav">
+    <a href="{% url 'recycle_user:trash' %}">일반쓰레기</a>
+    <a href="{% url 'recycle_user:vinyl' %}">비닐류</a>
+    <a href="{% url 'recycle_user:plastic' %}">플라스틱</a>
+    <a href="{% url 'recycle_user:can' %}">병*캔류</a>
+    <a href="{% url 'recycle_user:paper' %}">종이류</a>
+    <a href="{% url 'recycle_user:food'  %}">음식물쓰레기</a>
+</div>
+<div class="recycle-detail-container">
+    {% if recycle.image %}
+    <img src="{{ recycle.image.url }}" alt="{{ recycle.name }}">
+    {% endif %}
+    <div>
+        <div>
+            <p class="recycle-category">{{ recycle.get_category_display }}</p>
+            <h1>{{ recycle.name }}</h1>            
+        </div>
+        <p class="recycle-desc">{{ recycle.description }}</p>
+        {% if recycle.tip %}
+        <p class="recycle-tip">{{ recycle.tip }}</p>
+        {% endif%}
+    </div>    
+</div>
+
+{% if user.is_staff %}
+<div class="recycle-detail-btns">
+    <a href="{% url 'recycle_user:recycle_update' category_name=recycle.category item_name=recycle.name %}">수정</a>
+    <a href="{% url 'recycle_user:recycle_delete' category_name=recycle.category item_name=recycle.name %}">삭제</a>
+{% endif %}
+</div>
+{% endblock %}
+{% block script %}
+    <script src="/static/js/recycle/recycle_category.js"></script>
+{% endblock %}

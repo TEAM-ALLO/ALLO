@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/community/community_list.css">
+{% endblock %}
+{% block content %}
+<div class="community-header">
+    <div class="community-category community-categoty-selected"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+</div>
+<div class="community-top-box">
+    <div id="community-top-notice">
+        <a href="{% url 'community_user:rule' %}" style="text-decoration: none; color: inherit;">📣공지 및 규칙</a>
+    </div>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'community_user:post_create' %}" id="community-top-btn">글쓰기</a>
+    {% endif %}
+</div>
+<div class="community-post-container">
+    {% if posts %}
+    {% for post in posts %}
+    <div class="community-post-box" data-url="{% url 'community_user:post_detail' pk=post.id %}">
+        <div class="community-post-box-left">
+            <div class="community-post-box-title">
+                <h2>제목</h2>
+                <h2 class="community-title">{{ post.title }}</h2>
+            </div>
+            <div class="community-post-box-author">
+                <h2>작성자</h2>
+                <h2>{{post.author.name}}</h2>
+            </div>
+            <div class="community-post-box-like">
+                <img src="/static/img/full-heart.svg" alt="하트 개수" class="community-post-icon">
+                <p>{{ post.total_likes }}</p>
+                <img src="/static/img/full-bookmark.svg" alt="북마크 개수" class="community-post-icon">
+                <p>{{ post.total_bookmarks }}</p>
+            </div>
+        </div>
+        <div class="community-post-box-right">
+            <div class="community-post-box-content">
+                <h2>본문</h2>
+                <p class="community-content">{{ post.content }}</p>
+            </div>
+            <div class="community-post-box-comment">
+                <h2>댓글</h2>
+                {% if post.comments.first %}
+                    <p>{{ post.comments.first.content|slice:":7" }}...</p>
+                {% else %}
+                    <p>댓글이 없습니다.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+<p class="no-post">작성된 게시글이 없습니다.</p>    
+{% endif %}
+</div>
+{% endblock %}
+{% block script %}
+    <script src="/static/js/community/community_list.js"></script>
+{% endblock %}

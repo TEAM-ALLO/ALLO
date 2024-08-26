@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/users/mypage.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="mypage-bar">
+    마이페이지
+</div>
+<div class="mypage-user-info">
+    <div class="mypage-user-info-l">
+    {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+    {% else %}
+        <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진" class="mypage-img">
+    {% endif %}
+        <a href="#" class="mypage-update-btn" id="profile-edit-btn">
+            <img src="{% static 'img/setting.svg' %}" alt="프로필 편집 아이콘" class="mypage-update-icon">
+            <p>프로필 편집</p>
+        </a>
+    </div>
+    <div class="mypage-user-info-r">
+        <h2>{{ user.name }}님</h2>
+        <div class="mypage-postit">
+            <div class="mypage-ranking-divs">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div class="mypage-ranking-divs-title">My ranking</div>
+            </div>
+            <div>
+                <p>{{ today }}</p>
+                <div class="mypage-my-ranking">
+                    {{ ranking }}위
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+<section class="categories">
+    <div id="my_posts">
+        <img src="{% static 'img/grid.svg' %}" alt="격자 아이콘" id="grid-icon">
+        <p>내 글</p>
+    </div>
+    <div id="bookmarked">
+        <img src="{% static 'img/bookmark-black.svg' %}" alt="북마크 아이콘" id="bookmark-icon">
+        <p>북마크 한 글</p>
+    </div>
+</section>
+
+<section class="sub-categories">
+    <div class="hidden" id="sub-category-post">
+        <div id="mypost1">전체</div>
+        <div id="mypost2">인테리어</div>
+        <div id="mypost3">요리</div>
+        <div id="mypost4">자유게시판</div>
+    </div>
+    <div class="hidden" id="sub-category-bookmark">
+        <div id="mybookmarked1">전체</div>
+        <div id="mybookmarked2">인테리어</div>
+        <div id="mybookmarked3">요리</div>
+        <div id="mybookmarked4">자유게시판</div>
+    </div>
+</section>
+
+<!-- 내 글 -->
+<div id="mypage-all-post">
+<section id="posts-community" class="content-section hidden">
+    {% for post in community_posts %}
+        <a href="{% url 'community_user:post_detail' pk=post.id %}">
+            <article>
+                <h4>{{ post.title }}</h4>
+                <p>{{ post.content }}</p>
+                <span>{{ post.created_at }}</span>
+            </article>
+        </a>
+    {% endfor %}
+</section>
+<section id="posts-recipe" class="content-section hidden">
+    {% for post in recipe_posts %}
+    <a href="{% url 'recipe_user:recipe_detail' id=post.id %}">
+        <article>
+            <h4>{{ post.recipe_name }}</h4>
+            <p>{{ post.ingredients }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="posts-interior" class="content-section hidden">
+    {% for post in interior_posts %}
+    <a href="{% url 'interior_user:interior_detail' pk=post.pk %}">
+        <article>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.content }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="posts-all" class="content-section hidden">
+    {% for post in community_posts %}
+    <a href="{% url 'community_user:post_detail' pk=post.id %}">
+        <article>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.content }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+    {% for post in recipe_posts %}
+    <a href="{% url 'recipe_user:recipe_detail' id=post.id %}">
+        <article>
+            <h4>{{ post.recipe_name }}</h4>
+            <p>{{ post.ingredients }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+    {% for post in interior_posts %}
+    <a href="{% url 'interior_user:interior_detail' pk=post.pk %}">
+        <article>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.content }}</p>
+            <span>{{ post.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="bookmarks-community" class="content-section hidden">
+    {% for bookmark in community_bookmarks %}
+    <a href="{% url 'community_user:post_detail' pk=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.title }}</h4>
+            <p>{{ bookmark.content }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="bookmarks-recipe" class="content-section hidden">
+    {% for bookmark in recipe_bookmarks %}
+    <a href="{% url 'recipe_user:recipe_detail' id=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.recipe_name }}</h4>
+            <p>{{ bookmark.ingredients }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="bookmarks-interior" class="content-section hidden">
+    {% for bookmark in interior_bookmarks %}
+    <a href="{% url 'interior_user:interior_detail' pk=bookmark.pk %}">
+        <article>
+            <h4>{{ bookmark.title }}</h4>
+            <p>{{ bookmark.content }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+<section id="bookmarks-all" class="content-section hidden">
+    {% for bookmark in community_bookmarks %}
+    <a href="{% url 'community_user:post_detail' pk=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.title }}</h4>
+            <p>{{ bookmark.content }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+    {% for bookmark in recipe_bookmarks %}
+    <a href="{% url 'recipe_user:recipe_detail' id=bookmark.id %}">
+        <article>
+            <h4>{{ bookmark.recipe_name }}</h4>
+            <p>{{ bookmark.ingredients }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+    {% for bookmark in interior_bookmarks %}
+    <a href="{% url 'interior_user:interior_detail' pk=bookmark.pk %}">
+        <article>
+            <h4>{{ bookmark.title }}</h4>
+            <p>{{ bookmark.content }}</p>
+            <span>{{ bookmark.created_at }}</span>
+        </article>
+    </a>
+    {% endfor %}
+</section>
+</div>
+
+<!-- 프로필 편집 팝업창 -->
+<div id="profile-edit-popup" class="popup" style="display: none;">
+    <h2>프로필 편집
+        <img src="/static/img/no.svg" alt="엑스 모양 아이콘" id="profile-edit-close">
+    </h2>
+    <form method="post" enctype="multipart/form-data" id="profile-edit-form" action="{% url 'users_user:profile_edit' %}">
+        {% csrf_token %}
+        <div>
+            <label for="id_username">아이디</label>
+            <input type="text" id="id_username" name="username" value="{{ user.username }}" readonly>
+        </div>
+        <div>
+            <label for="id_email">이메일</label>
+            <input type="email" id="id_email" name="email" value="{{ user.email }}">
+        </div>
+        <div>
+            <label for="id_name">이름</label>
+            <input type="text" id="id_name" name="name" value="{{ user.name }}">
+        </div>
+        <div>
+            <label for="id_profile_image">프로필 이미지</label>
+            <input type="file" id="id_profile_image" name="profile_image">
+        </div>
+        <div class="mypage-btns">
+            <a href="#" id="password-change-btn" class="pw-change-btn">비밀번호 변경</a>
+            <button type="submit" class="profile-save-btn">저장</button>
+        </div>
+    </form>
+</div>
+
+<!-- 비밀번호 변경 팝업창 -->
+<div id="password-change-popup" class="popup" style="display: none;">
+    <h2>비밀번호 변경
+        <img src="/static/img/no.svg" alt="엑스 모양 아이콘" id="password-change-close">
+    </h2>
+    <form method="post" id="password-change-form">
+        {% csrf_token %}
+        <div>
+            <label for="origin_password">현재 비밀번호</label>
+            <input type="password" name="origin_password" id="origin_password">
+        </div>
+        <div>
+            <label for="password1">새 비밀번호</label>
+            <input type="password" name="password1" id="password1">
+        </div>
+        <div>
+            <label for="password2">새 비밀번호 확인</label>
+            <input type="password" name="password2" id="password2">
+        </div>
+        <button type="submit" class="password-change-popup-btn">변경</button>
+    </form>
+</form>
+{% if error %}
+    <p>{{ error }}</p>
+{% elif password_change_success %}
+    <p>{{ password_change_success }}</p>
+{% endif %}
+</div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="/static/js/user/mypage.js"></script>
+{% endblock %}

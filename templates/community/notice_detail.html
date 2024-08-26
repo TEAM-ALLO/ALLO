@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/community/event_detail.css">
+<link rel="stylesheet" href="/static/css/community/notice_detail.css">
+{% endblock %}
+{% block content %}
+<div class="community-header">
+    <div class="community-category"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category community-category-selected"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+</div>
+<div class="notice-detail-container">
+    <div>
+        <h1>{{ notice.title }}</h1>
+        <div>
+            {% if user.is_staff %}
+                <a href="{% url 'community_user:notice_delete' notice.pk %}" class="notice-delete" onclick="return confirm('공지를 정말로 삭제하시겠습니까?');">삭제</a>
+            {% endif %}
+        </div>   
+    </div>
+    <p>{{ notice.created_at }}</p>
+    {% if notice.image %}
+    <img src="{{ notice.image.url }}" alt="{{ notice.title }}">
+    {% endif %}
+    <p class="notice-detail-content">{{ notice.content|linebreaksbr }}</p>
+    <a href="{% url 'community_user:notice_list' %}" class="event-detail-btn">목록</a>    
+</div>
+
+
+{% endblock %}

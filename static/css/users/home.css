@@ -1,0 +1,185 @@
+/* 상단 이미지 슬라이더 */
+.slider {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 590px;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    animation: slider 15s infinite linear;
+}
+
+.slide:nth-child(1) {
+    animation-delay: 0;
+}
+.slide:nth-child(2) {
+    animation-delay: -10s;
+    background-color: var(--main--red--color);
+}
+.slide:nth-child(3) {
+    animation-delay: -20s;
+    background-color: var(--main--blue--color);
+}
+
+@keyframes slider {
+    0% {
+        transform: translateX(0);
+    }
+
+    26% {
+        transform: translateX(0);
+    }
+    33% {
+        transform: translateX(-100%);
+        animation-timing-function: step-end;
+    }
+    93% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+/* 첫번째 슬라이드 */
+.slide1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background-color: var(--main--yellow--color);
+    gap: 50px;
+}
+.slide-logo-img {
+    max-height: 80%;
+    max-width: 30%;
+    border-radius: 50%;
+    aspect-ratio: auto;
+}
+.slide1-right {
+    display: flex;
+    flex-direction: column;
+}
+.slide1-right-ment {
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
+}
+.slide1-red {
+    color: var(--main--red--color);
+}
+.slide-logo2-img {
+    margin: 20px 0;
+    width: 380px;
+    height: 120px;
+}
+.slide1-right > p {
+    color: #B89D30;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+/* 두번째 슬라이드 */
+.slide2 {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 70px;
+    justify-content: center;
+}
+.slide2 > div {
+    display: flex;
+    gap: 20px;
+}
+.slide2 > div  img {
+    height: 100px;
+    width: 100px;
+}
+.slide2 > div > img {
+    /* display: none; */
+}
+.slide2>div:nth-child(2) {
+    justify-content: flex-end;
+}
+.slide-bubble {
+    padding: 30px;
+    font-size: 22px;
+    font-weight: bold;
+    background-color: #fff;
+    position: relative;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 60px;
+    border-radius: 10px;
+}
+.slide-bubble img {
+    position: absolute;
+    top: 0;
+    left: -70px;
+}
+/* 세번째 슬라이드 */
+.slide3 {
+    padding: 70px;
+    gap: 30px;
+    display: flex;
+    flex-direction: column;
+
+}
+.slide3-section {
+    padding: 25px 30px;
+    background-color: var(--light--blue--color);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: 5px solid #fff;
+    box-shadow: 0 15px 50px -20px rgb(255 255 255 / 90);
+}
+
+/* 명예의 전당 */
+.home-hof-container {
+    width: 100%;
+    background-color: var(--light--gray--color);
+    padding: 30px;
+    font-weight: bold;
+    font-size: 20px;
+}
+.hof-img {
+    margin: 30px auto;
+    width: 50%;
+    display: flex;
+}
+.hof-big-container {
+    display: flex;
+    justify-content: center;
+}
+.hof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    margin: -4px;
+}
+.hof p {
+    margin: 3px;
+}
+.mypage-img {
+    border-radius: 50%;
+    width: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
+}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/users/searched_list.css">
+{% endblock %}
+{% block content %}
+<div class="searched-list-title"><p>{{ query }}</p>에 관련된 게시글</div>
+<div class="searched-list-result">
+    <div>
+        <h2>인테리어</h2>
+        {% if interior_results %}
+        <ul>
+        {% for post in interior_results %}
+            <li><a href="{% url 'interior_user:interior_detail' post.id %}">{{ post.title }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>관련된 게시글이 존재하지 않습니다.</p>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2>레시피</h2>
+        {% if recipe_results %}
+        <ul>
+        {% for recipe in recipe_results %}
+            <li><a href="{% url 'recipe_user:recipe_detail' recipe.id %}">{{ recipe.recipe_name }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>관련된 게시글이 존재하지 않습니다.</p>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2>커뮤니티</h2>
+        {% if community_results %}
+        <ul>
+        {% for post in community_results %}
+            <li><a href="{% url 'community_user:post_detail' post.id %}">{{ post.title }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>관련된 게시글이 존재하지 않습니다.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+.community-categoty {
+    color: #fff !important;
+}
+.community-categoty-selected {
+    color: black !important;
+}
+.community-header {
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    height: 50px;
+    display: flex;
+    align-items: center;    
+    justify-content: space-around;
+    color: #fff;
+    font-size: 20px;
+}
+.community-title-box {
+    background-color: var(--main--gray--color);
+    font-size: 20px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+.community-top-box {
+    padding: 0 10px;
+    height: 50px;
+    display: flex;
+    gap: 10px;
+    margin: 10px auto;
+    width: 80%;
+}
+#community-top-notice {
+    width: 100%;
+    background-color: var(--main--gray--color);
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#community-top-btn {
+    width: 20%;
+    background-color: var(--main--gray--color);
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.community-categoty:nth-child(3) {
+    color: black;
+}
+.community-create-container > p > label {
+    display: none;
+}
+.community-post-container {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.community-post-box {
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+    cursor: pointer;
+}
+.community-post-box-left {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    margin: 20px;
+    gap: 20px;
+}
+.community-post-box-title {
+    display: flex;
+    gap: 10px;
+}
+.community-title {
+    font-weight: bold;
+}
+.community-post-box-author {
+    display: flex;
+    gap: 10px;
+}
+.community-post-box-like {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.community-post-box-right {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin: 20px;
+    gap: 20px;
+}
+.community-post-box-content {
+    display: flex;
+    gap: 10px;
+}
+.community-content {
+    max-height: 32px;
+    overflow: hidden;
+    width: calc(100% - 40px);
+}
+.community-post-box-comment {
+    display: flex;
+    gap: 10px;
+}
+.community-post-box-content h2,
+.community-post-box-comment h2 {
+    width: 30px;
+}
+.community-post-box-ud {
+    display: flex;
+    gap: 10px;
+}
+.community-post-icon {
+    width: 20px;
+}
+.no-post {
+    width: 80%;
+    margin: 10px auto;
+}

@@ -1,0 +1,86 @@
+.community-category {
+    color: #fff !important;
+}
+.community-category-selected {
+    color: black !important;
+}
+.community-header {
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    height: 50px;
+    display: flex;
+    align-items: center;    
+    justify-content: space-around;
+    color: #fff;
+    font-size: 20px;
+}
+.button-group {
+    margin: 10px;
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+.button-group button {
+    color: #fff;
+    font-size: 20px;
+    background-color: var(--main--gray--color);
+    height: 100%;
+    width: 100%;
+}
+.event-post-container {
+    /* display: flex;
+    flex-direction: column;
+    gap: 20px; */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin: 10px auto;
+    width: 80%;
+}
+.event-post {
+    /* max-width: 500px; */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: var(--light--gray--color);
+    padding: 10px;
+    gap: 5px;
+    width: 100%;
+    justify-content: flex-end;
+}
+.event-post h2 {
+    font-weight: 500;
+    font-size: 20px;
+}
+.event-img {
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+.event-icon {
+    width: 50%;
+    max-width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    object-fit: contain;
+}
+.event-btn {
+    background-color: var(--main--red--color);
+    color: #fff !important;
+    border-radius: 10px;
+    padding: 10px;
+    margin-right: 10%;
+    margin-left: calc(100% - 100px - 10%);
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.event-btn a {
+    height: 25px;
+    line-height: 25px;
+}

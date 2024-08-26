@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/users/notification.css' %}">
+{% endblock %}
+{% block content %}
+<h1 class="notification-nav">알림</h1>
+<ul id="notification_list">
+    {% for item in notifications %}
+    <li id="notification-{{ item.notification.id }}" class="noti-container {% if item.is_read %}read-notification{% else %}unread-notification{% endif %}">
+        <a href="javascript:void(0);" onclick="markNotificationAsReadAndRedirect({{ item.notification.id }}, '{{ item.link }}')">
+        {% if item.notification.sender.profile_image %}
+            <img src="{{ item.notification.sender.profile_image.url }}" alt="프로필 사진">
+        {% else %}
+            <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진">
+        {% endif %}
+            <div>
+                <p>{{ item.message }}</p>
+                <p>{{ item.notification.timestamp }}</p>
+            </div>
+        </a>
+        <button onclick="deleteNotification({{ item.notification.id }})" class="alarm-delete">삭제</button>
+    </li>
+    {% empty %}
+    <li>알림이 없습니다.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block script %}
+<script>
+    function getCsrfToken() {
+        const cookieValue = document.cookie.split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            ?.split('=')[1];
+        return cookieValue || '';
+    }
+    
+
+    function markNotificationAsReadAndRedirect(notificationId, redirectUrl) {
+        console.log('Notification clicked, ID:', notificationId, 'Redirecting to:', redirectUrl);
+    
+        const data = { notification_ids: [notificationId] };
+        console.log('Sending data:', data);
+        
+        fetch('/notifications/read/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Notification marked as read, updating UI...');
+                const notificationElement = document.getElementById(`notification-${notificationId}`);
+                notificationElement.classList.remove('unread-notification');
+                notificationElement.classList.add('read-notification');
+                window.location.href = redirectUrl;
+            } else {
+                console.error('Error marking notification as read:', data.message);
+            }
+        })
+        .catch(error => console.error('Fetch error:', error));
+    }
+    
+    
+    function deleteNotification(notificationId) {
+        if (!confirm('정말로 이 알림을 삭제하시겠습니까?')) {
+            return;
+        }
+
+        fetch('{% url "users_user:delete_notification" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'notification_id': notificationId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.getElementById(`notification-${notificationId}`).remove(); // 삭제된 알림을 화면에서 제거
+            } else {
+                alert('알림을 삭제하는 데 실패했습니다.');
+            }
+        })
+        .catch(error => console.error('Fetch error:', error));
+    }
+    
+
+    // 웹소켓 연결 설정
+    const socket = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const notificationList = document.getElementById('notification_list');
+        
+        // 새로운 알림을 리스트에 추가
+        notificationList.insertAdjacentHTML('afterbegin',
+            `<li id="notification-${data.notification.id}" class="unread-notification">
+                <a href="javascript:void(0);" onclick="markNotificationAsReadAndRedirect(${data.notification.id}, '${data.notification.link}')">
+                    ${data.notification.message}
+                </a>
+                <small>${data.notification.timestamp}</small>
+            </li>`
+        );
+    };
+
+    socket.onclose = function(e) {
+        console.error('WebSocket connection closed unexpectedly');
+    };
+</script>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/community/event_list.css">
+<link rel="stylesheet" href="/static/css/community/notice_form.css">
+{% endblock %}
+{% block content %}
+<div class="community-header">
+    <div class="community-category"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category community-category-selected"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+</div>
+<h2 class="notice-form-title">공지 작성</h2>
+<form method="post" enctype="multipart/form-data" class="notice-form-container">
+    {% csrf_token %}
+    <div>
+        <div>제목</div>
+        {{ form.title }}
+    </div>
+    <div>
+        <div>내용</div>
+        {{ form.content }}
+    </div>
+    <div>
+        <div>이미지</div>
+        {{ form.image }}
+    </div>
+    <div class="notice-form-btns">
+        <a href="{% url 'community_user:notice_list' %}">목록</a>
+        <button type="submit">공지 작성</button>
+    </div>
+</form>
+{% endblock %}

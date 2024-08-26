@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/interior/interior_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/interior/interior_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="interior-nav">
+    <a href="{% url 'interior_user:interior_list' %}?category=all{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'all' %}category-select{% endif %}">전체</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=modern{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'modern' %}category-select{% endif %}">모던</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=european{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'european' %}category-select{% endif %}">유럽풍</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=classic{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'classic' %}category-select{% endif %}">클래식</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=natural{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'natural' %}category-select{% endif %}">내추럴</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=colorful{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'colorful' %}category-select{% endif %}">컬러풀</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=other{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'other' %}category-select{% endif %}">기타</a>
+</div>
+<div class="interior-detail-title">
+    <p class="interior-detail-category" id="interior-detail-category">{{ post.get_category_display }}</p>
+    <h1>{{ post.title }}</h1>
+</div>
+<div class="interior-detail-info">
+    <div class="author-info">
+        {% if post.author.profile_image %}
+        <img src="{{ post.author.profile_image.url }}" alt="작성자의 프로필 사진" class="author-img">
+        {% else %}
+        <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진" class="author-img">
+        {% endif %}
+        <p>{{ post.author.name }}</p>
+    </div>
+    <p class="interior-detail-user-btns">
+        {% if request.user == post.author %}
+        <a href="{% url 'interior_user:interior_update' post.pk %}">수정</a>
+        <a href="{% url 'interior_user:interior_delete' post.pk %}">삭제</a>
+        {% else %}
+            {% if friends %}
+                <button class="btn btn-success">친구 중</button>
+            {% elif friend_request_sent %}
+                <button class="btn btn-warning">신청함</button>
+            {% elif friend_request_received %}
+                <button class="btn btn-info">친구 요청 대기 중</button>
+            {% else %}
+                <button id="friend-request-button" data-username="{{ post.author.username }}" class="btn btn-success">친구 추가</button>
+            {% endif %}
+        {% endif %}
+    </p>
+</div>
+<div class="interior-detail-info2">
+    <div class="interior-detail-btns">
+        <button id="like-button" data-post-id="{{ post.pk }}">
+            {% if request.user in post.likes.all %}
+                <img src="/static/img/full-heart.svg" alt="좋아요 눌렀을 때 아이콘">
+            {% else %}
+                <img src="/static/img/heart.svg" alt="좋아요 안 눌렀을 때 아이콘">
+            {% endif %}
+        </button>
+        <span id="likes-count">{{ post.total_likes }}</span>
+        <button id="bookmark-button" data-post-id="{{ post.pk }}">
+            {% if request.user in post.bookmarks.all %}
+            <img src="{% static 'img/full-bookmark.svg' %}" alt="북마크 눌렀을 때 아이콘">
+            {% else %}
+            <img src="{% static 'img/bookmark.svg' %}" alt="북마크 안 눌렀을 때 아이콘">
+            {% endif %}
+        </button>
+        <span id="bookmarks-count">{{ post.total_bookmarks }}</span>
+    </div>
+    <p class="interior-detail-date">{{ post.created_at }}</p>
+</div>
+<img src="{{ post.image.url }}" alt="{{ post.title }}" class="interior-detail-img">
+
+
+{% if furniture_list %}
+<div class="furniture-list">
+    <h3>가구 목록</h3>
+    <ul>
+        {% for item in furniture_list %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<div class="interior-detail-content">{{ post.content|linebreaks }}</div>
+<!-- 댓글 목록 -->
+<p class="interior-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
+<ul id="comment-list">
+    {% for comment in comments %}
+    <li class="interior-detail-comment-container">
+        <div class="interior-detail-comment-user">
+            {{ comment.user.name }}
+            {% if request.user.username == comment.user.username %}
+            <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
+            {% endif %}
+        </div>
+        <div>
+            {{ comment.content|linebreaks }}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+<!-- 댓글 작성 -->
+{% if request.user.is_authenticated %}
+<h3 class="interior-detail-comment-title">댓글을 작성해주세요!</h3>
+<form id="comment-form" method="post" action="{% url 'interior_user:comments_create' post.pk %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" class="interior-detail-comment-btn" value="댓글 작성">
+</form>
+{% else %}
+<p class="interior-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
+{% endif %}
+
+<div class="btn-div">
+    <a href="{% url 'interior_user:interior_list' %}" class="interior-detail-btn">목록</a>
+</div>
+
+<input type="hidden" id="current-username" value="{{ request.user.username }}">
+<input type="hidden" id="post-id" value="{{ post.pk }}">
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/interior/interior_detail.js' %}"></script>
+<script src="{% static 'js/interior/interior_category.js' %}"></script>
+{% endblock %}

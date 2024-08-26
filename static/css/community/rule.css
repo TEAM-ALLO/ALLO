@@ -1,0 +1,48 @@
+.rule-container h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.rule-container h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+.rule-container p {
+    margin: 10px 0;
+}
+.rule-container ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+.rule-container ul li {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+}
+.rule-container ul li:before {
+    content: "⭐";
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.rule-container .highlight {
+    color: #d9534f;
+    font-weight: bold;
+}
+.rule-container .emoji {
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+.rule-container .notice {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+.rule-container {
+    width: 80%;
+    margin: 10px auto;
+}

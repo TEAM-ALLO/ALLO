@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/recycle/recycle_category.css">
+{% endblock %}
+{% block content %}
+<div class="recycle-nav">
+    <a href="{% url 'recycle_user:recycle_main' %}" id="recycle-nav-trash" class="recycle-nav-select">분리수거</a>
+    <a href="{% url 'recycle_user:clothing' %}">의류수거함</a>
+</div>
+<div id="recycle-sub-nav">
+    <div id="nav1"><a href="{% url 'recycle_user:category_detail' '일반쓰레기' %}">일반쓰레기</a></div>
+    <div id="nav2"><a href="{% url 'recycle_user:category_detail' '비닐류' %}">비닐류</a></div>
+    <div id="nav3"><a href="{% url 'recycle_user:category_detail' '플라스틱' %}">플라스틱</a></div>
+    <div id="nav4"><a href="{% url 'recycle_user:category_detail' '병*캔류' %}">병*캔류</a></div>
+    <div id="nav5"><a href="{% url 'recycle_user:category_detail' '종이류' %}">종이류</a></div>
+    <div id="nav6"><a href="{% url 'recycle_user:category_detail' '음식물쓰레기' %}">음식물쓰레기</a></div>
+</div>
+
+{% for category in categories %}
+<div id="recycle-main{{ forloop.counter }}" class="recycle-main">
+    <h2>{{ category.name }}</h2>
+    <ul>
+        {% for item in category.recycles %}
+            <li><a href="{% url 'recycle_user:recycle_detail' category_name=recycle.category item_name=recycle.name %}">{{ item.name }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endfor %}
+<a href="{% url 'recycle_user:recycle_main' %}">메인으로 돌아가기</a>
+{% endblock %}
+{% block script %}
+    <script src="/static/js/recycle/recycle_category.js"></script>
+{% endblock %}

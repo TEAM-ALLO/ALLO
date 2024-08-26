@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/recycle/recycle_category.css">
+<link rel="stylesheet" href="/static/css/recycle/recycle_main.css">
+{% endblock %}
+{% block content %}
+<div class="recycle-nav">
+    <a href="{% url 'recycle_user:recycle_main' %}" id="recycle-nav-trash" class="recycle-nav-select">분리수거</a>
+    <a href="{% url 'recycle_user:clothing' %}">의류수거함</a>
+</div>
+
+<div id="recycle-sub-nav">
+    <a href="{% url 'recycle_user:trash' %}">일반쓰레기</a>
+    <a href="{% url 'recycle_user:vinyl' %}">비닐류</a>
+    <a href="{% url 'recycle_user:plastic' %}">플라스틱</a>
+    <a href="{% url 'recycle_user:can' %}">병*캔류</a>
+    <a href="{% url 'recycle_user:paper' %}">종이류</a>
+    <a href="{% url 'recycle_user:food'  %}">음식물쓰레기</a>
+</div>
+
+
+<div class="recycle-header">
+    <div class="recycle-header-ment">
+        <h1>매번 헷갈리는 분리수거 방법,</h1>
+        <h1>ALLO와 함께 알아보아요!</h1>
+    </div>
+    <form method="post" class="recycle-search-container">
+        {% csrf_token %}
+        <input type="text" name="query" placeholder="예) 우유, 영수증, 식용유" class="recycle-main-search">
+        <button type="submit"><img src="/static/img/search.png" alt="검색 아이콘" class="search-icon"></button>
+    </form>
+    {% if search_performed %}
+        {% if items %}
+            <ul>
+            {% for item in items %}
+                <a href="{% url 'recycle_user:recycle_detail' category_name=item.category item_name=item.name %}" class="recycle-post-container">
+                    <p>{{ item.category }} - {{ item.name }}</p>
+                    <!-- <p>{{ item.category }}</p> -->
+                </a>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>앗, 해당 품목은 아직 정보가 없어요. 사이트 하단의 연락처로 요청해 주시면 빠른 시일 내에 반영할게요!</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="/static/js/recycle/recycle_category.js"></script>
+{% endblock %}

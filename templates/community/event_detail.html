@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/community/event_detail.css">
+{% endblock %}
+{% block content %}
+<div class="community-header">
+    <div class="community-category"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category community-category-selected"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+</div>
+<div class="event-detail-container">
+    <div class="event-detail-top">
+        <h2 class="event-title">{{ event.title }}</h2>
+        <div>
+            {% if user.is_staff %}
+                <a href="{% url 'community_user:event_delete' event.pk %}" class="btn btn-danger" onclick="return confirm('이벤트를 정말로 삭제하시겠습니까?');">삭제</a>
+            {% endif %}
+        </div>        
+    </div>
+    {% if event.image %}
+    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="event-img">
+    {% endif %}
+    <p class="event-desc">{{ event.description|linebreaksbr }}</p>
+    <div class="event-date-container">
+        <h3>
+            시작
+        </h3>
+        <p>
+            {{ event.start_date }}
+        </p>
+    </div>
+    <div class="event-date-container">
+        <h3>
+            끝
+        </h3>
+        <p>
+            {{ event.end_date }}
+        </p>        
+    </div>
+    <div class="event-btn-container">
+        <a href="{% url 'community_user:event_list' %}" class="event-detail-btn">목록</a>
+    </div>
+</div>
+    {% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/users/home.css">
+{% endblock %}
+{% block content %}
+<div class="slider">
+    <div class="slide slide1">
+        <img src="/static/img/allo_logo.jpg" alt="" class="slide-logo-img">
+        <div class="slide1-right">
+            <div class="slide1-right-ment">
+                <p class="slide1-red">홀로</p>
+                <p>가 아닌</p>
+                <p class="slide1-red">All로</p>
+            </div>
+            <img src="/static/img/ALLO.svg" alt="" class="slide-logo2-img">
+            <p>더 이상 외롭지 않은 자취 생활, 올로와 함께하세요!</p>
+        </div>
+    </div>
+    <div class="slide slide2">
+        <!-- 첫번째 -->
+        <div>
+            <img src="/static/img/interview.svg" alt="사람 아이콘">
+            <div class="slide-bubble">
+                <p>초보 자취생으로서 정보가 절실해요</p>
+                <img src="/static/img/bubble-interview.svg" alt="">
+            </div>            
+        </div>
+
+        <!-- 두번째 -->
+        <div>
+            <img src="/static/img/interview.svg" alt="사람 아이콘">
+            <div class="slide-bubble">
+                <p>혼자 살면서 외로움을 느끼는 사람들에게 큰 힘이 될 것 같아요</p>
+                <img src="/static/img/bubble-interview.svg" alt="">
+            </div>            
+        </div>
+
+        <!-- 세번째 -->
+        <div>
+            <img src="/static/img/interview.svg" alt="사람 아이콘">
+            <div class="slide-bubble">
+                <p>고민 해결에 큰 도움이 될 거라고 생각해요</p>
+                <img src="/static/img/bubble-interview.svg" alt="">
+            </div>            
+        </div>
+    </div>
+    <div class="slide slide3">
+        <!-- 분리수거 -->
+        <div class="slide3-section">
+            재질과 품목에 따른 분리수거 방법을 안내하고
+            의료수거함의 위치를 파악할 수 있어요
+        </div>
+        <!-- 인테리어 -->
+        <div class="slide3-section">
+            인테리어 컨셉에 따른 게시글을 보고 의견을 나눌 수 있어요
+        </div>
+        <!-- 레시피 -->
+        <div class="slide3-section">
+            레시피를 공유하고 사용자의 취향에 맞는 레시피를 추천받을 수 있어요
+        </div>
+        <!-- 커뮤니티 -->
+        <div class="slide3-section">
+            자유롭게 게시글을 작성해서 이야기를 나누고 고민을 해결할 수 있어요
+        </div>
+    </div>
+</div>
+<div class="home-hof-container">
+    <h2>명예의 전당</h2>
+    <div class="hof-big-container">
+        <!-- 2등 -->
+        {% if top_users|length >= 2 %}
+        <div class="hof2 hof">
+            {% if top_users.1.profile_image %}
+                <img src="{{ top_users.1.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
+            <p>{{ top_users.1.name }}</p>
+            <p>{{ top_users.1.score }}pt</p>
+            <img src="/static/img/hof2.svg" alt="명예의 전당 2등 이미지">
+        </div>
+        {% endif %}
+
+        <!-- 1등 -->
+        {% if top_users|length >= 1 %}
+        <div class="hof1 hof">
+            {% if top_users.0.profile_image %}
+                <img src="{{ top_users.0.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
+            <p>{{ top_users.0.name }}</p>
+            <p>{{ top_users.0.score }}pt</p>
+            <img src="/static/img/hof1.svg" alt="명예의 전당 1등 이미지">
+        </div>
+        {% endif %}
+
+        <!-- 3등 -->
+        {% if top_users|length >= 3 %}
+        <div class="hof3 hof">
+            {% if top_users.2.profile_image %}
+            <img src="{{ top_users.2.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
+            <p>{{ top_users.2.name }}</p>
+            <p>{{ top_users.2.score }}pt</p>
+            <img src="/static/img/hof3.svg" alt="명예의 전당 3등 이미지">
+        </div>
+        {% endif %}        
+    </div>
+
+</div>
+
+{% endblock %}

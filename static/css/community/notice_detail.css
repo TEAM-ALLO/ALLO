@@ -1,0 +1,30 @@
+.notice-detail-container {
+    width: 80%;
+    margin: 0 auto;
+}
+.notice-detail-container h1 {
+    font-weight: bold;
+    font-size: 20px;
+    margin: 10px 0;
+}
+.notice-detail-container img {
+    width: 100%;
+    margin: 10px auto;
+    max-width: 100vh;
+    display: flex;
+}
+.notice-detail-container > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.notice-detail-content {
+    margin: 10px 0;
+}
+.event-detail-btn {
+    margin: 0 auto 10px auto;
+}
+.notice-delete {
+    text-decoration: underline;
+    color: var(--dark--gray--color);
+}

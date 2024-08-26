@@ -1,0 +1,90 @@
+.community-categoty {
+    color: #fff !important;
+}
+.community-categoty-selected {
+    color: black !important;
+}
+.community-header {
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    height: 50px;
+    display: flex;
+    align-items: center;    
+    justify-content: space-around;
+    color: #fff;
+    font-size: 20px;
+}
+.community-create-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.post-title {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px auto;
+}
+.community-create-container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.community-create-container > div {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: center;
+}
+.community-create-container h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--main--red--color);
+    width: 66px;
+    margin-right: 10px;
+
+}
+.community-create-container input {
+    width: 300px;
+}
+#id_title,
+#id_content {
+    background-color: var(--light--gray--color);
+    padding: 10px;
+    border-radius: 10px;
+    border: 0;
+}
+#id_content {
+    resize: none;
+    width: 300px;
+}
+#id_content:focus {
+    outline: none;
+}
+.post-form-btns {
+    margin: 0 auto 10px auto;
+}
+.post-form-btns button,
+.post-form-btns a {
+    background-color: var(--main--red--color);
+    border-radius: 10px;
+    color: #fff !important;
+    padding: 10px;
+    font-size: 16px;
+    height: 44px;
+    line-height: 1.5;
+}
+.community-img-container {
+    display: flex;
+}
+
+.community-img-container text,
+.community-img-container a,
+.community-img-container label,
+.community-img-container input,
+.community-img-container br {
+    /* width: 386px;
+    margin-left: 310px; */
+}

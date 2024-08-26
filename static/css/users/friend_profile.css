@@ -1,0 +1,25 @@
+.friend-header {
+    height: 50px;
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 20px;
+    color: #fff !important;
+}
+.friend-select {
+    color: black !important;
+}
+.friend-profile-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.mypage-img {
+    height: 200px;
+}
+.btn-danger {
+    font-size: 16px;
+}

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/recipe/recipe_list.css">
+{% endblock %}
+{% block content %}
+<div class="recipe-nav">
+    <a href="{% url 'recipe_user:recipe_list' %}?category=all" class="{% if request.GET.category == 'all' %}category-select{% endif %}">전체</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=korean" class="{% if request.GET.category == 'korean' %}category-select{% endif %}">한식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese" class="{% if request.GET.category == 'japanese' %}category-select{% endif %}">일식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese" class="{% if request.GET.category == 'chinese' %}category-select{% endif %}">중식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=western" class="{% if request.GET.category == 'western' %}category-select{% endif %}">양식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=snack" class="{% if request.GET.category == 'snack' %}category-select{% endif %}">분식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=others" class="{% if request.GET.category == 'others' %}category-select{% endif %}">기타</a>
+</div>
+
+<form method="GET" action="{% url 'recipe_user:recipe_list' %}" class="search-form">
+    <input type="text" name="search" placeholder="검색어를 입력하세요" value="{{ request.GET.search }}" class="recipe-search-container">
+    <button type="submit">
+        <img src="/static/img/search2.png" alt="검색어 아이콘" class="recipe-search-icon">
+    </button>
+</form>
+
+{% if not request.GET.search and popular_recipe %}
+<h1 class="recipe-list-mention">
+    {% if category_name == '기타' %}
+        지금 가장 인기있는 음식
+    {% else %}
+        지금 가장 인기있는 {{ category_name }}
+    {% endif %}
+</h1>
+<a href="{% url 'recipe_user:recipe_detail' id=popular_recipe.id %}" class="recipe-list-popular">
+    <img src="{% if popular_recipe.image %}{{ popular_recipe.image.url }}{% else %}/static/img/empty2.svg{% endif %}" alt="">
+    <div>
+        <div class="recipe-popular-info">
+            <h3>{{ popular_recipe.recipe_name }}</h3>
+            <h4>{{ popular_recipe.author }}</h4>
+            <p>{{ popular_recipe.created_at }}</p>
+        </div>
+        <div class="recipe-popular-react">
+            <img src="/static/img/full-heart.svg" alt="좋아요 수">
+            <p>{{ popular_recipe.total_likes }}</p>
+            <img src="/static/img/full-bookmark.svg" alt="북마크 수">
+            <p>{{ popular_recipe.total_bookmarks }}</p>
+        </div>
+    </div>
+</a>
+
+<!-- 개인적인 취향에 맞춘 추천 레시피 섹션 추가 -->
+{% if preferred_recipes %}
+<div class="recipe-prefer-container">
+    <h2>{{ user.name }}님이 좋아할 만한 레시피</h2>
+    <h3>선호도에 따라 추천 메뉴가 추후에 변경돼요!</h3>
+    <ul class="preferred-recipe-list">
+        {% for recipe in preferred_recipes %}
+            {% if recipe.recipe_name %}
+                <!-- Recipe 객체가 있을 때 -->
+                <li>
+                    <div class="preferred-recipe-item">
+                        <div class="preferred-recipe-name">{{ recipe.recipe_name }}</div>
+                        <div class="reaction-buttons">
+                            <form action="{% url 'recipe_user:like_recipe' recipe.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="like-button recommend-like">좋아요</button>
+                            </form>
+                            <form action="{% url 'recipe_user:dislike_recipe' recipe.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="dislike-button recommend-hate">싫어요</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            {% else %}
+                <!-- 단순 문자열이 있을 때 -->
+                <li>
+                    <div class="preferred-recipe-item">
+                        <div class="preferred-recipe-name">{{ recipe }}</div>
+                        <div class="reaction-buttons">
+                            <form action="{% url 'recipe_user:like_csv_recipe' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="recipe_name" value="{{ recipe }}">
+                                <button type="submit" class="like-button recommend-like">좋아요</button>
+                            </form>
+                            <form action="{% url 'recipe_user:dislike_csv_recipe' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="recipe_name" value="{{ recipe }}">
+                                <button type="submit" class="dislike-button recommend-hate">싫어요</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>    
+</div>
+{% endif %}
+{% endif %}
+
+{% if request.GET.search %}
+    <h2 class="recipe-results-heading">검색어 : {{ request.GET.search }}</h2>
+{% endif %}
+<div class="recipe-list-btn-box">
+    <a href="{% url 'recipe_user:recipe_create' %}" class="recipe-list-btn">작성하기</a>
+</div>
+<ul class="recipe-list-container">
+    {% if no_results %}
+    <li>검색 결과가 없습니다.</li>
+    {% else %}
+    {% for recipe in recipes %}
+        <a href="{% url 'recipe_user:recipe_detail' id=recipe.id %}" class="recipe-list-post">
+            {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" alt="" class="recipe-list-img">
+            {% else %}
+                <img src="/static/img/empty2.svg" alt="" class="recipe-list-icon">
+            {% endif %}
+            <div class="recipe-post-name">{{ recipe.recipe_name }}</div>
+            <div class="recipe-post-info">
+                <p>조리 시간: {{ recipe.cooking_time }}분</p>
+                <p>난이도: {{ recipe.difficulty }}</p>
+            </div>               
+    </a>
+{% empty %}
+    <li>등록된 레시피가 없습니다.</li>
+{% endfor %}
+{% endif %}
+</ul>
+
+<!-- 페이지네이션 추가 -->
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; 처음</a>
+        <a href="?page={{ page_obj.previous_page_number }}">이전</a>
+    {% endif %}
+
+    {% for num in page_range %}
+        {% if page_obj.number == num %}
+            <strong>{{ num }}</strong>
+        {% else %}
+            <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">다음</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+    {% endif %}
+</div>
+{% endblock %}
+{% block script %}
+<script src="/static/js/recipe/recipe_category.js"></script>
+<script src="/static/js/recipe/recipe_list.js"></script>
+{% endblock %}
