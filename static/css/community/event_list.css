@@ -30,9 +30,6 @@
     width: 100%;
 }
 .event-post-container {
-    /* display: flex;
-    flex-direction: column;
-    gap: 20px; */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
@@ -40,7 +37,6 @@
     width: 80%;
 }
 .event-post {
-    /* max-width: 500px; */
     margin: 0 auto;
     display: flex;
     flex-direction: column;
