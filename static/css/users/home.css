@@ -209,10 +209,17 @@
     .slide3 {
         padding: 40px;
     }
+    .slide1 {
+        gap: 0;
+        justify-content: space-evenly;
+    }
 }
 @media screen and (max-width: 600px){
     .slide2 {
         padding: 40px;
+    }
+    .slide1 {
+        gap: 10px;
     }
 }
 @media screen and (max-width: 540px){

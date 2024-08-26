@@ -67,3 +67,6 @@
     color: red;
     text-align: center;
 }
+.login-container {
+    border-radius: 0 !important;
+}

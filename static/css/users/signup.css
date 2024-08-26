@@ -59,3 +59,6 @@
     bottom: -20px;
     color: red;
 }
+.signup-container {
+    border-radius: 0 !important;
+}
