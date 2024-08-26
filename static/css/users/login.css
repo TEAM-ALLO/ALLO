@@ -73,4 +73,6 @@
 }
 .login-btn {
     color: black !important;
+    border-radius: 0 !important;
+    font-weight: 400 !important;
 }
