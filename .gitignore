@@ -170,7 +170,9 @@ cython_debug/
 **/migrations/**_initial.py
 
 allo.pem
+allo_deploy.pem
 /staticfiles/
+allo_dp.venv/
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
