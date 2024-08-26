@@ -23,3 +23,9 @@
 #pagination a {display:inline-block;margin-right:10px;}
 #pagination .on {font-weight: bold; cursor: default;color:#777;}
 .map_wrap {height: 722px !important;}
+
+@media screen and (max-width: 600px){
+    #menu_wrap {
+        height: 245px;
+    }
+}

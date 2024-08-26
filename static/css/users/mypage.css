@@ -21,6 +21,10 @@
 #mypage-all-post {
     display: none;
 }
+#mypage-all-post section a article p {
+    max-height: 50px;
+    overflow-y: hidden;
+}
 #sub-category-post div,
 #sub-category-bookmark div {
     margin: 10px 20px;
@@ -270,4 +274,48 @@
     width: 60px;
     height: 36px;
     font-size: 16px;
+}
+
+
+@media screen and (max-width: 800px){
+    .mypage-user-info {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 570px){
+    .mypage-postit {
+        gap: 0;
+    }
+}
+
+@media screen and (max-width: 470px){
+    #profile-edit-popup,
+    #password-change-popup {
+        padding: 20px;
+    }
+    #profile-edit-form input,
+    #password-change-form input {
+        width: 180px;
+    }
+    #profile-edit-form label {
+        width: 120px;
+    }
+    #password-change-form label {
+        width: 132px;
+    }
+}
+
+@media screen and (max-width: 400px){
+
+    #sub-category-post > div,
+     #sub-category-bookmark > div {
+        font-size: 17px;
+    }
+}
+
+@media screen and (max-width: 370px){
+    .mypage-postit {
+        gap: 0;
+    }
 }

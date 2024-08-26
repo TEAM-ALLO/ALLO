@@ -209,3 +209,16 @@
 #friend-request-button {
     cursor: pointer;
 }
+
+@media screen and (max-width: 450px){
+    .interior-detail-info2 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+@media screen and (max-width: 100px){
+    .interior-detail-info2 {
+        flex-direction: column;
+        align-items: start;
+    }
+}

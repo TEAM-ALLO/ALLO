@@ -124,3 +124,50 @@
     display: flex;
     align-items: center;
 }
+
+@media screen and (max-width: 550px){
+    .recipe-input > input, 
+    .ingredient-item input,
+    .recipe-input-container select,
+    #id_image,
+    .instruction-item textarea {
+        width: 200px;
+    }
+    .instruction-item button,
+    .remove-ingredient {
+        width: 45px;
+    }
+    .recipe-input-container,
+    #ingredients-container,
+    #instructions-container {
+        margin: 10px auto 10px calc((100vw - 350px)/2);
+    }
+}
+@media screen and (max-width: 450px){
+    .recipe-input > input, 
+    .ingredient-item input,
+    .recipe-input-container select,
+    #id_image,
+    .instruction-item textarea {
+        width: 150px;
+    }
+    .recipe-input-container,
+    #ingredients-container,
+    #instructions-container {
+        margin: 10px auto 10px calc((100vw - 300px)/2);
+    }
+}
+@media screen and (max-width: 400px){
+    .recipe-input > input, 
+    .ingredient-item input,
+    .recipe-input-container select,
+    #id_image,
+    .instruction-item textarea {
+        width: 120px;
+    }
+    .recipe-input-container,
+    #ingredients-container,
+    #instructions-container {
+        margin: 10px auto 10px calc((100vw - 260px)/2);
+    }
+}

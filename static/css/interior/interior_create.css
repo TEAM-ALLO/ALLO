@@ -16,7 +16,7 @@ h2 {
     font-size: 20px;
     font-weight: bold;
     color: var(--main--red--color);
-    width: 150px;
+    width: 100px;
 }
 .interior-input-container input, 
 .interior-input-container textarea{
@@ -56,16 +56,17 @@ h2 {
     border-radius: 10px;
     color: #fff;;
     font-family: "Noto Sans KR", sans-serif;
+    width: 45px !important;
 }
 .interior-furniture-list-container {
     display: flex;
-    margin: 10px auto 10px calc((100vw - 450px) / 2);
+    margin: 10px auto 10px calc((100vw - 400px) / 2);
 }
 .interior-furniture-list {
     color: var(--main--red--color);
     font-size: 20px;
     font-weight: bold;
-    width: 150px;
+    width: 100px;
 }
 .furniture-fields-container {
     display: flex;
@@ -98,4 +99,40 @@ h2 {
 }
 .interior-input {
     width: 300px;
+}
+@media screen and (max-width: 600px){
+    #id_title, 
+    #id_content, 
+    .form-control,
+    #id_image,
+    #id_category {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 500px){
+    #id_title, 
+    #id_content, 
+    .form-control,
+    #id_image,
+    #id_category,
+    .interior-input {
+        width: 200px !important;
+    }
+    .interior-furniture-list-container {
+        margin: 10px auto 10px calc((100vw - 300px) / 2);
+    }
+}
+@media screen and (max-width: 475px){
+    #id_title, 
+    #id_content, 
+    .form-control,
+    #id_image,
+    #id_category,
+    .interior-input {
+        width: 150px !important;
+    }
+    .interior-furniture-list-container {
+        margin: 10px auto 10px calc((100vw - 250px) / 2);
+    }
 }

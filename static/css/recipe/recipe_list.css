@@ -173,3 +173,22 @@
 }.active-class {
     color: black;
 }
+
+/* 반응형 */
+@media screen and (max-width: 800px){
+    .recipe-list-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 650px){
+    .preferred-recipe-list {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media screen and (max-width: 520px){
+    .recipe-list-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
