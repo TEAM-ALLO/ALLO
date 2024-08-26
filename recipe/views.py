@@ -380,7 +380,12 @@ def dislike_csv_recipe(request):
 from django.core.cache import cache
 
 def get_similar_recipes_based_on_names(recipe_name, user, top_n=5, similarity_threshold=0.4):
-    cache_key = f"similar_recipes_{user.id}_{recipe_name}"
+    if request.user.is_authenticated:
+        cache_key = f"similar_recipes_{request.user.username}_{recipe_name}"
+    else:
+        # 비로그인 사용자를 위한 처리
+        cache_key = f"similar_recipes_anonymous_{recipe_name}"
+
     similar_recipes = cache.get(cache_key)
     
     if similar_recipes:
