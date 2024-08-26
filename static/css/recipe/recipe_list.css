@@ -110,6 +110,7 @@
     display: flex;
     gap: 10px;
 }
+
 .reaction-buttons button:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -173,7 +174,10 @@
 }.active-class {
     color: black;
 }
-
+.like-button,
+.dislike-button {
+    color: black;
+}
 /* 반응형 */
 @media screen and (max-width: 800px){
     .recipe-list-container {

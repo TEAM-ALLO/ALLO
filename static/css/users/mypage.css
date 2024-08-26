@@ -216,6 +216,8 @@
     width: 60px;
     height: 36px;
     font-size: 16px;
+    color: black !important;
+    font-weight: 400 !important;
 }
 .pw-change-btn {
     background-color: var(--main--yellow--color);
@@ -274,13 +276,27 @@
     width: 60px;
     height: 36px;
     font-size: 16px;
+    color: black !important;
+    font-weight: 400 !important;
 }
-
+#profile-edit-popup #id_username,
+#profile-edit-popup #id_email, 
+#profile-edit-popup #id_name,
+#profile-edit-popup #id_profile_image {
+    height: 36px !important;
+    border-radius: 0;
+}
 
 @media screen and (max-width: 800px){
     .mypage-user-info {
         flex-direction: column;
     }
+}
+#origin_password,
+#password-change-popup #password1,
+#password-change-popup #password2 {
+    height: 36px;
+    border-radius: 0;
 }
 
 @media screen and (max-width: 570px){

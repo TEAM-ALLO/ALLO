@@ -484,8 +484,6 @@ else:
     df = None
 
 
-model = SentenceTransformer('jhgan/ko-sroberta-multitask')
-
 def get_similar_recipes(recipe_id, top_n=3):
     if count_matrix is None or df is None:
         print("Count matrix or DataFrame is not loaded")

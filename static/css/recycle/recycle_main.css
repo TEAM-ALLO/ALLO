@@ -56,8 +56,18 @@
         width: 400px;
     }
 }
+@media screen and (max-width: 500px){
+    #recycle-sub-nav a {
+        font-size: 16px;
+    }
+}
+
 @media screen and (max-width: 450px) {
     .recycle-header ul a {
         width: 300px;
     }
+    #recycle-sub-nav a {
+        font-size: 14px;
+    }
 }
+
