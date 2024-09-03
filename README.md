@@ -2,6 +2,9 @@
 <img src="static/img/allo_logo_round.png" style="width: 250px;" >
 자취생을 위한 유일무이 종합 플랫폼
 
+## 개발 기간
+2024.07.08 - 2024.08.23
+
 ## Git Flow
 + 개발할 때 feature/[이름] 브랜치를 생성한다.
 + 자신의 브랜치에 push하고 develop 브랜치에 Pull Request를 보낸다.
@@ -49,6 +52,4 @@ python manage.py runserver
 ```
 
 ## 발표 자료
-[발표 자료](https://github.com/TEAM-ALLO/ALLO/blob/develop/ALLO_%EB%B0%9C%ED%91%9C_ppt.pptx)
-
-
+[발표 자료](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2FTEAM-ALLO%2FALLO%2Ffeature%2Fnk3%2FALLO.pptx&wdOrigin=BROWSELINK)
