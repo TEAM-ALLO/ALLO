@@ -40,6 +40,13 @@
     justify-content: center;
     align-items: center;
 }
+#community-top-notice a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 #community-top-btn {
     width: 20%;
     background-color: var(--main--gray--color);
@@ -79,6 +86,9 @@
 .community-post-box-title {
     display: flex;
     gap: 10px;
+}
+.post-title{
+    width: 30px !important;
 }
 .community-title {
     font-weight: bold;
@@ -126,4 +136,28 @@
 .no-post {
     width: 80%;
     margin: 10px auto;
+}
+
+
+@media screen and (max-width: 600px){
+    .community-post-box {
+        flex-direction: column;
+    }
+    .community-post-box-left,
+    .community-post-box-right {
+        width: 90%;
+    }
+    #community-top-notice,
+    #community-top-btn {
+        font-size: 18px;
+    }
+    .community-post-box-left {
+        margin-bottom: 0;
+    }
+}
+@media screen and (max-width: 420px){
+    #community-top-notice,
+    #community-top-btn {
+        font-size: 16px;
+    }
 }

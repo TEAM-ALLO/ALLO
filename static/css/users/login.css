@@ -42,6 +42,7 @@
     width: 100%;
     max-width: 600px;
     border: 1px solid var(--main--yellow--color);
+    height: 100%;
 }
 .login-btn {
     background-color: var(--main--yellow--color);
@@ -66,4 +67,12 @@
 .error {
     color: red;
     text-align: center;
+}
+.login-container {
+    border-radius: 0 !important;
+}
+.login-btn {
+    color: black !important;
+    border-radius: 0 !important;
+    font-weight: 400 !important;
 }

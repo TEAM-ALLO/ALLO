@@ -36,6 +36,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 .recycle-detail-container > div h1 {
     font-size: 20px;
@@ -53,4 +54,14 @@
     border-radius: 10px;
     padding: 10px;
     color: #fff !important;    
+}
+
+@media screen and (max-width: 650px){
+    .recycle-detail-container {
+        flex-direction: column;
+    }
+    .recycle-detail-container img {
+        width: 100%;
+        max-height: 300px;
+    }
 }

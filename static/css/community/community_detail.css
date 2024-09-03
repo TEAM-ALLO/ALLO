@@ -182,3 +182,10 @@
     display: flex;
     align-items: center;
 }
+
+@media screen and (max-width: 700px) {
+    .post-detail-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
