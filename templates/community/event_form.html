@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/community/community_list.css">
+    <link rel="stylesheet" href="/static/css/community/event_form.css">
+{% endblock %}
+{% block content %}
+<div class="community-header">
+    <div class="community-category"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category community-categoty-selected"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+</div>
+<h1 class="event-form-title">이벤트 작성</h1>
+<form method="post" enctype="multipart/form-data" class="event-from-container">
+    {% csrf_token %}
+    <div>
+        <label for="id_title">제목</label>
+        {{ form.title }}
+    </div>
+    <div>
+        <label for="id_description">내용</label>
+        {{ form.description }}
+    </div>
+    <div>
+        <label for="id_start_date">시작 날짜</label>
+        {{ form.start_date }}
+    </div>
+    <div>
+        <label for="id_end_date">마감 날짜</label>
+        {{ form.end_date }}
+    </div>
+    <div>
+        <label for="id_image">이미지</label>
+        {{ form.image }}
+    </div>
+    <div class="event-btn">
+        <button type="submit">이벤트 작성</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,46 @@
+.friend-header {
+    height: 50px;
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 20px;
+    color: #fff !important;
+}
+.friend-select {
+    color: black !important;
+}
+.community-chatroom-title {
+    text-align: center;
+    font-weight: bold;
+    margin: 10px;
+    font-size: 20px;
+}
+.community-friend-big-container {
+    width: 80%;
+    margin: 0 auto 10px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.chatroom-friend-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-wrap: nowrap;
+    width: 180px;
+    padding: 10px;
+    background-color: var(--light--gray--color);
+    border-radius: 10px;
+}
+.mypage-img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.community-friend-name {
+    font-size: 18px;
+    text-align: center;
+}

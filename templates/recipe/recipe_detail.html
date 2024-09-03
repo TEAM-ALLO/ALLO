@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/recipe/recipe_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe/recipe_detail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="recipe-nav">
+    <a href="{% url 'recipe_user:recipe_list' %}?category=all" class="{% if request.GET.category == 'all' %}category-select{% endif %}">전체</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=korean" class="{% if request.GET.category == 'korean' %}category-select{% endif %}">한식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese" class="{% if request.GET.category == 'japanese' %}category-select{% endif %}">일식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese" class="{% if request.GET.category == 'chinese' %}category-select{% endif %}">중식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=western" class="{% if request.GET.category == 'western' %}category-select{% endif %}">양식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=snack" class="{% if request.GET.category == 'snack' %}category-select{% endif %}">분식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=others" class="{% if request.GET.category == 'others' %}category-select{% endif %}">기타</a>
+</div>
+<div id="recipe-category-select">
+    {{recipe.category}}
+</div>
+<div class="recipe-detail-info">
+    {% if recipe.image %}
+    <img src="{{ recipe.image.url }}" alt="{{ recipe.recipe_name }}" class="recipe-detail-img">
+    {% else %}
+    <img src="{% static 'img/empty2.svg' %}" alt="" class="recipe-detail-img" id="empty-icon">
+    {% endif %}
+    <div class="recipe-detail-menu">
+        <div class="recipe-title-container">
+            <div>
+                {% if recipe.category == "western" %}
+                <div>양식</div>
+                {% elif recipe.category == "korean" %}
+                <div>한식</div>
+                {% elif recipe.category == "chinese" %}
+                <div>중식</div>
+                {% elif recipe.category == "japanese" %}
+                <div>일식</div>
+                {% elif recipe.category == "snack" %}
+                <div>분식</div>
+                {% elif recipe.category == "others" %}
+                <div>기타</div>
+                {% endif %}
+                <h1 class="recipe-title">{{ recipe.recipe_name }}</h1>               
+            </div>
+       
+            {% if request.user == recipe.author %}
+            <div class="recipe-detail-user-btns">
+                <a href="{% url 'recipe_user:recipe_edit' id=recipe.id %}">수정</a>
+                <a href="{% url 'recipe_user:recipe_delete' id=recipe.id %}" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+            </div>
+            {% else %}
+                {% if friends %}
+                    <button class="btn btn-success">친구 중</button>
+                {% elif friend_request_sent %}
+                    <button class="btn btn-warning">신청함</button>
+                {% elif friend_request_received %}
+                    <button class="btn btn-info">친구 요청 대기 중</button>
+                {% else %}
+                    <button id="friend-request-button" data-username="{{ recipe.author.username }}" class="btn btn-success">친구 추가</button>
+                {% endif %}
+            {% endif %}
+        </div>
+        <p>작성자: {{ recipe.author.name }}</p>
+        <p>{{ recipe.servings }}인분</p>
+        <div class="recipe-detail-cook">
+            <p>난이도: {{ recipe.difficulty }}</p>
+            <p>조리 시간: {{ recipe.cooking_time }}분</p>
+        </div>
+        <a class="recipe-detail-recommend"
+        href="{% url 'recipe_user:recommend_similar_recipes' id=recipe.id %}">비슷한 레시피 추천받으러 가기</a>
+    </div>
+</div>
+<div class="recipe-detail-btns">
+    <button id="like-button" data-recipe-id="{{ recipe.id }}">
+    {% if request.user in recipe.likes.all %}
+        <img src="{% static 'img/full-heart.svg' %}" alt="좋아요 눌렀을 때 아이콘">
+    {% else %}
+        <img src="{% static 'img/heart.svg' %}" alt="좋아요 안 눌렀을 때 아이콘">
+    {% endif %}
+    </button>
+    <span id="likes-count">{{ recipe.total_likes }}</span>
+    <button id="bookmark-button" data-recipe-id="{{ recipe.id }}" >
+        {% if request.user in recipe.bookmarks.all %}
+            <img src="{% static 'img/full-bookmark.svg' %}" alt="북마크 눌렀을 때 아이콘">
+        {% else %}
+            <img src="{% static 'img/bookmark.svg' %}" alt="북마크 안 눌렀을 때 아이콘">
+        {% endif %}
+    </button>
+    <span id="bookmarks-count">{{ recipe.total_bookmarks }}</span>
+</div>
+
+<h2 class="recipe-detila-ingredient-title">재료</h2>
+<div class="recipe-detail-ingredient">
+    {% for ingredient in recipe.ingredients.splitlines %}
+    <div>{{ ingredient }}</div>
+    {% endfor %}
+</div>
+<div class="recipe-detail-step-container">
+    <h2>레시피</h2>
+    {% for index, instruction in instructions_with_index %}
+    <div class="recipe-detail-steps">
+        <div class="recipe-detail-step">{{ index }}단계</div>
+        <div class="recipe-detail-content">{{ instruction }}</div>
+    </div>
+    {% endfor %}
+</div>
+<!-- 댓글 목록 -->
+  <p class="recipe-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
+  <ul id="comment-list">
+    {% for comment in comments %}
+    <li class="recipe-detail-comment-container">
+        <div class="recipe-detail-comment-user">
+            {{ comment.user.name }}
+            {% if request.user.username == comment.user.username %}
+            <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
+            {% endif %}
+        </div>
+        <div>
+            {{ comment.content|linebreaks }}
+        </div>
+    </li>
+    {% endfor %}
+  </ul>
+
+<!-- 댓글 작성 -->
+{% if request.user.is_authenticated %}
+<h3 class="recipe-detail-comment-title">댓글을 작성해주세요!</h3>
+<form id="comment-form" method="post" action="{% url 'recipe_user:comments_create' recipe.id %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" class="recipe-detail-comment-btn" value="댓글 작성">
+</form>
+{% else %}
+<p class="recipe-detail-before-login">댓글을 작성하려면 <a href="{% url 'users_user:login' %}">로그인</a>하세요.</p>
+{% endif %}
+
+<div class="btn-div">
+    <a href="{% url 'recipe_user:recipe_list' %}" class="recipe-detail-btn">목록</a>
+</div>
+
+<input type="hidden" id="current-username" value="{{ request.user.username }}">
+<input type="hidden" id="recipe-id" value="{{ recipe.id }}">
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/recipe/recipe_detail.js' %}"></script>
+<script src="/static/js/recipe/recipe_category.js"></script>
+{% endblock %}

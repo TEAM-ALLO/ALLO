@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/interior/interior_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/interior/interior_create.css' %}">
+{% endblock %}
+{% block content %}
+<div class="interior-nav">
+    <a href="{% url 'interior_user:interior_list' %}?category=all{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'all' %}category-select{% endif %}">전체</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=modern{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'modern' %}category-select{% endif %}">모던</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=european{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'european' %}category-select{% endif %}">유럽풍</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=classic{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'classic' %}category-select{% endif %}">클래식</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=natural{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'natural' %}category-select{% endif %}">내추럴</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=colorful{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'colorful' %}category-select{% endif %}">컬러풀</a>
+    <a href="{% url 'interior_user:interior_list' %}?category=other{% if query %}&q={{ query }}{% endif %}" class="{% if category == 'other' %}category-select{% endif %}">기타</a>
+</div>
+<h2>새 인테리어</h2>
+<form method="post" enctype="multipart/form-data" class="interior-create-form">
+    {% csrf_token %}
+    <div class="interior-input-container interior-box">
+        <h4>{{ form.title.label_tag }}</h4>
+        <div class="interior-input">{{ form.title }}</div>
+    </div>
+    <div class="interior-input-container">
+        <h4 class="interior-box-title">{{ form.content.label_tag }}</h4>
+        <div class="interior-input">{{ form.content }}</div>
+    </div>
+    <div class="interior-input-container interior-box">
+        <h4>이미지:</h4>
+        <div class="interior-input">{{ form.image }}</div>
+    </div>
+    <div class="interior-input-container interior-box">
+        <h4>{{ form.category.label_tag }}</h4>
+        <div class="interior-input">{{ form.category }}</div>
+    </div>
+    <div class="interior-furniture-list-container">
+        <h4 class="interior-furniture-list">가구 목록:</h4>
+        <div>
+            <div class="furniture-fields-container" id="furniture_fields">
+                {% for item in furniture_list %}
+                    <div class="furniture-item">
+                        <input type="text" name="furniture_list[]" class="form-control" value="{{ item }}">
+                        <button type="button" onclick="removeFurnitureField(this)" class="interior-furniture-remove-btn">삭제</button>
+                    </div>
+                {% endfor %}
+                {% if not furniture_list %}
+                    <div class="furniture-item">
+                        <input type="text" name="furniture_list[]" class="form-control">
+                        <button type="button" onclick="removeFurnitureField(this)" class="interior-furniture-remove-btn">삭제</button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>        
+    </div>  
+    <button type="button" onclick="addFurnitureField()" class="interior-furniture-add-btn">+가구 추가</button>
+    
+    <button type="submit" class="interior-create-btn">작성하기</button>
+    {{ form.furniture_list }}
+</form>
+{% endblock %}
+{% block script %}
+<script src="{% static 'js/interior/interior_create.js' %}"></script>
+{% endblock %}

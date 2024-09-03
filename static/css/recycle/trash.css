@@ -1,0 +1,72 @@
+.trash-title {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+.title-underline {
+    margin: 5px auto 10px auto;
+    width: 200px;
+    height: 2px;
+    background-color: var(--dark--gray--color);
+}
+.recycle-instructions,
+.recycle-type,
+.recycle-question,
+.recycle-guide {
+    width: 70%;
+    padding: 20px;
+    background-color: var(--light--gray--color);
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    border-radius: 10px;
+}
+.recycle-instructions h2 {
+    font-weight: bold;
+    font-size: 20px;
+}
+.recycle-instructions h3 {
+    font-size: 18px;
+    color: var(--main--red--color);
+    font-weight: bold;
+}
+.recycle-instructions h4 {
+    color: blue;
+    font-size: 1;
+}
+.recycle-instructions p {
+    line-height: 1.2;
+}
+.btn-container {
+    display: flex;
+}
+.trash-main-btn {
+    background-color: var(--main--red--color);
+    color: #fff !important;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px auto 20px auto;
+}
+.recycle-type h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+.recycle-type h3 {
+    font-size: 18px;
+    color: var(--main--red--color);
+    font-weight: bold;
+}
+.recycle-type p {
+    font-weight: bold;
+}
+.recycle-type ul {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.recycle-question h2 {
+    font-weight: bold;
+    font-size: 18px;
+}

@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/community/chatroom_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/community/chatroom_detail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="friend-header">
+    <a href="{% url 'users_user:friend_list' request.user.username %}">친구</a>
+    <a href="/community/chatrooms" class="friend-select">채팅방</a>
+</div>
+<h2 class="receiver-username">{{ receiver.name }}님과의 채팅</h2>
+    <div class="chatroom-detail-big-container" id="chat-messages">
+        {% for message in messages %}
+            <div class="message-item" data-message-id="{{ message.id }}">
+                {% if message.sender == request.user %}
+                <!-- 내가 보낸 메시지 -->
+                <div class="bubble-container-right">
+                    {{ message.content|linebreaksbr }}
+                    {% if message.image %}
+                    <div class="message-image-container">
+                        <img src="{{ message.image.url }}" alt="채팅 이미지" class="chat-image">
+                    </div>
+                    {% endif %}
+                    <img src="{% static 'img/my-bubble.svg' %}" alt="말풍선 꼬리 이미지" class="my-bubble">
+                </div>
+                {% else %}
+                <!-- 내가 받은 메시지 -->
+                <div class="bubble-big-container-left">
+                    <div class="bubble-big-container-top">
+                        {% if message.sender.profile_image %}
+                            <img src="{{ message.sender.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+                        {% else %}
+                            <img src="{% static 'img/user.svg' %}" alt="기본 프로필 사진" class="mypage-img">
+                        {% endif %}
+                        <div class="bubble-container-left">
+                            {{ message.content|linebreaksbr }}
+                            {% if message.image %}
+                            <div class="message-image-container">
+                                <img src="{{ message.image.url }}" alt="채팅 이미지" class="chat-image">
+                            </div>
+                            {% endif %}
+                            <img src="{% static 'img/bubble-writer.svg' %}" alt="말풍선 꼬리 이미지" class="bubble-writer">
+                        </div>
+                    </div>
+                    <p>{{ message.sender.name }}</p>
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+<form method="post" class="comment-container" id="message-form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+    {{form.content}}
+    {{form.image}}
+    </div>
+    <button type="submit" class="send-icon-button"><img src="{% static 'img/send.svg' %}" alt="채팅 전송 아이콘" class="send-icon"></button>
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+// 채팅 컨테이너를 맨 아래로 스크롤하는 함수
+function scrollToBottom() {
+    var chatContainer = document.getElementById("chat-messages");
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// 페이지 로드 시 Long Polling 시작 및 스크롤 맨 아래로 이동
+window.onload = function() {
+    scrollToBottom();
+    fetchNewMessages();
+};
+
+// 폼 제출 시 AJAX를 사용하여 페이지를 다시 로드하지 않고 메시지 전송
+// Long Polling을 관리하기 위한 변수
+let longPollingTimeout;
+let isSending = false;   // 메시지 전송 중인지 확인하기 위한 변수
+
+document.getElementById("message-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    if (isSending) return;  // 전송 중이면 중복 요청 방지
+    isSending = true;
+
+    var formData = new FormData(this);
+    var xhr = new XMLHttpRequest();
+
+    xhr.open("POST", this.action, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+    // Long Polling 중단
+    clearTimeout(longPollingTimeout);
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            addNewMessage(response);
+            scrollToBottom();
+            // 메시지 전송 완료 후 일정 시간 후에 Long Polling 재시작
+            setTimeout(function() {
+                isSending = false;
+                fetchNewMessages();
+            }, 1000);  // 1초 대기 후 Long Polling 재시작
+        } else {
+            console.error("Failed to send message. Status:", xhr.status);
+            isSending = false;
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error("An error occurred during the request.");
+        isSending = false;
+    };
+
+    xhr.send(formData);
+    this.reset();  // 폼 리셋
+});
+
+function addNewMessage(message) {
+    var chatMessages = document.getElementById("chat-messages");
+
+    if (!document.querySelector(`[data-message-id='${message.id}']`)) {
+        var newMessage = document.createElement("div");
+        newMessage.setAttribute("data-message-id", message.id);
+        newMessage.classList.add("message-item");
+
+        if (message.sender === "{{ request.user.username }}") {
+            newMessage.classList.add("bubble-container-right");
+            newMessage.innerHTML = message.content;
+            if (message.image) {
+                var imgContainer = document.createElement("div");
+                imgContainer.classList.add("message-image-container");
+                var img = document.createElement("img");
+                img.src = message.image;
+                img.alt = "채팅 이미지";
+                img.classList.add("chat-image");
+                imgContainer.appendChild(img);
+                newMessage.appendChild(imgContainer);
+            }
+            var bubbleTail = document.createElement("img");
+            bubbleTail.src = "{% static 'img/my-bubble.svg' %}";
+            bubbleTail.alt = "말풍선 꼬리 이미지";
+            bubbleTail.classList.add("my-bubble");
+            newMessage.appendChild(bubbleTail);
+        } else {
+            newMessage.classList.add("bubble-big-container-left");
+            var topContainer = document.createElement("div");
+            topContainer.classList.add("bubble-big-container-top");
+
+            var profileImg = document.createElement("img");
+            profileImg.src = message.sender_profile_image ? message.sender_profile_image : "{% static 'img/user.svg' %}";
+            profileImg.alt = "프로필 사진";
+            profileImg.classList.add("mypage-img");
+            topContainer.appendChild(profileImg);
+
+            var contentContainer = document.createElement("div");
+            contentContainer.classList.add("bubble-container-left");
+            contentContainer.innerHTML = message.content;
+            if (message.image) {
+                var imgContainerLeft = document.createElement("div");
+                imgContainerLeft.classList.add("message-image-container");
+                var imgLeft = document.createElement("img");
+                imgLeft.src = message.image;
+                imgLeft.alt = "채팅 이미지";
+                imgLeft.classList.add("chat-image");
+                imgContainerLeft.appendChild(imgLeft);
+                contentContainer.appendChild(imgContainerLeft);
+            }
+            var bubbleTailLeft = document.createElement("img");
+            bubbleTailLeft.src = "{% static 'img/bubble-writer.svg' %}";
+            bubbleTailLeft.alt = "말풍선 꼬리 이미지";
+            bubbleTailLeft.classList.add("bubble-writer");
+            contentContainer.appendChild(bubbleTailLeft);
+
+            topContainer.appendChild(contentContainer);
+            newMessage.appendChild(topContainer);
+
+            var username = document.createElement("p");
+            username.textContent = message.sender;
+            newMessage.appendChild(username);
+        }
+
+        chatMessages.appendChild(newMessage);
+    }
+}
+
+
+function fetchNewMessages() {
+    var lastMessage = document.querySelector("#chat-messages > div:last-child");
+    var lastMessageId = lastMessage ? lastMessage.getAttribute("data-message-id") : 0;
+
+    var xhr = new XMLHttpRequest();
+    var url = "{% url 'community_user:chatroom_detail' pk=chatroom.pk username=receiver.username %}?ajax=true";
+    if (lastMessageId) {
+        url += "&last_message_id=" + lastMessageId;
+    }
+    xhr.open("GET", url, true);
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.new_messages && response.new_messages.length > 0) {
+                response.new_messages.forEach(function(message) {
+                    addNewMessage(message);
+                });
+                scrollToBottom();
+            }
+            
+            // Long Polling 재시작
+            longPollingTimeout = setTimeout(fetchNewMessages, 1000);
+        } else {
+            console.error("Failed to fetch new messages. Status:", xhr.status);
+            longPollingTimeout = setTimeout(fetchNewMessages, 1000);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error("An error occurred during the polling request.");
+        longPollingTimeout = setTimeout(fetchNewMessages, 1000);
+    };
+
+    xhr.send();
+}
+</script>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/recycle/recycle_form.css">
+{% endblock %}
+{% block content %}
+<h1 class="recycle-form-title">새 분리수거 항목 생성</h1>
+<form method="POST" enctype="multipart/form-data" class="recycle-form">
+    {% csrf_token %}
+    <div class="form-group">
+        <div>카테고리</div>
+        {{ form.category }}
+    </div>
+    <div class="form-group">
+        <div>이름</div>
+        {{ form.name }}
+    </div>
+    <div class="form-group">
+        <div>설명</div>
+        {{ form.description }}
+    </div>
+    <div class="form-group">
+        <div>팁</div>
+        {{ form.tip }}
+    </div>
+    <div class="form-group">
+        <div>이미지</div>
+        {{ form.image }}
+    </div>
+    <div class="recycle-form-btns">
+        <a href="{% url 'recycle_user:recycle_main' %}">목록</a>
+        <button type="submit">작성</button>
+    </div>
+</form>
+{% endblock %}

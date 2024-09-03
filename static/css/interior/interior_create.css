@@ -1,0 +1,138 @@
+h2 {
+    text-align: center;
+    margin: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.interior-input-container {
+    display: flex;
+    margin: 10px;
+    justify-content: center;
+}
+.interior-box {
+    align-items: center;
+}
+.interior-input-container h4 {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--main--red--color);
+    width: 100px;
+}
+.interior-input-container input, 
+.interior-input-container textarea{
+    width: 300px;
+}
+.interior-input-container textarea {
+    resize: none;
+}
+.interior-input-container textarea:focus {
+    outline: none;
+}
+#id_title,
+#id_content,
+.form-control {
+    border-radius: 10px;
+    background-color: var(--light--gray--color);
+    padding: 10px;
+    border: 0;
+    width: 300px;
+}
+#id_category {
+    border: 0;
+    border-radius: 10px;
+    background-color: var(--light--gray--color);
+    padding: 10px;
+    width: 300px;
+}
+.furniture-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+}
+.interior-furniture-remove-btn {
+    background-color: var(--main--red--color);
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;;
+    font-family: "Noto Sans KR", sans-serif;
+    width: 45px !important;
+}
+.interior-furniture-list-container {
+    display: flex;
+    margin: 10px auto 10px calc((100vw - 400px) / 2);
+}
+.interior-furniture-list {
+    color: var(--main--red--color);
+    font-size: 20px;
+    font-weight: bold;
+    width: 100px;
+}
+.furniture-fields-container {
+    display: flex;
+    flex-direction: column;
+}
+#furniture_fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.interior-furniture-add-btn {
+    color: var(--main--red--color);
+    font-weight: bold;
+    display: flex;
+    margin: 0 auto;
+}
+.interior-create-btn {
+    background-color: var(--main--red--color);
+    border-radius: 10px;
+    padding: 10px;
+    color: #fff !important;
+    margin: 0;
+    width: 70px;
+    display: flex;
+    margin: 10px auto;
+}
+.interior-box-title,
+.interior-furniture-list {
+    margin-top: 10px;
+}
+.interior-input {
+    width: 300px;
+}
+@media screen and (max-width: 600px){
+    #id_title, 
+    #id_content, 
+    .form-control,
+    #id_image,
+    #id_category {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 500px){
+    #id_title, 
+    #id_content, 
+    .form-control,
+    #id_image,
+    #id_category,
+    .interior-input {
+        width: 200px !important;
+    }
+    .interior-furniture-list-container {
+        margin: 10px auto 10px calc((100vw - 300px) / 2);
+    }
+}
+@media screen and (max-width: 475px){
+    #id_title, 
+    #id_content, 
+    .form-control,
+    #id_image,
+    #id_category,
+    .interior-input {
+        width: 150px !important;
+    }
+    .interior-furniture-list-container {
+        margin: 10px auto 10px calc((100vw - 250px) / 2);
+    }
+}

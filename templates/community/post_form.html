@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/community/community_create.css">
+{% endblock %}
+{% block content %}
+<div class="community-header">
+    <div class="community-category community-categoty-selected"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+</div>
+<h1 class="post-title">
+    {% if form.instance.pk %}
+    게시글 수정
+    {% else %}
+    게시글 작성
+    {% endif %}
+</h1>
+<form method="post" enctype="multipart/form-data" class="community-create-container">
+    {% csrf_token %}
+    <div>
+        <h2>제목</h2>
+        {{ form.title }}
+    </div>
+    <div>
+        <h2>내용</h2>
+        {{ form.content }}
+    </div>
+    <div class="community-img-container">
+        <h2>이미지</h2>
+        {{ form.image }}
+    </div>
+    <div class="post-form-btns">
+        <a href="{% url 'community_user:post_list' %}" class="community-list-btn">목록</a>
+        <button type="submit" class="community-create-btn">작성하기</button>
+    </div>
+</form>
+{% endblock %}
+{% block script %}
+<script src="/static/js/community/community_update.js"></script>
+{% endblock %}

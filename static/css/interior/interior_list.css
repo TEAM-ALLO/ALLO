@@ -1,0 +1,125 @@
+.interior-nav {
+    height: 50px;
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 20px;
+    color: #fff;
+}
+.category-select {
+    color: black !important;
+}
+.interior-search-form {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.interior-search-container {
+    border-radius: 20px;
+    padding: 10px;
+    width: calc(80% - 40px);
+    border: 3px solid var(--dark--gray--color);
+
+}
+.interior-search-img {
+    width: 40px;
+    height: 40px;
+}
+.search-results-heading {
+    margin: 5px auto;
+    text-align: center;
+}
+.interior-popular-container {
+    width: 80%;
+    margin: 0 auto;
+}
+.interior-popular-container h2 {
+    margin: 10px auto;
+    font-size: 20px;
+    font-weight: bold;
+}
+.interior-popular-post {
+    background-color: var(--light--gray--color);
+    height: 150px;
+    display: flex;
+}
+.interior-popular-post > div {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 20px;
+}
+.interior-popular-post h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+.interior-popular-img {
+    height: 150px;
+    max-width: 50%;
+    object-fit: cover;
+}
+.interior-popular-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.interior-popular-react {
+    display: flex;
+    gap: 5px;
+}
+.interior-create-btn-div {
+    display: flex;
+    justify-content: flex-end;
+    width: 80%;
+    margin: 0 auto;
+}
+.interior-create-btn {
+    background-color: var(--main--red--color);
+    padding: 10px;
+    margin: 10px 0;
+    color: #fff!important;
+    border-radius: 10px;
+}
+.interior-list-big-container {
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin: 10px auto;
+}
+.interior-list-post {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow-wrap: anywhere;
+    gap: 10px;
+    background-color: var(--light--gray--color);
+}
+.interior-list-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    margin: 0 auto;
+}
+.interior-list-post-title {
+    font-size: 18px;
+    height: 18px;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 850px){
+    .interior-list-big-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 500px){
+    .interior-list-big-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .interior-nav {
+        font-size: 18px;
+    }
+}

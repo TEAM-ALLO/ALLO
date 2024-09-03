@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/community/community_detail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="community-header">
+    <div class="community-category community-categoty-selected"><a href="{% url 'community_user:post_list' %}">커뮤니티</a></div>
+    <div class="community-category"><a href="{% url 'community_user:event_list' %}">이벤트</a></div>
+    <div class="community-category"><a href="{% url 'community_user:notice_list' %}">공지</a></div>
+</div>
+<div class="post-detail-big-container">
+    <div class="post-detail-top">
+        <h1 class="post-detail-title">{{ post.title }}</h1>
+        <div>
+            {% if request.user == post.author %}
+                <a href="{% url 'community_user:post_update' post.id %}" class="btn btn-secondary">수정</a>
+                <a href="{% url 'community_user:post_delete' post.id %}" class="btn btn-danger">삭제</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="post-detail-bottom">
+        <p class="post-detail-info">
+            {% if post.author.profile_image %}
+                <img src="{{ post.author.profile_image.url }}" alt="프로필 사진" class="mypage-img">
+            {% else %}
+                <img src="/static/img/user.svg" alt="기본 프로필 사진" class="mypage-img">
+            {% endif %}
+            {{ post.author.name }} | {{ post.date_posted|date:"Y-m-d H:i" }}
+        </p>
+        <div class="actions">
+            <button id="like-button" data-post-id="{{ post.pk }}">
+                {% if request.user in post.likes.all %}
+                <img src="{% static 'img/full-heart.svg' %}" alt="좋아요 눌렀을 때 아이콘">
+                {% else %}
+                <img src="{% static 'img/heart.svg' %}" alt="좋아요 안 눌렀을 때 아이콘">
+                {% endif %}
+            </button>
+            <span id="likes-count">{{ post.total_likes }}</span>
+            <button id="bookmark-button" data-post-id="{{ post.pk }}" class="btn btn-info">
+                {% if request.user in post.bookmarks.all %}
+                    <img src="{% static 'img/full-bookmark.svg' %}" alt="북마크 눌렀을 때 아이콘">
+                {% else %}
+                    <img src="{% static 'img/bookmark.svg' %}" alt="북마크 안 눌렀을 때 아이콘">
+                {% endif %}
+            </button>
+            <span id="bookmarks-count">{{ post.total_bookmarks }}</span>
+            {% if request.user != post.author %}
+                {% if friends %}
+                    <button class="btn btn-success">친구 중</button>
+                {% elif friend_request_sent %}
+                    <button class="btn btn-warning">신청함</button>
+                {% elif friend_request_received %}
+                    <button class="btn btn-info">친구 요청 대기 중</button>
+                {% else %}
+                    <button id="friend-request-button" data-username="{{ post.author.username }}" class="btn btn-success">친구 추가</button>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" alt="{{ post.post_title }}" class="recipe-detail-img">
+    {% endif %}
+    <div class="post-detail-content-box">
+        {{ post.content|linebreaksbr }}
+    </div>
+
+</div>
+<p class="post-detail-comment-title comment-line">{{ comments|length }}개의 댓글이 있습니다.</p>
+<ul id="comment-list">
+    {% for comment in comments %}
+    <li class="post-detail-comment-container">
+        <div class="post-detail-comment-user">
+            {{ comment.user.name }}
+            {% if request.user.username == comment.user.username %}
+            <button class="comment-delete-button" data-comment-id="{{ comment.id }}">삭제</button>
+            {% endif %}
+        </div>
+        <div>
+            {{ comment.content }}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+<!-- 댓글 작성 -->
+{% if request.user.is_authenticated %}
+<h3 class="post-detail-comment-title">댓글을 작성해주세요!</h3>
+<form id="comment-form" method="post" action="{% url 'community_user:comments_create' post.pk %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" class="post-detail-comment-btn" value="댓글 작성">
+</form>
+{% endif %}
+
+<div class="btn-div">
+    <a href="{% url 'community_user:post_list' %}" class="post-detail-btn">목록</a>
+</div>
+
+<input type="hidden" id="current-username" value="{{ request.user.username }}">
+<input type="hidden" id="post-id" value="{{ post.pk }}">
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/community/community_detail.js' %}"></script>
+{% endblock %}

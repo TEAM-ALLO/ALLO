@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="interior-header">
+    <h1>북마크한 게시물</h1>
+</div>
+<div class="interior-list">
+    {% for post in posts %}
+    <div class="interior-post">
+        <h2><a href="{% url 'interior_user:interior_detail' post.pk %}">{{ post.title }}</a></h2>
+        <p>{{ post.author }} - {{ post.created_at }}</p>
+        <p>{{ post.content|truncatewords:30 }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

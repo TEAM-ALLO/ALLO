@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/recipe/recipe_list.css">
+    <link rel="stylesheet" href="/static/css/recipe/recipe_form.css">
+{% endblock %}
+{% block content %}
+<div class="recipe-nav">
+    <a href="{% url 'recipe_user:recipe_list' %}?category=all" class="{% if request.GET.category == 'all' %}category-select{% endif %}">전체</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=korean" class="{% if request.GET.category == 'korean' %}category-select{% endif %}">한식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=japanese" class="{% if request.GET.category == 'japanese' %}category-select{% endif %}">일식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=chinese" class="{% if request.GET.category == 'chinese' %}category-select{% endif %}">중식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=western" class="{% if request.GET.category == 'western' %}category-select{% endif %}">양식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=snack" class="{% if request.GET.category == 'snack' %}category-select{% endif %}">분식</a>
+    <a href="{% url 'recipe_user:recipe_list' %}?category=others" class="{% if request.GET.category == 'others' %}category-select{% endif %}">기타</a>
+</div>
+<h2 id="recipe-title">새 레시피</h2>
+<form method="post" enctype="multipart/form-data" id="recipe-form">
+    {% csrf_token %}
+    <div class="recipe-input-container">
+        <h2>{{ form.recipe_name.label_tag }}</h2>
+        <div class="recipe-input">{{ form.recipe_name }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.cooking_time.label_tag }}</h2>
+        <div class="recipe-input">{{ form.cooking_time }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.servings.label_tag }}</h2>
+        <div class="recipe-input">{{ form.servings }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.difficulty.label_tag }}</h2>
+        <div>{{ form.difficulty }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.category.label_tag }}</h2>
+        <div>{{ form.category }}</div>
+    </div>
+    <div class="recipe-input-container">
+        <h2>{{ form.image.label_tag }}</h2>
+        <div>{{ form.image }}</div>
+    </div>
+    <div id="ingredients-container">
+        <h3>재료</h3>
+        <div class="ingredient-group">
+            <div class="ingredient-item">
+                <input type="text" name="ingredients[]" required>
+                <button type="button" class="remove-ingredient">삭제</button>
+            </div>
+        </div>
+        
+    </div>
+    <button type="button" id="add-ingredient">+재료 추가</button>
+
+    <div id="instructions-container">
+        <h3>조리 방법</h3>
+        <div class="instruction-group">
+            <div class="instruction-item">
+                <textarea name="instructions[]" required></textarea>
+                <button type="button" class="remove-instruction">삭제</button>
+            </div>            
+        </div>
+
+    </div>
+    <button type="button" id="add-instruction">+조리 단계 추가</button>
+    <div class="recipe-form-btns">
+        <a href="{% url 'recipe_user:recipe_list' %}">목록</a>
+        <button type="submit" class="save-btn">작성하기</button>        
+    </div>
+</form>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/recipe/recipe_form.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,28 @@
+.recycle-nav {
+    height: 50px;
+    width: 100%;
+    background-color: var(--main--yellow--color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 20px;
+    color: #fff;
+}
+.recycle-nav-select {
+    color: black !important;
+}
+#recycle-sub-nav {
+    display: none;
+    align-items: center;
+    justify-content: space-around;
+    height: 50px;
+    width: 100%;
+    background-color: rgba(255, 215, 50, 0.45);
+    transition: all 0.6s ease;
+}
+#recycle-sub-nav>div:hover {
+    cursor: pointer;
+}
+.recycle-main {
+    display: none;
+}
