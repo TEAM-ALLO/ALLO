@@ -15,11 +15,13 @@
     display: flex;
     justify-content: space-between;    
     gap: 10px;
+    color: black;
 }
 .recipe-title-container > div {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 .recipe-title-container > div > div {
     padding: 10px;
@@ -264,4 +266,32 @@
 .recipe-title-container #btn-warning,
 .recipe-title-container #btn-info {
    cursor: default;
+}
+.recipe-title-container .btn-success {
+    text-align: left;
+}
+
+@media screen and (max-width: 850px){
+    .recipe-title-container {
+        flex-direction: column;
+    }
+    #friend-request-button {
+        text-align: left;
+    }
+}
+@media screen and (max-width: 650px){
+    .recipe-detail-menu {
+        width: auto;
+    }
+}
+@media screen and (max-width: 600px){
+    .recipe-detail-info {
+        flex-direction: column;
+    }
+    .recipe-detail-img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: contain;
+    }
+
 }

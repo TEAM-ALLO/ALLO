@@ -88,3 +88,12 @@
     /* width: 386px;
     margin-left: 310px; */
 }
+
+
+@media screen and (max-width: 420px){
+    #id_title,
+    #id_content,
+    #id_image {
+        width: 224px;
+    }
+}

@@ -134,7 +134,7 @@
     gap: 30px;
     display: flex;
     flex-direction: column;
-
+    justify-content: space-evenly;
 }
 .slide3-section {
     padding: 25px 30px;
@@ -155,11 +155,6 @@
     padding: 30px;
     font-weight: bold;
     font-size: 20px;
-}
-.hof-img {
-    margin: 30px auto;
-    width: 50%;
-    display: flex;
 }
 .hof-big-container {
     display: flex;
@@ -182,4 +177,71 @@
     object-fit: cover;
     width: 100px;
     height: 100px;
+}
+
+@media screen and (max-width: 780px){
+    .slide3 {
+        gap: 15px;
+    }
+    .slide-logo-img {
+        margin-left: 20px;
+    }
+    .slide1-right {
+        margin-right: 20px;
+    }
+}
+@media screen and (max-width: 700px){
+    .award-img {
+        width: 150px;
+    }
+    .hof {
+        margin: -2px;
+    }
+}
+@media screen and (max-width: 650px){
+    .slide-logo2-img {
+      width: 200px;
+      height: 60px;
+    }
+    .slide1-right p {
+        font-size: 16px;
+    }
+    .slide3 {
+        padding: 40px;
+    }
+    .slide1 {
+        gap: 0;
+        justify-content: space-evenly;
+    }
+}
+@media screen and (max-width: 600px){
+    .slide2 {
+        padding: 40px;
+    }
+    .slide1 {
+        gap: 10px;
+    }
+}
+@media screen and (max-width: 540px){
+    .slide2 > div >img {
+        display: none;
+    }
+}
+@media screen and (max-width: 450px){
+    .award-img {
+        width: 100px;
+    }   
+    .mypage-img {
+        width: 80px;
+        height: 80px;
+    }
+    .slide p {
+        font-size: 18px;
+    }
+    .slide3-section {
+        font-size: 18px;
+    }
+    .hof p {
+        font-size: 16px;
+    }
 }

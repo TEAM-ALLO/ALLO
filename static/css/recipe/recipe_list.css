@@ -110,6 +110,7 @@
     display: flex;
     gap: 10px;
 }
+
 .reaction-buttons button:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -172,4 +173,26 @@
     font-weight: bold;
 }.active-class {
     color: black;
+}
+.like-button,
+.dislike-button {
+    color: black;
+}
+/* 반응형 */
+@media screen and (max-width: 800px){
+    .recipe-list-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 650px){
+    .preferred-recipe-list {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media screen and (max-width: 520px){
+    .recipe-list-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }

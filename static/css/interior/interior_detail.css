@@ -7,6 +7,7 @@
     gap: 10px;
     align-items: center;
     word-break: break-all;
+    flex-wrap: wrap;
 }
 .interior-detail-category {
     border-radius: 10px;
@@ -98,6 +99,7 @@
     gap: 10px;
     margin: 10px auto;
     justify-content: center;
+    flex-wrap: wrap;
 }
 .furniture-list li {
     background-color: var(--main--red--color);
@@ -208,4 +210,18 @@
 }
 #friend-request-button {
     cursor: pointer;
+    color: black;
+}
+
+@media screen and (max-width: 450px){
+    .interior-detail-info2 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+@media screen and (max-width: 100px){
+    .interior-detail-info2 {
+        flex-direction: column;
+        align-items: start;
+    }
 }

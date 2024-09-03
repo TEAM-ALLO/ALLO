@@ -47,3 +47,27 @@
     width: 30px;
     height: 30px;
 }
+
+@media screen and (max-width: 600px){
+    .recycle-header {
+        margin: 100px 30px;
+    }
+    .recycle-header ul a {
+        width: 400px;
+    }
+}
+@media screen and (max-width: 500px){
+    #recycle-sub-nav a {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .recycle-header ul a {
+        width: 300px;
+    }
+    #recycle-sub-nav a {
+        font-size: 14px;
+    }
+}
+
