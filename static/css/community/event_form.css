@@ -4,9 +4,6 @@
     text-align: center;
     margin: 10px;
 }
-.event-from-container {
-
-}
 .event-from-container > div {
     display: flex;
     align-items: flex-start;

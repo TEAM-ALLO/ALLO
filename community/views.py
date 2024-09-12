@@ -413,14 +413,13 @@ def create_like_notification(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Message)
 def create_message_notification(sender, instance, created, **kwargs):
-    if created:
+    if created and instance.sender != instance.receiver:
         Notification.objects.create(
             user=instance.receiver,
             sender=instance.sender,
             notification_type='message',
             content_type=ContentType.objects.get_for_model(instance),
             object_id=instance.chatroom.pk,
-            
         )
 
 def rule_view(request):
